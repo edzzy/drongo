@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="peopleTemplate.xhtml">
+        <ui:define name="content">
+            <h:form prependId="false">  
+
+                <p:dataTable var="client" value="#{clientBean.clients}" rowKey="#{client.id}" paginator="true" rows="10"  
+                             selection="#{clientBean.selectedClients}" selectionMode="multiple" filteredValue="#{clientBean.filteredClients}" id="clientsTable">  
+                    <f:facet name="header">  
+                        #{messages.label_client}
+                    </f:facet>  
+
+                    <p:column headerText="#{messages.persons_lastname}"  sortBy="#{client.lastname}" filterBy="#{client.lastname}" id="lastname">  
+                        #{client.lastname}  
+                    </p:column>  
+
+                    <p:column headerText="#{messages.persons_firstname}" sortBy="#{client.firstname}" filterBy="#{client.firstname}" id="firstname">  
+                        #{client.firstname}  
+                    </p:column>  
+
+                    <p:column headerText="#{messages.persons_email}" sortBy="#{client.email}" filterBy="#{client.email}" id="email">  
+                        #{client.email}  
+                    </p:column>  
+
+                    <p:column headerText="#{messages.persons_phone}" sortBy="#{client.phone}" filterBy="#{client.phone}" id="phone">  
+                        #{client.phone}"  
+                    </p:column>  
+                    
+                    <p:column headerText="#{messages.clients_type}" sortBy="#{client.type}" filterBy="#{client.type}" id="type">  
+                        #{client.type}"  
+                    </p:column>
+                </p:dataTable>  
+
+            </h:form> 
+        </ui:define>
+    </ui:composition>
+</html>
+

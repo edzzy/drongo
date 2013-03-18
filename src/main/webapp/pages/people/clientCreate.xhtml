@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="peopleTemplate.xhtml">
+        <ui:define name="content">
+            <h:form id="form">  
+                <p:panel id="panel" header="#{messages.label_newClient}" style="margin-bottom:10px; width: 750px">  
+                    <h:panelGrid columns="3">  
+                        <p:outputLabel for="firstname" value="#{messages.persons_firstname}" />  
+                        <p:inputText id="firstname"   
+                                     value="#{clientBean.newClient.firstname}" required="true" >
+                        </p:inputText>  
+                        <p:message for="firstname" />  
+
+                        <p:outputLabel for="lastname" value="#{messages.persons_lastname}" />  
+                        <p:inputText id="lastname"   
+                                     value="#{clientBean.newClient.lastname}" required="true">
+                        </p:inputText>
+                        <p:message for="lastname" />  
+
+                        <p:outputLabel for="email" value="#{messages.persons_email}" />  
+                        <p:inputText id="email"   
+                                     value="#{clientBean.newClient.email}" required="true">
+                        </p:inputText>
+                        <p:message for="email" /> 
+
+                        <p:outputLabel for="phone" value="#{messages.persons_phone}" />  
+                        <p:inputText id="phone"   
+                                     value="#{clientBean.newClient.phone}" required="false">
+                        </p:inputText>
+                        <p:message for="phone" /> 
+
+                        <p:outputLabel for="type" value="#{messages.clients_type}" />
+                        <p:selectOneMenu id="type" value="#{clientBean.newClient.type}" required="true" >  
+                            <f:selectItem itemLabel="#{messages.label_select}" itemValue="" />  
+                            <f:selectItems value="#{clientTypeBean.clientTypes}" />  
+                        </p:selectOneMenu>
+                        <p:message for="type" /> 
+
+                        <f:facet name="footer">  
+                            <p:commandButton value="#{messages.label_save}"  icon="ui-icon-disk" update="panel" style="margin-right: 10px"/>
+                            <p:commandButton value="#{messages.label_reset}" update="panel" process="@this" icon="ui-icon-refresh" >  
+                                <p:resetInput target="panel" />  
+                            </p:commandButton>  
+                        </f:facet>  
+                    </h:panelGrid>  
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

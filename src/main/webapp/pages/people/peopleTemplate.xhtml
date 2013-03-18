@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/templates/e_layout.xhtml">
+        <ui:define name="menu">
+            <h:form id="menuForm">
+                <p:menu>  
+                    <p:submenu label="#{messages.label_client}">  
+                        <p:menuitem value="#{messages.label_list}" outcome="clientList.jsf" icon="ui-icon-script" />  
+                        <p:menuitem value="#{messages.label_create}" outcome="clientCreate.jsf" icon="ui-icon-plus"/>
+                    </p:submenu>  
+                    <p:submenu label="#{messages.label_pfMember}">  
+                        <p:menuitem value="#{messages.label_list}" outcome="pfMemberList.jsf" icon="ui-icon-script" />  
+                        <p:menuitem value="#{messages.label_create}" outcome="pfMemberCreate.jsf" icon="ui-icon-plus"/> 
+                    </p:submenu>  
+                    <p:submenu label="#{messages.label_appCredentials}">  
+                        <p:menuitem value="#{messages.label_list}" icon="ui-icon-script" />  
+                        <p:menuitem value="#{messages.label_create}" icon="ui-icon-plus"/> 
+                    </p:submenu>  
+                </p:menu>  
+            </h:form>
+        </ui:define>
+
+        <ui:define name="help">
+            <h:outputText value="help for people"/>
+        </ui:define>
+    </ui:composition>
+</html>

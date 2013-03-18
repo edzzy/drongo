@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <f:view locale="#{localeBean.locale}" contentType="text/html">
+        <h:head>
+            <ui:insert name="header">
+                <ui:include src="e_header.xhtml" />
+            </ui:insert>
+        </h:head>
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="north" size="70" style="border: none">
+                    <p:layout fullPage="false">
+                        <p:layoutUnit position="west" size="220" style="border: none"/>
+                        <p:layoutUnit position="center" style="border: none"/>
+                        <p:layoutUnit position="east" size="200" style="border: none">
+                            <h:form>
+                                <p:themeSwitcher value="#{themeSwitcherBean.theme}" style="width: 165px;" effect="fade" var="t" >
+                                    <f:selectItem itemLabel="#{messages.chooseSkin}" itemValue="" />
+                                    <f:selectItems value="#{themeSwitcherBean.advancedThemes}" var="theme"
+                                                   itemLabel="#{theme.name}" itemValue="#{theme}" />
+                                    <p:ajax listener="#{themeSwitcherBean.saveTheme}" />
+                                    <!--
+                                    <p:column>
+                                       <h:graphicImage value="/resources/images/themes/#{t.image}" />
+                                    </p:column>
+                                    -->
+                                    <p:column>
+                                        #{t.name}
+                                    </p:column>
+                                </p:themeSwitcher>
+                            </h:form>
+                        </p:layoutUnit>
+                    </p:layout>
+                </p:layoutUnit>
+                        
+                <p:layoutUnit position="south" size="50" collapsible="true">
+                    <h:outputText value="South unit content." />
+                </p:layoutUnit>
+                        
+                <p:layoutUnit position="west" minSize="80" maxSize="250" size="220" header="#{messages.label_menu_header}" resizable="true" closable="false" collapsible="true" effect="drop">
+                    <ui:insert name="menu">
+                        <!--<ui:include src="e_menu.xhtml" />-->
+                    </ui:insert>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="east" minSize="80" maxSize="500" size="200" header="#{messages.label_help_header}" resizable="true" closable="false" collapsible="true" effect="drop">
+                    <ui:insert name="help">
+                        
+                    </ui:insert>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <ui:insert name="content">Put default content here, if any.</ui:insert>
+                </p:layoutUnit>
+                        
+            </p:layout>
+        </h:body>
+    </f:view>
+</html>

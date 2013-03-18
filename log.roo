@@ -1,0 +1,55 @@
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-03-06 11:17:12
+project --topLevelPackage fr.pfgen.lims
+jpa setup --provider HIBERNATE --database MYSQL --databaseName limsdb --userName lims --password limspwd
+/*
+/*
+/*
+entity jpa --class ~.domain.AbstractPerson --abstract --inheritanceType JOINED  --activeRecord false
+entity jpa --class ~.domain.Client --extends ~.domain.AbstractPerson --activeRecord false
+entity jpa --class ~.domain.ClientType --activeRecord false
+entity jpa --class ~.domain.PfMember --extends ~.domain.AbstractPerson --activeRecord false
+entity jpa --class ~.domain.AppCredentials --activeRecord false
+entity jpa --class ~.domain.AppAction --activeRecord false
+/*
+field string --fieldName firstname --sizeMin 2 --sizeMax 30 --notNull --class ~.domain.AbstractPerson
+field string --fieldName lastname --sizeMin 2 --sizeMax 30 --notNull --class ~.domain.AbstractPerson
+field string --fieldName email --sizeMin 2 --sizeMax 60 --notNull --unique --class ~.domain.AbstractPerson
+field string --fieldName phone --sizeMin 5 --sizeMax 30 --class ~.domain.AbstractPerson
+field date --type java.util.Date --fieldName registeredOn --notNull --class ~.domain.AbstractPerson
+field string --fieldName name --sizeMin 2 --sizeMax 30 --notNull --class ~.domain.ClientType
+field date --type java.util.Date --fieldName memberSince --notNull --class ~.domain.PfMember
+field string --fieldName login --sizeMin 5 --sizeMax 30 --notNull --unique --class ~.domain.AppCredentials
+field string --fieldName password --notNull --class ~.domain.AppCredentials 
+field string --fieldName salt --class ~.domain.AppCredentials
+field string --fieldName appTheme --class ~.domain.AppCredentials
+field string --fieldName appLocale --class ~.domain.AppCredentials
+field string --fieldName name --sizeMin 3 --sizeMax 50 --notNull --class ~.domain.AppAction
+/*
+field set --fieldName clients --type ~.domain.Client --mappedBy type --cardinality ONE_TO_MANY --class ~domain.ClientType
+field reference --fieldName type --type ~.domain.ClientType --cardinality MANY_TO_ONE --class ~.domain.Client
+field set --fieldName persons --type ~.domain.AbstractPerson --mappedBy appCredentials --cardinality ONE_TO_MANY --class ~.domain.AppCredentials
+field reference --fieldName appCredentials --type ~.domain.AppCredentials --cardinality MANY_TO_ONE --class ~.domain.AbstractPerson
+field set --fieldName persons --type ~.domain.AbstractPerson --cardinality MANY_TO_MANY --mappedBy appActions --class ~.domain.AppAction
+field set --fieldName appActions --type ~.domain.AppAction --cardinality MANY_TO_MANY --class ~.domain.AbstractPerson
+/*
+repository jpa --interface ~.repository.AppCredentialsRepository --entity ~.domain.AppCredentials
+repository jpa --interface ~.repository.ClientRepository --entity ~.domain.Client
+repository jpa --interface ~.repository.PfMemberRepository --entity ~.domain.PfMember
+repository jpa --interface ~.repository.ClientTypeRepository --entity ~.domain.ClientType
+repository jpa --interface ~.repository.AppActionRepository --entity ~.domain.AppAction
+service --interface ~.service.AppCredentialsService --entity ~.domain.AppCredentials
+service --interface ~.service.ClientService --entity ~.domain.Client
+service --interface ~.service.PfMemberService --entity ~.domain.PfMember
+service --interface ~.service.ClientTypeService --entity ~.domain.ClientType
+service --interface ~.service.AppActionService --entity ~.domain.AppAction
+// script --file /home/eric/Lims/Documents/lims.roo
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-03-06 11:19:37
+web jsf setup --implementation ORACLE_MOJARRA --library PRIMEFACES --theme BLUESKY
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-03-06 11:37:05
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-03-06 11:37:16
+web jsf scaffold --class ~.web.ClientManagedBean --includeOnMenu false --entity ~.domain.Client
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-03-06 12:07:56
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-03-06 12:08:16
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-03-06 12:11:42
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-03-08 12:22:35
