@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="peopleTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <h:form id="form">  
+
+                <p:growl id="messages" showDetail="true"/> 
+
+                <p:dataTable var="client" value="#{clientBean.clientList}" rowsPerPageTemplate="5,10,20" rowKey="#{client.id}" paginator="true" rows="10" editable="true"  
+                             selection="#{clientBean.selectedClient}" filteredValue="#{clientBean.filteredClients}" id="clientsTable" emptyMessage="#{messages.label_emptyRecords}">  
+
+                    <f:facet name="header">
+                        #{messages.label_client}
+                    </f:facet>  
+
+                    <p:ajax event="rowEdit" listener="#{clientBean.onEdit}" update=":form:messages" />  
+                    <p:ajax event="rowEditCancel" listener="#{clientBean.onCancel}" update=":form:messages" />
+                    <p:ajax event="rowEditInit" listener="#{clientBean.onEditInit}" update=":form:messages" />
+
+                    <p:column headerText="#{messages.persons_lastname}"  sortBy="#{client.lastname}" filterBy="#{client.lastname}" id="lastname">  
+                        <p:cellEditor>
+                            <f:facet name="output">  
+                                <h:outputText value="#{client.lastname}"/>  
+                            </f:facet>  
+                            <f:facet name="input">  
+                                <p:inputText value="#{client.lastname}"/>  
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="#{messages.persons_firstname}" sortBy="#{client.firstname}" filterBy="#{client.firstname}" id="firstname">  
+                        <p:cellEditor>
+                            <f:facet name="output">  
+                                <h:outputText value="#{client.firstname}" />  
+                            </f:facet>  
+                            <f:facet name="input">  
+                                <p:inputText value="#{client.firstname}"/>  
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>  
+
+                    <p:column headerText="#{messages.persons_email}" sortBy="#{client.email}" filterBy="#{client.email}" id="email">  
+                        <p:cellEditor>
+                            <f:facet name="output">  
+                                <h:outputText value="#{client.email}" />  
+                            </f:facet>  
+                            <f:facet name="input">  
+                                <p:inputText value="#{client.email}" style="width:80%"/>  
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>  
+
+                    <p:column headerText="#{messages.persons_phone}" sortBy="#{client.phone}" filterBy="#{client.phone}" id="phone">  
+                        <p:cellEditor>
+                            <f:facet name="output">  
+                                <h:outputText value="#{client.phone}" />  
+                            </f:facet>  
+                            <f:facet name="input">  
+                                <p:inputMask value="#{client.phone}" mask="99.99.99.99.99"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>  
+
+                    <p:column headerText="#{messages.clients_type}" sortBy="#{client.type.name}" filterBy="#{client.type.name}" id="type">  
+                        <p:cellEditor>
+                            <f:facet name="output">  
+                                <h:outputText value="#{client.type}" />  
+                            </f:facet>  
+                            <f:facet name="input">  
+                                <p:selectOneMenu value="#{client.type}" converter="#{clientTypeConverter}" style="width: 130px" >  
+                                    <f:selectItems value="#{clientBean.clientTypeList}" /> 
+                                </p:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="#{messages.label_edit}" style="width:6%">  
+                        <p:rowEditor />  
+                    </p:column>  
+
+                    <f:facet name="footer">  
+                        <p:commandButton value="#{messages.label_newClient}" icon="ui-icon-plus" style="margin-right: 10px"/>
+                    </f:facet>
+
+                </p:dataTable>
+
+                <!--
+                <p:blockUI block="clientsTable" trigger="clientsTable">  
+                    #{messages.loading}<br />  
+                    <p:graphicImage value="/resources/images/loading-ring32.gif"/>  
+                </p:blockUI> 
+                -->
+            </h:form> 
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="peopleTemplate.xhtml">
+        <ui:define name="content">
+            <h:form id="newClientTypeForm">  
+                <p:panel id="panel" header="#{messages.clientType_new}" style="margin-bottom:10px; width: 750px">  
+                    <p:panelGrid>  
+
+                        <p:row>
+                            <p:column style="border: none">
+                                <p:outputLabel for="name" value="#{messages.clientType_name}" />  
+                            </p:column>
+                            <p:column style="border: none">
+                                <p:inputText id="name"   
+                                             value="#{createClientTypeBean.newClientType.name}" required="true" >
+                                </p:inputText>  
+                            </p:column>
+                            <p:column colspan="2" style="border: none"> 
+                                <p:message for="name" />  
+                            </p:column>
+                        </p:row>
+
+                        <f:facet name="footer" > 
+                            <p:row>
+                                <p:column style="border: none">
+                                    <p:commandButton value="#{messages.label_save}" action="#{createClientTypeBean.saveNewClientType()}" icon="ui-icon-disk" update="panel" style="margin-right: 10px"/>
+                                </p:column>
+                                <p:column colspan="3" style="border: none">
+                                    <p:commandButton value="#{messages.label_reset}" update="panel" process="@this" icon="ui-icon-refresh" >  
+                                        <p:resetInput target="panel" />  
+                                    </p:commandButton> 
+                                </p:column>
+                            </p:row>
+                        </f:facet>  
+                    </p:panelGrid>  
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

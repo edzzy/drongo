@@ -3,6 +3,7 @@ package fr.pfgen.lims.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -39,7 +40,7 @@ public abstract class AbstractPerson implements Serializable {
     @Column(unique = true)
     @Size(min = 2, max = 60)
     private String email;
-    @Pattern(regexp="[\\d]{10}")
+    @Size(max = 16)
     private String phone;
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -108,7 +109,8 @@ public abstract class AbstractPerson implements Serializable {
 
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return this.firstname+" "+this.lastname;
+        //return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
     
     @Id
@@ -134,5 +136,27 @@ public abstract class AbstractPerson implements Serializable {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AbstractPerson other = (AbstractPerson) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
 }

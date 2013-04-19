@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientTypeRepository extends JpaRepository<ClientType, Long>, JpaSpecificationExecutor<ClientType> {
+
+    public ClientType findOneByName(String value);
 }

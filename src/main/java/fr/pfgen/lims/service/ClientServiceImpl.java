@@ -11,41 +11,41 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ClientServiceImpl implements ClientService {
 
-	@Autowired
+    @Autowired
     ClientRepository clientRepository;
 
-	@Override
-	public long countAllClients() {
+    @Override
+    public long countAllClients() {
         return clientRepository.count();
     }
 
-	@Override
-	public void deleteClient(Client client) {
+    @Override
+    public void deleteClient(Client client) {
         clientRepository.delete(client);
     }
 
-	@Override
-	public Client findClient(Long id) {
+    @Override
+    public Client findClient(Long id) {
         return clientRepository.findOne(id);
     }
 
-	@Override
-	public List<Client> findAllClients() {
+    @Override
+    public List<Client> findAllClients() {
         return clientRepository.findAll();
     }
 
-	@Override
-	public List<Client> findClientEntries(int firstResult, int maxResults) {
+    @Override
+    public List<Client> findClientEntries(int firstResult, int maxResults) {
         return clientRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
     }
 
-	@Override
-	public void saveClient(Client client) {
+    @Override
+    public void saveClient(Client client) {
         clientRepository.save(client);
     }
 
-	@Override
-	public Client updateClient(Client client) {
+    @Override
+    public Client updateClient(Client client) {
         return clientRepository.save(client);
     }
 }

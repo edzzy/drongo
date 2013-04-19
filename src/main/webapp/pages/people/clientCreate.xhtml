@@ -7,47 +7,97 @@
       xmlns:p="http://primefaces.org/ui">
     <ui:composition template="peopleTemplate.xhtml">
         <ui:define name="content">
-            <h:form id="form">  
+            <h:form id="newClientForm">  
                 <p:panel id="panel" header="#{messages.label_newClient}" style="margin-bottom:10px; width: 750px">  
-                    <h:panelGrid columns="3">  
-                        <p:outputLabel for="firstname" value="#{messages.persons_firstname}" />  
-                        <p:inputText id="firstname"   
-                                     value="#{clientBean.newClient.firstname}" required="true" >
-                        </p:inputText>  
-                        <p:message for="firstname" />  
+                    <p:panelGrid>  
 
-                        <p:outputLabel for="lastname" value="#{messages.persons_lastname}" />  
-                        <p:inputText id="lastname"   
-                                     value="#{clientBean.newClient.lastname}" required="true">
-                        </p:inputText>
-                        <p:message for="lastname" />  
+                        <p:row>
+                            <p:column style="border: none">
+                                <p:outputLabel for="firstname" value="#{messages.persons_firstname}" />  
+                            </p:column>
+                            <p:column style="border: none">
+                                <p:inputText id="firstname"   
+                                             value="#{clientForm.client.firstname}" required="true" >
+                                </p:inputText>  
+                            </p:column>
+                            <p:column colspan="2" style="border: none"> 
+                                <p:message for="firstname" />  
+                            </p:column>
+                        </p:row>
 
-                        <p:outputLabel for="email" value="#{messages.persons_email}" />  
-                        <p:inputText id="email"   
-                                     value="#{clientBean.newClient.email}" required="true">
-                        </p:inputText>
-                        <p:message for="email" /> 
+                        <p:row>
+                            <p:column style="border: none">
+                                <p:outputLabel for="lastname" value="#{messages.persons_lastname}" />  
+                            </p:column>
+                            <p:column style="border: none">
+                                <p:inputText id="lastname"   
+                                             value="#{clientForm.client.lastname}" required="true">
+                                </p:inputText>
+                            </p:column>
+                            <p:column colspan="2" style="border: none">   
+                                <p:message for="lastname" />  
+                            </p:column>
+                        </p:row>
 
-                        <p:outputLabel for="phone" value="#{messages.persons_phone}" />  
-                        <p:inputText id="phone"   
-                                     value="#{clientBean.newClient.phone}" required="false">
-                        </p:inputText>
-                        <p:message for="phone" /> 
+                        <p:row>
+                            <p:column style="border: none">
+                                <p:outputLabel for="email" value="#{messages.persons_email}" />  
+                            </p:column>
+                            <p:column style="border: none">
+                                <p:inputText id="email"   
+                                             value="#{clientForm.client.email}" required="true">
+                                </p:inputText>
+                            </p:column>
+                            <p:column colspan="2" style="border: none">  
+                                <p:message for="email" /> 
+                            </p:column>
+                        </p:row>
 
-                        <p:outputLabel for="type" value="#{messages.clients_type}" />
-                        <p:selectOneMenu id="type" value="#{clientBean.newClient.type}" required="true" >  
-                            <f:selectItem itemLabel="#{messages.label_select}" itemValue="" />  
-                            <f:selectItems value="#{clientTypeBean.clientTypes}" />  
-                        </p:selectOneMenu>
-                        <p:message for="type" /> 
+                        <p:row>
+                            <p:column style="border: none">
+                                <p:outputLabel for="phone" value="#{messages.persons_phone}" /> 
+                            </p:column>
+                            <p:column style="border: none">
+                                <p:inputText id="phone"   
+                                             value="#{clientForm.client.phone}" required="false" >
+                                </p:inputText>
+                            </p:column>
+                            <p:column colspan="2" style="border: none">  
+                                <p:message for="phone" /> 
+                            </p:column>
+                        </p:row>
 
-                        <f:facet name="footer">  
-                            <p:commandButton value="#{messages.label_save}"  icon="ui-icon-disk" update="panel" style="margin-right: 10px"/>
-                            <p:commandButton value="#{messages.label_reset}" update="panel" process="@this" icon="ui-icon-refresh" >  
-                                <p:resetInput target="panel" />  
-                            </p:commandButton>  
+                        <p:row>
+                            <p:column style="border: none">
+                                <p:outputLabel for="type" value="#{messages.clients_type}" />
+                            </p:column>
+                            <p:column style="border: none">
+                                <p:selectOneMenu id="type" value="#{clientForm.clientTypeID}" required="true" style="width: 130px" >  
+                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" itemValue="" /> 
+                                    <f:selectItems value="#{clientForm.availableClientTypes}" var="clientType" itemLabel="#{clientType.name}" itemValue="#{clientType.id}" /> 
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column style="border: none">
+                                <p:commandButton value="#{messages.label_new}" ajax="false" action="#{clientForm.goNewClientType}"/>
+                            </p:column>
+                            <p:column style="border: none">
+                                <p:message for="type" /> 
+                            </p:column>
+                        </p:row>
+
+                        <f:facet name="footer" > 
+                            <p:row>
+                                <p:column style="border: none">
+                                    <p:commandButton value="#{messages.label_save}" action="#{clientForm.addNewClient}" icon="ui-icon-disk" update="panel" style="margin-right: 10px"/>
+                                </p:column>
+                                <p:column colspan="3" style="border: none">
+                                    <p:commandButton value="#{messages.label_reset}" update="panel" process="@this" icon="ui-icon-refresh" >  
+                                        <p:resetInput target="panel" />  
+                                    </p:commandButton> 
+                                </p:column>
+                            </p:row>
                         </f:facet>  
-                    </h:panelGrid>  
+                    </p:panelGrid>  
                 </p:panel>
             </h:form>
         </ui:define>

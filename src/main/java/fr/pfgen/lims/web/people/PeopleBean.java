@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.pfgen.lims.web;
+package fr.pfgen.lims.web.people;
 
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;

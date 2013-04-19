@@ -2,6 +2,7 @@ package fr.pfgen.lims.domain;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -43,8 +44,10 @@ public class ClientType implements Serializable {
 
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return name;
+        //return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -67,5 +70,27 @@ public class ClientType implements Serializable {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ClientType other = (ClientType) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
 }
