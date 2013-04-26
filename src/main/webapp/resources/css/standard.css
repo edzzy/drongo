@@ -86,3 +86,35 @@ a:visited {
 .col3 {
     vertical-align: top;
 }
+
+.ui-dock-container-top{
+    z-index: 30;
+    position:relative;
+    height:50px;
+    padding-left:20px;
+}
+
+.ui-panelgrid tr, .ui-panelgrid td {
+    border:0 !important;
+}
+
+a.ui-dock-item-top {
+    display: block;
+    width: 40px;
+    position: absolute;
+    top: 0px;
+    text-wrap: none;
+    text-align: center;
+    text-decoration: underline;
+}
+
+.topAligned td{
+    vertical-align: top !important;
+}
+
+.ui-layout-unit-content{
+    background-image:url('#{request.contextPath}/resources/images/pf-gen_transparent.png');
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    background-position:center; 
+}

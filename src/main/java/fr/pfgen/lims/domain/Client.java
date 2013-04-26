@@ -2,8 +2,6 @@ package fr.pfgen.lims.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 public class Client extends AbstractPerson {
@@ -14,7 +12,6 @@ public class Client extends AbstractPerson {
     @Override
     public String toString() {
         return this.getFirstname()+" "+this.getLastname();
-        //return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
     public ClientType getType() {
@@ -24,6 +21,4 @@ public class Client extends AbstractPerson {
     public void setType(ClientType type) {
         this.type = type;
     }
-    
-    
 }

@@ -2,6 +2,7 @@ package fr.pfgen.lims.service;
 
 import fr.pfgen.lims.domain.Client;
 import fr.pfgen.lims.repository.ClientRepository;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,11 +42,17 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void saveClient(Client client) {
+        client.setRegisteredOn(new Date());
         clientRepository.save(client);
     }
 
     @Override
     public Client updateClient(Client client) {
         return clientRepository.save(client);
+    }
+
+    @Override
+    public Client findByEmail(String email) {
+        return clientRepository.findByEmail(email);    
     }
 }

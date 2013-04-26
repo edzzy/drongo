@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PfMemberRepository extends JpaRepository<PfMember, Long>, JpaSpecificationExecutor<PfMember> {
+    
+    public PfMember findByEmail(String email);
 }

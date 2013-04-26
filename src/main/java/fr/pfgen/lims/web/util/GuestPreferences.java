@@ -16,7 +16,7 @@ import javax.faces.context.FacesContext;
 public class GuestPreferences implements Serializable {
 
    private static final long serialVersionUID = 1L;
-   private String theme = "bluesky";
+   private String theme = "afterdark";
 
    public String getTheme() {
       Map<String, String> params = FacesContext.getCurrentInstance()

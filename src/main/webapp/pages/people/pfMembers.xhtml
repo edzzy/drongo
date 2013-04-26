@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="peopleTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <h:form id="pfMemberListForm">  
+
+                <p:growl id="pfMemberListMessages" showDetail="true" life="3000"/> 
+
+                <p:dataTable var="pfMember" value="#{pfMemberBean.pfMemberList}" rowsPerPageTemplate="5,10,15" rowKey="#{pfMember.id}" paginator="true" rows="10" editable="true"  
+                             filteredValue="#{pfMemberBean.filteredPfMembers}" id="pfMembersTable" emptyMessage="#{messages.label_emptyRecords}">  
+
+                    <f:facet name="header">
+                        #{messages.label_pfMember}
+                    </f:facet>  
+
+                    <p:ajax event="rowEdit" listener="#{pfMemberBean.onEdit}" update=":pfMemberListForm:pfMemberListMessages" />  
+                    <p:ajax event="rowEditCancel" listener="#{pfMemberBean.onCancel}" update=":pfMemberListForm:pfMemberListMessages" />
+                    <p:ajax event="rowEditInit" listener="#{pfMemberBean.onEditInit}" update=":pfMemberListForm:pfMemberListMessages" />
+
+                    <p:column headerText="#{messages.persons_lastname}"  sortBy="#{pfMember.lastname}" filterBy="#{pfMember.lastname}" id="lastname">  
+                        <p:cellEditor>
+                            <f:facet name="output">  
+                                <h:outputText value="#{pfMember.lastname}"/>  
+                            </f:facet>  
+                            <f:facet name="input">  
+                                <p:inputText value="#{pfMember.lastname}"/>  
+                            </f:facet>
+                        </p:cellEditor>
+                        <f:facet name="footer">  
+                            #{pfMemberBean.pfMemberNumber} #{messages.label_pfMember}
+                        </f:facet>
+                    </p:column>
+
+                    <p:column headerText="#{messages.persons_firstname}" sortBy="#{pfMember.firstname}" filterBy="#{pfMember.firstname}" id="firstname">  
+                        <p:cellEditor>
+                            <f:facet name="output">  
+                                <h:outputText value="#{pfMember.firstname}" />  
+                            </f:facet>  
+                            <f:facet name="input">  
+                                <p:inputText value="#{pfMember.firstname}"/>  
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>  
+
+                    <p:column headerText="#{messages.persons_email}" sortBy="#{pfMember.email}" filterBy="#{pfMember.email}" id="email">  
+                        <p:cellEditor>
+                            <f:facet name="output">  
+                                <h:outputText value="#{pfMember.email}" />  
+                            </f:facet>  
+                            <f:facet name="input">  
+                                <p:inputText value="#{pfMember.email}" style="width:80%" validator="#{clientBean.validateEmail}">
+                                    <f:attribute name="pfMemberID" value="#{pfMember.id}"/>
+                                    <f:validator validatorId="emailValidator" />
+                                </p:inputText>  
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>  
+
+                    <p:column headerText="#{messages.persons_phone}" sortBy="#{pfMember.phone}" filterBy="#{pfMember.phone}" id="phone">  
+                        <p:cellEditor>
+                            <f:facet name="output">  
+                                <h:outputText value="#{pfMember.phone}" />  
+                            </f:facet>  
+                            <f:facet name="input">  
+                                <p:inputMask value="#{pfMember.phone}" mask="99.99.99.99.99"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>  
+
+                    <p:column headerText="#{messages.persons_registrationDate}" sortBy="#{pfMember.registeredOn}" id="registered">
+                        <h:outputText value="#{pfMember.registeredOn}">
+                            <f:convertDateTime dateStyle="long" type="date" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="#{messages.label_edit}">  
+                        <p:rowEditor />
+                    </p:column>  
+
+                    <f:facet name="footer">  
+                        <p:commandButton value="#{messages.label_newPfMember}" action="pfMemberCreate?faces-redirect=true" icon="ui-icon-plus" style="margin-right: 10px" />
+                    </f:facet>
+
+                </p:dataTable>
+
+                <!--
+                <p:blockUI block="clientsTable" trigger="clientsTable">  
+                #{messages.loading}<br />  
+                <p:graphicImage value="/resources/images/loading-ring32.gif"/>  
+            </p:blockUI> 
+                -->
+            </h:form> 
+            <!--
+            <h:form id="clientCreateForm">
+                
+            </h:form>
+            -->
+        </ui:define>
+    </ui:composition>
+</html>

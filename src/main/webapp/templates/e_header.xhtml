@@ -6,32 +6,9 @@
       xmlns:p="http://primefaces.org/ui">
     <ui:composition>
         <title>#{applicationBean.appName}</title>
-        <style>
-            .ui-dock-container-top{
-                z-index: 30;
-                position:relative;
-                height:50px;
-                padding-left:20px;
-            }
-
-            .ui-panelgrid tr, .ui-panelgrid td {
-                border:0 !important;
-            }
-            
-            a.ui-dock-item-top {
-                display: block;
-                width: 40px;
-                position: absolute;
-                top: 0px;
-                text-wrap: none;
-                text-align: center;
-                text-decoration: underline;
-            }
-
-        </style>
         <h:form > 
             <p:dock position="top" >  
-                <p:menuitem value="#{messages.dock_home}" icon="/resources/images/Primo_Icons/PNG/128x128/home.png" url="/pages/home/e_home.jsf"/>  
+                <p:menuitem value="#{messages.dock_home}" icon="/resources/images/Primo_Icons/PNG/128x128/home.png" url="/pages/e_main.jsf"/>  
                 <p:menuitem value="#{messages.dock_planning}" icon="/resources/images/Primo_Icons/PNG/128x128/calendar.png" url="/pages/schedule/e_schedule.jsf"/>  
                 <p:menuitem value="#{messages.dock_projects}" icon="/resources/images/Primo_Icons/PNG/128x128/folder.png" url="/pages/projects/e_projects.jsf"/>  
                 <p:menuitem value="#{messages.dock_users}" icon="/resources/images/Primo_Icons/PNG/128x128/vcards.png" url="/pages/people/people.jsf"/>  

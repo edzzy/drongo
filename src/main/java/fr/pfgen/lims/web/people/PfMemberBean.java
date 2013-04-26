@@ -5,9 +5,8 @@
 package fr.pfgen.lims.web.people;
 
 import fr.pfgen.lims.domain.Client;
-import fr.pfgen.lims.domain.ClientType;
-import fr.pfgen.lims.service.ClientService;
-import fr.pfgen.lims.service.ClientTypeService;
+import fr.pfgen.lims.domain.PfMember;
+import fr.pfgen.lims.service.PfMemberService;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -30,74 +29,52 @@ import org.springframework.stereotype.Controller;
 @Controller
 @Scope("view")
 @ManagedBean
-public class ClientBean implements Serializable {
-
-    @Autowired
-    ClientService clientService;
+public class PfMemberBean implements Serializable{
     
     @Autowired
-    ClientTypeService clientTypeService;
+    PfMemberService pfMemberService;
     
-    private List<Client> clientList;
-    private List<ClientType> clientTypeList;
-    private List<Client> filteredClients;
-
-    public List<ClientType> getClientTypeList() {
-        return clientTypeList;
-    }
-
-    public void setClientTypeList(List<ClientType> clientTypeList) {
-        this.clientTypeList = clientTypeList;
-    }
-
-    public ClientService getClientService() {
-        return clientService;
-    }
-
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
-    }
-
+    private List<PfMember> pfMemberList;
+    private List<PfMember> filteredPfMembers;
+    
     @PostConstruct
     public void init() {
-        clientList = clientService.findAllClients();
-        clientTypeList = clientTypeService.findAllClientTypes();
+        pfMemberList = pfMemberService.findAllPfMembers();
     }
     
-    public int getClientNumber(){
-        return clientList.size();
+    public int getPfMemberNumber(){
+        return pfMemberList.size();
     }
 
-    public List<Client> getClientList() {
-
-        return clientList;
+    public List<PfMember> getFilteredPfMembers() {
+        return filteredPfMembers;
     }
 
-    public void setClientList(List<Client> clientList) {
-        this.clientList = clientList;
+    public void setFilteredPfMembers(List<PfMember> filteredPfMembers) {
+        this.filteredPfMembers = filteredPfMembers;
     }
 
-    public List<Client> getFilteredClients() {
-        return filteredClients;
+    public List<PfMember> getPfMemberList() {
+        return pfMemberList;
     }
 
-    public void setFilteredClients(List<Client> filteredClients) {
-        this.filteredClients = filteredClients;
+    public void setPfMemberList(List<PfMember> pfMemberList) {
+        this.pfMemberList = pfMemberList;
     }
-
+    
     public void onEdit(RowEditEvent event) {
-        Client clientToEdit = (Client) event.getObject();
+        PfMember pfMemberToEdit = (PfMember) event.getObject();
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            Client clientUpdated = clientService.updateClient(clientToEdit);
-            int index = clientList.indexOf(clientToEdit);
-            clientList.remove(index);
-            clientList.add(index, clientUpdated);
+            PfMember pfMemberUpdated = pfMemberService.updatePfMember(pfMemberToEdit);
+            int index = pfMemberList.indexOf(pfMemberToEdit);
+            pfMemberList.remove(index);
+            pfMemberList.add(index, pfMemberUpdated);
             RequestContext rcontext = RequestContext.getCurrentInstance();
-            rcontext.update("clientTable");
+            rcontext.update("pfMembersTable");
 
             String text = context.getApplication().getResourceBundle(context, "messages").getString("edit_done");
-            FacesMessage msg = new FacesMessage(text, ((Client) event.getObject()).toString());
+            FacesMessage msg = new FacesMessage(text, ((PfMember) event.getObject()).toString());
 
             context.addMessage(null, msg);
         } catch (Exception e) {
@@ -110,38 +87,35 @@ public class ClientBean implements Serializable {
     public void onCancel(RowEditEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
         String text = context.getApplication().getResourceBundle(context, "messages").getString("edit_cancelled");
-        FacesMessage msg = new FacesMessage(text, ((Client) event.getObject()).toString());
+        FacesMessage msg = new FacesMessage(text, ((PfMember) event.getObject()).toString());
 
         context.addMessage(null, msg);
     }
 
     public void onEditInit(RowEditEvent event) {
-        Client clientToEdit = (Client) event.getObject();
-        Client clientIdDb = clientService.findClient(clientToEdit.getId());
+        PfMember pfMemberToEdit = (PfMember) event.getObject();
+        PfMember pfMemberIdDb = pfMemberService.findPfMember(pfMemberToEdit.getId());
 
-        if (clientToEdit.getVersion() != clientIdDb.getVersion()) {
-            int index = clientList.indexOf(clientToEdit);
-            clientList.remove(index);
-            clientList.add(index, clientIdDb);
+        if (pfMemberToEdit.getVersion() != pfMemberIdDb.getVersion()) {
+            int index = pfMemberList.indexOf(pfMemberToEdit);
+            pfMemberList.remove(index);
+            pfMemberList.add(index, pfMemberIdDb);
             RequestContext rcontext = RequestContext.getCurrentInstance();
-            rcontext.update("clientTable");
+            rcontext.update("pfMembersTable");
 
             FacesContext context = FacesContext.getCurrentInstance();
             String text = context.getApplication().getResourceBundle(context, "messages").getString("edit_rowchanged");
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, text, clientToEdit.toString());
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, text, pfMemberToEdit.toString());
 
             context.addMessage(null, msg);
         }
     }
-
-    public void removeClient(Client client) {
-    }
-
+    
     public void validateEmail(FacesContext context, UIComponent component, Object value) {
         String email = (String) value;
 
-        Client existingClient = clientService.findByEmail(email);
-        if (existingClient != null && existingClient.getId() != (Long) component.getAttributes().get("clientID")) {
+        PfMember existingPfMember = pfMemberService.findByEmail(email);
+        if (existingPfMember != null && existingPfMember.getId() != (Long) component.getAttributes().get("pfMemberID")) {
             ((UIInput) component).setValid(false);
             ResourceBundle bundle = context.getApplication().getResourceBundle(context, "messages");
             String error = bundle.getString("edit_error");

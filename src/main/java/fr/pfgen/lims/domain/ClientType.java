@@ -45,7 +45,6 @@ public class ClientType implements Serializable {
     @Override
     public String toString() {
         return name;
-        //return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
     
     @Id

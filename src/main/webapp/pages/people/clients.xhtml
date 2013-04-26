@@ -8,20 +8,20 @@
     <ui:composition template="peopleTemplate.xhtml">
         <ui:define name="content">
             <p:spacer height="50"/>
-            <h:form id="form">  
+            <h:form id="clientListForm">  
 
-                <p:growl id="messages" showDetail="true"/> 
+                <p:growl id="clientListMessages" showDetail="true" life="3000"/> 
 
-                <p:dataTable var="client" value="#{clientBean.clientList}" rowsPerPageTemplate="5,10,20" rowKey="#{client.id}" paginator="true" rows="10" editable="true"  
-                             selection="#{clientBean.selectedClient}" filteredValue="#{clientBean.filteredClients}" id="clientsTable" emptyMessage="#{messages.label_emptyRecords}">  
+                <p:dataTable var="client" value="#{clientBean.clientList}" rowsPerPageTemplate="5,10,15" rowKey="#{client.id}" paginator="true" rows="10" editable="true"  
+                             filteredValue="#{clientBean.filteredClients}" id="clientsTable" emptyMessage="#{messages.label_emptyRecords}">  
 
                     <f:facet name="header">
                         #{messages.label_client}
                     </f:facet>  
 
-                    <p:ajax event="rowEdit" listener="#{clientBean.onEdit}" update=":form:messages" />  
-                    <p:ajax event="rowEditCancel" listener="#{clientBean.onCancel}" update=":form:messages" />
-                    <p:ajax event="rowEditInit" listener="#{clientBean.onEditInit}" update=":form:messages" />
+                    <p:ajax event="rowEdit" listener="#{clientBean.onEdit}" update=":clientListForm:clientListMessages" />  
+                    <p:ajax event="rowEditCancel" listener="#{clientBean.onCancel}" update=":clientListForm:clientListMessages" />
+                    <p:ajax event="rowEditInit" listener="#{clientBean.onEditInit}" update=":clientListForm:clientListMessages" />
 
                     <p:column headerText="#{messages.persons_lastname}"  sortBy="#{client.lastname}" filterBy="#{client.lastname}" id="lastname">  
                         <p:cellEditor>
@@ -32,6 +32,9 @@
                                 <p:inputText value="#{client.lastname}"/>  
                             </f:facet>
                         </p:cellEditor>
+                        <f:facet name="footer">  
+                            #{clientBean.clientNumber} #{messages.label_client}
+                        </f:facet>
                     </p:column>
 
                     <p:column headerText="#{messages.persons_firstname}" sortBy="#{client.firstname}" filterBy="#{client.firstname}" id="firstname">  
@@ -51,7 +54,10 @@
                                 <h:outputText value="#{client.email}" />  
                             </f:facet>  
                             <f:facet name="input">  
-                                <p:inputText value="#{client.email}" style="width:80%"/>  
+                                <p:inputText value="#{client.email}" style="width:80%" validator="#{clientBean.validateEmail}">
+                                    <f:attribute name="clientID" value="#{client.id}"/>
+                                    <f:validator validatorId="emailValidator" />
+                                </p:inputText>  
                             </f:facet>
                         </p:cellEditor>
                     </p:column>  
@@ -80,23 +86,36 @@
                         </p:cellEditor>
                     </p:column>
 
-                    <p:column headerText="#{messages.label_edit}" style="width:6%">  
-                        <p:rowEditor />  
+                    <p:column headerText="#{messages.persons_registrationDate}" sortBy="#{client.registeredOn}" id="registered">
+                        <h:outputText value="#{client.registeredOn}">
+                            <f:convertDateTime dateStyle="long" type="date" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="#{messages.label_edit}">  
+                        <p:rowEditor />
                     </p:column>  
 
                     <f:facet name="footer">  
-                        <p:commandButton value="#{messages.label_newClient}" icon="ui-icon-plus" style="margin-right: 10px"/>
+                        <p:commandButton value="#{messages.label_newClient}" action="clientCreate?faces-redirect=true" icon="ui-icon-plus" style="margin-right: 10px">
+                           <!-- <p:ajax event="dialogReturn" listener="#{dialogBean.onDialogReturn}" update="growl" /> -->
+                        </p:commandButton>    
                     </f:facet>
 
                 </p:dataTable>
 
                 <!--
                 <p:blockUI block="clientsTable" trigger="clientsTable">  
-                    #{messages.loading}<br />  
-                    <p:graphicImage value="/resources/images/loading-ring32.gif"/>  
-                </p:blockUI> 
+                #{messages.loading}<br />  
+                <p:graphicImage value="/resources/images/loading-ring32.gif"/>  
+            </p:blockUI> 
                 -->
             </h:form> 
+            <!--
+            <h:form id="clientCreateForm">
+                
+            </h:form>
+            -->
         </ui:define>
     </ui:composition>
 </html>

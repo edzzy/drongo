@@ -65,4 +65,13 @@
         <property name="persistenceUnitName" value="persistenceUnit"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+        <property name="scopes">
+            <map>
+                <entry key="view">
+                    <bean class="fr.pfgen.lims.web.util.ViewScope"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>

@@ -1,104 +1,92 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <ui:composition template="peopleTemplate.xhtml">
         <ui:define name="content">
-            <h:form id="newClientForm">  
-                <p:panel id="panel" header="#{messages.label_newClient}" style="margin-bottom:10px; width: 750px">  
-                    <p:panelGrid>  
+            <p:spacer height="50"/>
 
-                        <p:row>
-                            <p:column style="border: none">
-                                <p:outputLabel for="firstname" value="#{messages.persons_firstname}" />  
-                            </p:column>
-                            <p:column style="border: none">
-                                <p:inputText id="firstname"   
-                                             value="#{clientForm.client.firstname}" required="true" >
-                                </p:inputText>  
-                            </p:column>
-                            <p:column colspan="2" style="border: none"> 
-                                <p:message for="firstname" />  
-                            </p:column>
-                        </p:row>
+            <h:form>
+                <p:growl id="clientCreateMessages" life="2500" showDetail="true" />
 
-                        <p:row>
-                            <p:column style="border: none">
-                                <p:outputLabel for="lastname" value="#{messages.persons_lastname}" />  
-                            </p:column>
-                            <p:column style="border: none">
-                                <p:inputText id="lastname"   
-                                             value="#{clientForm.client.lastname}" required="true">
-                                </p:inputText>
-                            </p:column>
-                            <p:column colspan="2" style="border: none">   
-                                <p:message for="lastname" />  
-                            </p:column>
-                        </p:row>
+                <p:wizard widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}">
 
-                        <p:row>
-                            <p:column style="border: none">
-                                <p:outputLabel for="email" value="#{messages.persons_email}" />  
-                            </p:column>
-                            <p:column style="border: none">
-                                <p:inputText id="email"   
-                                             value="#{clientForm.client.email}" required="true">
-                                </p:inputText>
-                            </p:column>
-                            <p:column colspan="2" style="border: none">  
-                                <p:message for="email" /> 
-                            </p:column>
-                        </p:row>
+                    <p:tab id="personal" title="Personal">
+                        <p:panel id="panelPersonal" header="Personal Details">
+                            <p:focus context="panelPersonal"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="firstname" value="#{messages.persons_firstname}" />
+                                <p:inputText id="firstname" required="true" value="#{createClientBean.newClient.firstname}" />
+                                <p:message for="firstname" />
 
-                        <p:row>
-                            <p:column style="border: none">
-                                <p:outputLabel for="phone" value="#{messages.persons_phone}" /> 
-                            </p:column>
-                            <p:column style="border: none">
-                                <p:inputText id="phone"   
-                                             value="#{clientForm.client.phone}" required="false" >
-                                </p:inputText>
-                            </p:column>
-                            <p:column colspan="2" style="border: none">  
-                                <p:message for="phone" /> 
-                            </p:column>
-                        </p:row>
+                                <p:outputLabel for="lastname" value="#{messages.persons_lastname}" />
+                                <p:inputText id="lastname" required="true" value="#{createClientBean.newClient.lastname}" />
+                                <p:message for="lastname" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
 
-                        <p:row>
-                            <p:column style="border: none">
-                                <p:outputLabel for="type" value="#{messages.clients_type}" />
-                            </p:column>
-                            <p:column style="border: none">
-                                <p:selectOneMenu id="type" value="#{clientForm.clientTypeID}" required="true" style="width: 130px" >  
-                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" itemValue="" /> 
-                                    <f:selectItems value="#{clientForm.availableClientTypes}" var="clientType" itemLabel="#{clientType.name}" itemValue="#{clientType.id}" /> 
-                                </p:selectOneMenu>
-                            </p:column>
-                            <p:column style="border: none">
-                                <p:commandButton value="#{messages.label_new}" ajax="false" action="#{clientForm.goNewClientType}"/>
-                            </p:column>
-                            <p:column style="border: none">
-                                <p:message for="type" /> 
-                            </p:column>
-                        </p:row>
+                    <p:tab id="contact" title="Contact">
+                        <p:panel id="panelContact" header="Contact Information">
+                            <p:focus context="panelContact"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="email" value="#{messages.persons_email}" />
+                                <p:inputText id="email" required="true" value="#{createClientBean.newClient.email}" validator="#{createClientBean.validateEmail}">
+                                    <f:validator validatorId="emailValidator" />
+                                </p:inputText>    
+                                <p:message for="email" />
 
-                        <f:facet name="footer" > 
-                            <p:row>
-                                <p:column style="border: none">
-                                    <p:commandButton value="#{messages.label_save}" action="#{clientForm.addNewClient}" icon="ui-icon-disk" update="panel" style="margin-right: 10px"/>
-                                </p:column>
-                                <p:column colspan="3" style="border: none">
-                                    <p:commandButton value="#{messages.label_reset}" update="panel" process="@this" icon="ui-icon-refresh" >  
-                                        <p:resetInput target="panel" />  
-                                    </p:commandButton> 
-                                </p:column>
-                            </p:row>
-                        </f:facet>  
-                    </p:panelGrid>  
-                </p:panel>
+                                <p:outputLabel for="phone" value="#{messages.persons_phone}" />
+                                <p:inputMask id="phone" required="false" mask="99.99.99.99.99" value="#{createClientBean.newClient.phone}"/>
+                                <p:message for="phone" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="rights" title="Droits">
+                        <p:panel header="Adress Details">
+                            <h:panelGrid columns="3" columnClasses="label, value">
+
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="confirm" title="Confirmation">
+                        <p:panel header="Confirmation" >
+                            <p:focus context="submitButton"/>
+                            <h:panelGrid columns="2" cellpadding="20" styleClass="topAligned">
+                                <p:panelGrid columns="2" > 
+                                    <f:facet name="header">
+                                        Personal
+                                    </f:facet> 
+
+                                    <h:outputText value="#{messages.persons_firstname}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.firstname}" />
+
+                                    <h:outputText value="#{messages.persons_lastname}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.lastname}" />
+                                </p:panelGrid>
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        Contact
+                                    </f:facet>
+                                    <h:outputText value="#{messages.persons_email}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.email}" />
+
+                                    <h:outputText value="#{messages.persons_phone}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.phone}" />
+                                </p:panelGrid>
+                            </h:panelGrid>
+                            <f:facet name="footer"> 
+                                <p:commandButton id="submitButton" value="Submit" update="clientCreateMessages" action="#{createClientBean.saveNewClient}" />
+                            </f:facet>
+                        </p:panel>
+                    </p:tab>
+
+                </p:wizard>
             </h:form>
         </ui:define>
     </ui:composition>
