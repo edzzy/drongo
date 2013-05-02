@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="projectTemplate.xhtml">
+        <ui:define name="content">
+            <h:form id="projectListForm">  
+                 <p:growl id="projectListMessages" showDetail="true" life="3000"/>
+                 <p:dataTable var="project" value="#{projectBean.projectList}" rowsPerPageTemplate="5,10,15" rows ="10" rowKey="#{project.id}" 
+                             paginator="true" editable="true" filteredValue="#{projectBean.filteredProjects}" id="projectsTable" emptyMessage="#{messages.label_emptyRecords}">  
+                    <f:facet name="header">  
+                        #{messages.label_project}
+                    </f:facet>  
+                    <p:ajax event="rowEdit" listener="#{projectBean.onEdit}" update=":projectListForm:projectListMessages"/>
+                    <p:ajax event="rowEditCancel" listener="#{projectBean.onCancel}" update=":projectListForm:projectListMessages"/>
+                    <p:ajax event="rowEditInit" listener="#{projectBean.onEditInit}" update=":projectListForm:projectListMessages"/>
+
+                    <p:column headerText="#{messages.label_project_name}"  sortBy="#{project.name}" filterBy="#{project.name}" id="name">  
+                        <p:cellEditor>
+                            <f:facet name ="output">
+                                <h:outputText value="#{project.name}"/>
+                            </f:facet>
+                              <f:facet name ="input">
+                                <h:outputText value="#{project.name}"/>
+                            </f:facet>
+                                
+                        </p:cellEditor>  
+                    </p:column> 
+                    
+                     <p:column headerText="#{messages.label_project_responsable}"  sortBy="#{project.responsable}" filterBy="#{project.responsable}" id="responsable">  
+                        <p:cellEditor>
+                            <f:facet name ="output">
+                                <h:outputText value="#{project.responsable}"/>
+                            </f:facet>
+                              <f:facet name ="input">
+                                  <p:selectOneMenu value="#{project.responsable}" converter="#{clientConverter}" style="width: 130px">
+                                      <f:selectItems value="#{clientBean.clientList}" />
+                                  </p:selectOneMenu>
+                                  
+                                   
+                                  
+                            </f:facet>
+                                
+                        </p:cellEditor>  
+                    </p:column>  
+                    <p:column headerText="#{messages.label_project_beginDate}"  sortBy="#{project.begin_date}" filterBy="#{project.begin_date}" id="begindate">  
+                        <p:cellEditor>
+                            <f:facet name ="output">
+                                <h:outputText value="#{project.begin_date}">
+                                    <f:convertDateTime dateStyle="long" type="date" />
+                                </h:outputText>
+                            </f:facet>
+                              <f:facet name ="input">
+                                <h:outputText value="#{project.begin_date}"/>
+                            </f:facet>
+                                
+                        </p:cellEditor>  
+                    </p:column>  
+
+                     <p:column headerText="#{messages.label_project_dueDate}"  sortBy="#{project.due_date}" filterBy="#{project.due_date}" id="duedate">  
+                        <p:cellEditor>
+                            <f:facet name ="output">
+                                <h:outputText value="#{project.due_date}">
+                                <f:convertDateTime dateStyle="long" type="date" />
+                                </h:outputText>
+                            </f:facet>
+                              <f:facet name ="input">
+                                <h:outputText value="#{project.due_date}"/>
+                            </f:facet>
+                                
+                        </p:cellEditor>  
+                    </p:column>  
+                     <p:column headerText="#{messages.label_edit}">  
+                        <p:rowEditor />
+                    </p:column>  
+                    <f:facet name="footer">
+                        <p:commandButton value="#{messages.label_project_newProject}" action="projectCreate?faces-redirect=true" icon="ui-icon-plus" style="margin-right: 10px">
+                        
+                        </p:commandButton>
+                    </f:facet>
+                </p:dataTable>  
+
+            </h:form> 
+        </ui:define>
+    </ui:composition>
+</html>
+
