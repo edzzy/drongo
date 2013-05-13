@@ -10,7 +10,7 @@
             <h:form id="projectListForm">  
                  <p:growl id="projectListMessages" showDetail="true" life="3000"/>
                  <p:dataTable var="project" value="#{projectBean.projectList}" rowsPerPageTemplate="5,10,15" rows ="10" rowKey="#{project.id}" 
-                             paginator="true" editable="true" filteredValue="#{projectBean.filteredProjects}" id="projectsTable" emptyMessage="#{messages.label_emptyRecords}">  
+                              paginator="true" editable="true" filteredValue="#{projectBean.filteredProjects}" id="projectsTable" emptyMessage="#{messages.label_emptyRecords}" resizableColumns="true" liveResize="true">  
                     <f:facet name="header">  
                         #{messages.label_project}
                     </f:facet>  
