@@ -73,10 +73,17 @@
                         </p:cellEditor>
                     </p:column>  
 
-                    <p:column headerText="#{messages.persons_registrationDate}" sortBy="#{pfMember.registeredOn}" id="registered">
-                        <h:outputText value="#{pfMember.registeredOn}">
-                            <f:convertDateTime dateStyle="long" type="date" />
-                        </h:outputText>
+                    <p:column headerText="#{messages.pfMember_memberSince}" sortBy="#{pfMember.memberSince}" id="registered">
+                        <p:cellEditor>
+                            <f:facet name="output">  
+                                <h:outputText value="#{pfMember.memberSince}">
+                                    <f:convertDateTime dateStyle="long" type="date" />
+                                </h:outputText>
+                            </f:facet>  
+                            <f:facet name="input">  
+                                <p:calendar value="#{pfMember.memberSince}" navigator="true" maxdate="#{pfMemberBean.maxDate}" />
+                            </f:facet>
+                        </p:cellEditor> 
                     </p:column>
 
                     <p:column headerText="#{messages.label_edit}">  

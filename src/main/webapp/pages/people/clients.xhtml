@@ -10,7 +10,7 @@
             <p:spacer height="50"/>
             <h:form id="clientListForm">  
 
-                <p:growl id="clientListMessages" showDetail="true" life="3000"/> 
+                <p:growl id="clientListMessages" showDetail="true" showSummary="true" life="3000"/> 
 
                 <p:dataTable var="client" value="#{clientBean.clientList}" rowsPerPageTemplate="5,10,15" rowKey="#{client.id}" paginator="true" rows="10" editable="true"  
                              filteredValue="#{clientBean.filteredClients}" id="clientsTable" emptyMessage="#{messages.label_emptyRecords}">  
@@ -29,7 +29,7 @@
                                 <h:outputText value="#{client.lastname}"/>  
                             </f:facet>  
                             <f:facet name="input">  
-                                <p:inputText value="#{client.lastname}"/>  
+                                <p:inputText value="#{client.lastname}" />  
                             </f:facet>
                         </p:cellEditor>
                         <f:facet name="footer">  

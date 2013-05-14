@@ -8,6 +8,7 @@ import fr.pfgen.lims.domain.Client;
 import fr.pfgen.lims.domain.PfMember;
 import fr.pfgen.lims.service.PfMemberService;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
@@ -40,6 +41,10 @@ public class PfMemberBean implements Serializable{
     @PostConstruct
     public void init() {
         pfMemberList = pfMemberService.findAllPfMembers();
+    }
+    
+    public Date getMaxDate(){
+        return new Date();
     }
     
     public int getPfMemberNumber(){
