@@ -106,6 +106,7 @@ public class ScheduleProject implements Serializable {
      */
     private ScheduleModel eventModel;
     private ScheduleEvent event = new DefaultScheduleEvent();
+   
     @Autowired
     ProjectService projectService;
     private List<Project> projectList;

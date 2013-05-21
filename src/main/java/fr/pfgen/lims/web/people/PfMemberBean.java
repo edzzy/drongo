@@ -6,6 +6,7 @@ package fr.pfgen.lims.web.people;
 
 import fr.pfgen.lims.domain.Client;
 import fr.pfgen.lims.domain.PfMember;
+import fr.pfgen.lims.service.ClientService;
 import fr.pfgen.lims.service.PfMemberService;
 import java.io.Serializable;
 import java.util.Date;
@@ -34,6 +35,9 @@ public class PfMemberBean implements Serializable{
     
     @Autowired
     PfMemberService pfMemberService;
+    
+    @Autowired
+    ClientService clientService;
     
     private List<PfMember> pfMemberList;
     private List<PfMember> filteredPfMembers;
@@ -85,6 +89,7 @@ public class PfMemberBean implements Serializable{
         } catch (Exception e) {
             String text = context.getApplication().getResourceBundle(context, "messages").getString("edit_error");
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, text, e.getMessage());
+            context.validationFailed();
             context.addMessage(null, msg);
         }
     }
@@ -118,9 +123,11 @@ public class PfMemberBean implements Serializable{
     
     public void validateEmail(FacesContext context, UIComponent component, Object value) {
         String email = (String) value;
-
+        
+        Client existingClient = clientService.findByEmail(email);
         PfMember existingPfMember = pfMemberService.findByEmail(email);
-        if (existingPfMember != null && existingPfMember.getId() != (Long) component.getAttributes().get("pfMemberID")) {
+        
+        if ((existingClient != null && existingClient.getId() != (Long) component.getAttributes().get("pfMemberID")) || (existingPfMember != null && existingPfMember.getId() != (Long) component.getAttributes().get("pfMemberID"))) {
             ((UIInput) component).setValid(false);
             ResourceBundle bundle = context.getApplication().getResourceBundle(context, "messages");
             String error = bundle.getString("edit_error");

@@ -15,6 +15,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -24,26 +25,33 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "persons")
 public abstract class AbstractPerson implements Serializable {
 
     @NotNull
     @Size(min = 2, max = 30)
     private String firstname;
+    
     @NotNull
     @Size(min = 2, max = 30)
     private String lastname;
+    
     @NotNull
     @Column(unique = true)
     @Size(min = 2, max = 60)
     private String email;
+    
     @Size(max = 16)
     private String phone;
+    
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date registeredOn;
+    
     @ManyToOne
     private AppCredentials appCredentials;
+    
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<AppAction> appActions = new HashSet<>();
 

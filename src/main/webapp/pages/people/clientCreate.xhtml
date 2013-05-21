@@ -14,8 +14,8 @@
 
                 <p:wizard widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}">
 
-                    <p:tab id="personal" title="Personal">
-                        <p:panel id="panelPersonal" header="Personal Details">
+                    <p:tab id="personal" title="#{messages.label_informations}">
+                        <p:panel id="panelPersonal" header="#{messages.label_PersonalDetails}">
                             <p:focus context="panelPersonal"/>
                             <h:panelGrid columns="3">
                                 <p:outputLabel for="firstname" value="#{messages.persons_firstname}" />
@@ -25,12 +25,17 @@
                                 <p:outputLabel for="lastname" value="#{messages.persons_lastname}" />
                                 <p:inputText id="lastname" required="true" value="#{createClientBean.newClient.lastname}" />
                                 <p:message for="lastname" />
+                                
+                                <p:outputLabel for="type" value="#{messages.clients_type}" />
+                                <p:selectOneMenu id="type"  value="#{createClientBean.newClient.type}" converter="#{clientTypeConverter}" style="width: 130px" >  
+                                    <f:selectItems value="#{createClientBean.clientTypeList}" /> 
+                                </p:selectOneMenu>
                             </h:panelGrid>
                         </p:panel>
                     </p:tab>
 
-                    <p:tab id="contact" title="Contact">
-                        <p:panel id="panelContact" header="Contact Information">
+                    <p:tab id="contact" title="#{messages.label_contact}">
+                        <p:panel id="panelContact" header="#{messages.label_contactInformations}">
                             <p:focus context="panelContact"/>
                             <h:panelGrid columns="3">
                                 <p:outputLabel for="email" value="#{messages.persons_email}" />
@@ -46,32 +51,42 @@
                         </p:panel>
                     </p:tab>
 
-                    <p:tab id="rights" title="Droits">
-                        <p:panel header="Adress Details">
-                            <h:panelGrid columns="3" columnClasses="label, value">
-
+                    <p:tab id="rights" title="#{messages.label_address}">
+                        <p:panel id="panelAddress" header="#{messages.label_addressInformations}">
+                            <p:focus context="panelAddress"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="shipping" value="#{messages.client_shippingAddress}" />
+                                <p:inputTextarea id="shipping" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{createClientBean.newClient.shippingAddress}" converter="shippingAddressConverter"/>
+                                <p:message for="shipping" />
+                                
+                                <p:outputLabel for="billing" value="#{messages.client_billingAddress}" />
+                                <p:inputTextarea id="billing" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{createClientBean.newClient.billingAddress}" converter="billingAddressConverter"/>
+                                <p:message for="billing" />
                             </h:panelGrid>
                         </p:panel>
                     </p:tab>
 
-                    <p:tab id="confirm" title="Confirmation">
-                        <p:panel header="Confirmation" >
+                    <p:tab id="confirm" title="#{messages.label_confirmation}">
+                        <p:panel header="#{messages.label_confirmation}" >
                             <p:focus context="submitButton"/>
                             <h:panelGrid columns="2" cellpadding="20" styleClass="topAligned">
                                 <p:panelGrid columns="2" > 
                                     <f:facet name="header">
-                                        Personal
-                                    </f:facet> 
-
+                                        #{messages.label_PersonalDetails}
+                                    </f:facet>
                                     <h:outputText value="#{messages.persons_firstname}: " />
                                     <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.firstname}" />
 
                                     <h:outputText value="#{messages.persons_lastname}: " />
                                     <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.lastname}" />
+                                    
+                                    <h:outputText value="#{messages.clients_type}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.type}" />
                                 </p:panelGrid>
+                                
                                 <p:panelGrid columns="2">
                                     <f:facet name="header">
-                                        Contact
+                                        #{messages.label_contactInformations}
                                     </f:facet>
                                     <h:outputText value="#{messages.persons_email}: " />
                                     <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.email}" />
@@ -79,9 +94,20 @@
                                     <h:outputText value="#{messages.persons_phone}: " />
                                     <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.phone}" />
                                 </p:panelGrid>
+                                
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        #{messages.label_addressInformations}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.client_shippingAddress}: " />
+                                    <h:outputText styleClass="carRetLabel" value="#{createClientBean.newClient.shippingAddress}" />
+                                    
+                                    <h:outputText value="#{messages.client_billingAddress}: " />
+                                    <h:outputText styleClass="carRetLabel" value="#{createClientBean.newClient.billingAddress}" />
+                                </p:panelGrid>
                             </h:panelGrid>
                             <f:facet name="footer"> 
-                                <p:commandButton id="submitButton" value="Submit" update="clientCreateMessages" action="#{createClientBean.saveNewClient}" />
+                                <p:commandButton id="submitButton" value="#{messages.label_save}" update="clientCreateMessages" action="#{createClientBean.saveNewClient}" />
                             </f:facet>
                         </p:panel>
                     </p:tab>

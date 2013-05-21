@@ -4,8 +4,8 @@
  */
 package fr.pfgen.lims.domain;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
@@ -27,36 +28,34 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Project {
+@Table(name = "projects")
+public class Project implements Serializable{
     
+    @NotNull
     @Size(min = 2, max = 30)
     private String name;
     
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
+    
     private Date registeredOn;
       
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date begin_date;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date due_date;
-
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
     
-    
-    
     @ManyToOne
     private Client responsable; 
-    
-    
      
     @Version
     @Column(name = "version")
@@ -81,9 +80,7 @@ public class Project {
     public void setResponsable(Client responsable) {
         this.responsable = responsable;
     }
-
-   
-
+    
     public void setDue_date(Date due_date) {
         this.due_date = due_date;
     }
@@ -95,9 +92,6 @@ public class Project {
     public void setBegin_date(Date begin_date) {
         this.begin_date = begin_date;
     }
-    
-    
-    
     
     public Date getRegisteredOn() {
         return registeredOn;

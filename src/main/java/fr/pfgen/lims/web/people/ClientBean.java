@@ -6,10 +6,14 @@ package fr.pfgen.lims.web.people;
 
 import fr.pfgen.lims.domain.Client;
 import fr.pfgen.lims.domain.ClientType;
+import fr.pfgen.lims.domain.PfMember;
 import fr.pfgen.lims.service.ClientService;
 import fr.pfgen.lims.service.ClientTypeService;
+import fr.pfgen.lims.service.PfMemberService;
+import fr.pfgen.lims.web.util.FacesUtils;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -19,6 +23,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.ToggleEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -34,13 +39,22 @@ public class ClientBean implements Serializable {
 
     @Autowired
     ClientService clientService;
-    
     @Autowired
     ClientTypeService clientTypeService;
-    
+    @Autowired
+    PfMemberService pfMemberService;
     private List<Client> clientList;
     private List<ClientType> clientTypeList;
     private List<Client> filteredClients;
+    private Client selectedClient;
+
+    public Client getSelectedClient() {
+        return selectedClient;
+    }
+
+    public void setSelectedClient(Client selectedClient) {
+        this.selectedClient = selectedClient;
+    }
 
     public List<ClientType> getClientTypeList() {
         return clientTypeList;
@@ -60,11 +74,11 @@ public class ClientBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        clientList = clientService.findAllClients();
+        clientList = clientService.findAllActiveClients();
         clientTypeList = clientTypeService.findAllClientTypes();
     }
-    
-    public int getClientNumber(){
+
+    public int getClientNumber() {
         return clientList.size();
     }
 
@@ -103,6 +117,7 @@ public class ClientBean implements Serializable {
         } catch (Exception e) {
             String text = context.getApplication().getResourceBundle(context, "messages").getString("edit_error");
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, text, e.getMessage());
+            context.validationFailed();
             context.addMessage(null, msg);
         }
     }
@@ -134,21 +149,50 @@ public class ClientBean implements Serializable {
         }
     }
 
-    public void removeClient(Client client) {
-    }
-
     public void validateEmail(FacesContext context, UIComponent component, Object value) {
-        String email = (String) value;
+        String email = ((String) value).toLowerCase();
 
         Client existingClient = clientService.findByEmail(email);
-        if (existingClient != null && existingClient.getId() != (Long) component.getAttributes().get("clientID")) {
+        PfMember existingPfMember = pfMemberService.findByEmail(email);
+
+        if ((existingClient != null && existingClient.getId() != (Long) component.getAttributes().get("clientID")) || (existingPfMember != null && existingPfMember.getId() != (Long) component.getAttributes().get("clientID"))) {
             ((UIInput) component).setValid(false);
-            ResourceBundle bundle = context.getApplication().getResourceBundle(context, "messages");
-            String error = bundle.getString("edit_error");
-            String text = bundle.getString("label_alreadyExists");
-            FacesMessage msg = new FacesMessage(error, email + " " + text);
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            context.addMessage(component.getClientId(context), msg);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
+    }
+
+    /*
+    public void onRowToggle(ToggleEvent event) {
+        
+        
+        FacesMessage msg = new FacesMessage();
+        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+        Client c = (Client) event.getData();
+        msg.setSummary(c.toString() + " " + event.getVisibility());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    */
+
+    public void modifyAd(Client client) {
+        FacesMessage msg = new FacesMessage();
+        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+
+        msg.setSummary("modifying address");
+        msg.setDetail(client.getFirstname() + " " + client.getLastname());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void deleteClient() {
+        try {
+            clientService.deleteClient(selectedClient);
+            clientList.remove(selectedClient);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteDone"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
+        } catch (Exception e) {
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+        }
+    }
+
+    public void cancelDeletion() {
+        FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteCanceled"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
     }
 }

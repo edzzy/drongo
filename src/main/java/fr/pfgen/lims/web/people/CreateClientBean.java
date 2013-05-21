@@ -4,9 +4,15 @@
  */
 package fr.pfgen.lims.web.people;
 
+import fr.pfgen.lims.domain.BillingAddress;
 import fr.pfgen.lims.domain.Client;
+import fr.pfgen.lims.domain.ClientType;
+import fr.pfgen.lims.domain.ShippingAddress;
 import fr.pfgen.lims.service.ClientService;
+import fr.pfgen.lims.service.ClientTypeService;
 import java.io.Serializable;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
@@ -30,20 +36,35 @@ public class CreateClientBean implements Serializable{
      * Creates a new instance of CreateClientBean
      */
     private Client newClient = new Client();
+    private List<ClientType> clientTypeList;
     
     @Autowired
     private ClientService clientService;
     
-    private UIComponent emailField;
-
-    public UIComponent getEmailField() {
-        return emailField;
+    @Autowired
+    ClientTypeService clientTypeService;
+    
+    @PostConstruct
+    public void init(){
+        clientTypeList = clientTypeService.findAllClientTypes();
     }
 
-    public void setEmailField(UIComponent emailField) {
-        this.emailField = emailField;
+    public List<ClientType> getClientTypeList() {
+        return clientTypeList;
     }
 
+    public void setClientTypeList(List<ClientType> clientTypeList) {
+        this.clientTypeList = clientTypeList;
+    }
+
+    public ClientTypeService getClientTypeService() {
+        return clientTypeService;
+    }
+
+    public void setClientTypeService(ClientTypeService clientTypeService) {
+        this.clientTypeService = clientTypeService;
+    }
+    
     public Client getNewClient() {
         return newClient;
     }
@@ -62,9 +83,6 @@ public class CreateClientBean implements Serializable{
 
     public String saveNewClient() {
         try {
-            newClient.setFirstname(WordUtils.capitalizeFully(newClient.getFirstname(), '-', ' '));
-            newClient.setLastname(WordUtils.capitalizeFully(newClient.getLastname(), '-', ' '));
-            newClient.setEmail(newClient.getEmail().toLowerCase());
             clientService.saveClient(newClient);
             FacesContext context = FacesContext.getCurrentInstance();
             String text = context.getApplication().getResourceBundle(context, "messages").getString("newClient_added");

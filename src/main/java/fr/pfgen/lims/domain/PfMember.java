@@ -2,14 +2,14 @@ package fr.pfgen.lims.domain;
 
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
+@Table(name = "pf_members")
 public class PfMember extends AbstractPerson {
 
     @NotNull

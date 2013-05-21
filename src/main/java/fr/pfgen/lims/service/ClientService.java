@@ -12,6 +12,8 @@ public interface ClientService {
     public abstract Client findClient(Long id);
 
     public abstract List<Client> findAllClients();
+    
+    public abstract List<Client> findAllActiveClients();
 
     public abstract List<Client> findClientEntries(int firstResult, int maxResults);
 

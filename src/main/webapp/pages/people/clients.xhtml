@@ -13,7 +13,7 @@
                 <p:growl id="clientListMessages" showDetail="true" showSummary="true" life="3000"/> 
 
                 <p:dataTable var="client" value="#{clientBean.clientList}" rowsPerPageTemplate="5,10,15" rowKey="#{client.id}" paginator="true" rows="10" editable="true"  
-                             filteredValue="#{clientBean.filteredClients}" id="clientsTable" emptyMessage="#{messages.label_emptyRecords}">  
+                             filteredValue="#{clientBean.filteredClients}"  id="clientsTable" emptyMessage="#{messages.label_emptyRecords}">  
 
                     <f:facet name="header">
                         #{messages.label_client}
@@ -22,6 +22,11 @@
                     <p:ajax event="rowEdit" listener="#{clientBean.onEdit}" update=":clientListForm:clientListMessages" />  
                     <p:ajax event="rowEditCancel" listener="#{clientBean.onCancel}" update=":clientListForm:clientListMessages" />
                     <p:ajax event="rowEditInit" listener="#{clientBean.onEditInit}" update=":clientListForm:clientListMessages" />
+                    <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
+
+                    <p:column style="width: 5px">  
+                        <p:rowToggler />  
+                    </p:column>
 
                     <p:column headerText="#{messages.persons_lastname}"  sortBy="#{client.lastname}" filterBy="#{client.lastname}" id="lastname">  
                         <p:cellEditor>
@@ -92,15 +97,45 @@
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="#{messages.label_edit}">  
-                        <p:rowEditor />
+                    <p:column style="width: 5px">  
+                        <p:rowEditor id="editButton"/>
+                        <p:tooltip for="editButton" value="#{messages.label_edit}" /> 
                     </p:column>  
 
+                    <p:column style="width: 5px">
+                        <p:commandLink id="deleteButton" oncomplete="deleteDlg.show();" update=":deleteDialog" title="#{messages.label_delete}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-trash" />
+                            <f:setPropertyActionListener value="#{client}" target="#{clientBean.selectedClient}" />
+                        </p:commandLink>
+                        <p:tooltip for="deleteButton" value="#{messages.label_delete}" /> 
+                    </p:column>
+
                     <f:facet name="footer">  
-                        <p:commandButton value="#{messages.label_newClient}" action="clientCreate?faces-redirect=true" icon="ui-icon-plus" style="margin-right: 10px">
-                           <!-- <p:ajax event="dialogReturn" listener="#{dialogBean.onDialogReturn}" update="growl" /> -->
-                        </p:commandButton>    
+                        <p:commandButton value="#{messages.label_newClient}" action="clientCreate?faces-redirect=true" icon="ui-icon-plus" />
                     </f:facet>
+
+                    <p:rowExpansion>  
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="width:auto" styleClass=" ui-widget-content grid">  
+
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    #{messages.label_addressInformations}
+                                </f:facet>
+                                <h:outputText value="#{messages.client_shippingAddress}: " />
+                                <h:outputText styleClass="carRetLabel" value="#{client.shippingAddress}" />
+
+                                <h:outputText value="#{messages.client_billingAddress}: " />
+                                <h:outputText styleClass="carRetLabel" value="#{client.billingAddress}" />
+
+                                <f:facet name="footer">
+                                    <p:commandButton value="#{messages.label_change}" oncomplete="addressDlg.show();" update=":modalAddressDialog" >
+                                        <f:setPropertyActionListener value="#{client}" target="#{clientBean.selectedClient}" />
+                                    </p:commandButton>    
+                                </f:facet>
+
+                            </p:panelGrid> 
+                        </h:panelGrid>
+                    </p:rowExpansion>
 
                 </p:dataTable>
 
@@ -110,7 +145,33 @@
                 <p:graphicImage value="/resources/images/loading-ring32.gif"/>  
             </p:blockUI> 
                 -->
-            </h:form> 
+            </h:form>
+
+            <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{clientBean.selectedClient.firstname} #{clientBean.selectedClient.lastname}" message="#{messages.label_confirm_deletion}"
+                             closable="false" showEffect="fade" severity="alert" appendToBody="true" >
+                <h:form id="deleteForm">
+                    <h:panelGroup layout="block" style="text-align: right">
+                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{clientBean.deleteClient}" update=":clientListForm:clientListMessages, :clientListForm:clientsTable," oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_cancel}" actionListener="#{clientBean.cancelDeletion}" update=":clientListForm:clientListMessages" oncomplete="deleteDlg.hide();" />
+                    </h:panelGroup>
+                </h:form>
+            </p:confirmDialog>
+
+            <p:dialog showEffect="fade" hideEffect="explode" id="modalAddressDialog" header="#{messages.label_address} #{messages.label_for} #{clientBean.selectedClient.firstname} #{clientBean.selectedClient.lastname}" 
+                      widgetVar="addressDlg" modal="true" appendToBody="true">
+                <h:form id="addressForm">
+                    <h:panelGrid columns="3">
+                        <p:outputLabel for="shipping" value="#{messages.client_shippingAddress}" />
+                        <p:inputTextarea id="shipping" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.selectedClient.shippingAddress}" converter="shippingAddressConverter"/>
+                        <p:message for="shipping" />
+
+                        <p:outputLabel for="billing" value="#{messages.client_billingAddress}" />
+                        <p:inputTextarea id="billing" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.selectedClient.billingAddress}" converter="billingAddressConverter"/>
+                        <p:message for="billing" />
+                    </h:panelGrid>
+                </h:form>
+            </p:dialog> 
+
             <!--
             <h:form id="clientCreateForm">
                 
