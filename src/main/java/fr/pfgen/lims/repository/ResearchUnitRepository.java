@@ -4,7 +4,7 @@
  */
 package fr.pfgen.lims.repository;
 
-import fr.pfgen.lims.domain.ShippingAddress;
+import fr.pfgen.lims.domain.ResearchUnit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -14,6 +14,6 @@ import org.springframework.stereotype.Repository;
  * @author eric
  */
 @Repository
-public interface ShippingAddressRepository extends JpaSpecificationExecutor<ShippingAddress>, JpaRepository<ShippingAddress, Long>{
+public interface ResearchUnitRepository extends JpaSpecificationExecutor<ResearchUnit>, JpaRepository<ResearchUnit, Long>{
     
 }

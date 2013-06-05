@@ -4,7 +4,7 @@
  */
 package fr.pfgen.lims.repository;
 
-import fr.pfgen.lims.domain.BillingAddress;
+import fr.pfgen.lims.domain.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
  * @author eric
  */
 @Repository
-public interface BillingAddressRepository extends JpaSpecificationExecutor<BillingAddress>, JpaRepository<BillingAddress, Long>{
+public interface AddressRespository extends JpaSpecificationExecutor<Address>, JpaRepository<Address, Long>{
     
+    public Address findByAddress(String address);
 }

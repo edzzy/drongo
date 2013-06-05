@@ -5,13 +5,15 @@
 package fr.pfgen.lims.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -21,9 +23,8 @@ import javax.validation.constraints.NotNull;
  * @author eric
  */
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "addresses")
-public abstract class Address implements Serializable {
+public class Address implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,11 +32,34 @@ public abstract class Address implements Serializable {
     private Long id;
    
     @NotNull
+    @Column(unique = true)
     private String address;
     
     @Version
     @Column(name = "version")
     private Integer version;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "shippingAddress")
+    private Set<Client> shipToClients = new HashSet<>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "billingAddress")
+    private Set<Client> billToClients = new HashSet<>();
+
+    public Set<Client> getShipToClients() {
+        return shipToClients;
+    }
+
+    public void setShipToClients(Set<Client> shipToClients) {
+        this.shipToClients = shipToClients;
+    }
+
+    public Set<Client> getBillToClients() {
+        return billToClients;
+    }
+
+    public void setBillToClients(Set<Client> billToClients) {
+        this.billToClients = billToClients;
+    }
 
     public Long getId() {
         return id;

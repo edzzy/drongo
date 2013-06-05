@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package fr.pfgen.lims.domain;
 
 import java.io.Serializable;
@@ -10,55 +14,60 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ *
+ * @author eric
+ */
 @Entity
-@Table(name = "client_types")
-public class ClientType implements Serializable {
+@Table(name = "research_teams")
+public class ResearchTeam implements Serializable{
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+    
+    @Version
+    @Column(name = "version")
+    private Integer version;
+    
+    @NotNull
+    @Column(unique = true)
+    @Size(min = 2, max = 50)
+    private String name;
 
     @NotNull
-    @Size(min = 2, max = 30)
-    @Column(unique = true)
-    private String name;
+    @ManyToOne
+    private ResearchUnit researchUnit;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "type")
+    @OneToMany(mappedBy = "researchTeam", cascade = CascadeType.ALL)
     private Set<Client> clients = new HashSet<>();
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Set<Client> getClients() {
-        return this.clients;
+        return clients;
     }
 
     public void setClients(Set<Client> clients) {
         this.clients = clients;
     }
 
-    @Override
-    public String toString() {
-        return name;
+    public ResearchUnit getResearchUnit() {
+        return researchUnit;
+    }
+
+    public void setResearchUnit(ResearchUnit researchUnit) {
+        this.researchUnit = researchUnit;
     }
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
-    @Version
-    @Column(name = "version")
-    private Integer version;
-
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -66,17 +75,25 @@ public class ClientType implements Serializable {
     }
 
     public Integer getVersion() {
-        return this.version;
+        return version;
     }
 
     public void setVersion(Integer version) {
         this.version = version;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 11 * hash + Objects.hashCode(this.id);
+        hash = 67 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -88,10 +105,15 @@ public class ClientType implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ClientType other = (ClientType) obj;
+        final ResearchTeam other = (ResearchTeam) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

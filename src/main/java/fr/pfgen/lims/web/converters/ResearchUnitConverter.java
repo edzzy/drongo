@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * @author edouard
+ * @author eric
  */
-@Component("clientConverter")
-public class ClientConverter extends SelectItemsConverter{
+@Component("researchUnitConverter")
+public class ResearchUnitConverter extends SelectItemsConverter{
     
 }

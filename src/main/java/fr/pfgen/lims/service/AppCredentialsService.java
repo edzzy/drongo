@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface AppCredentialsService {
 
-	public abstract long countAllAppCredentialses();
+	public abstract long countAllAppCredentials();
 
 
 	public abstract void deleteAppCredentials(AppCredentials appCredentials);
@@ -14,7 +14,7 @@ public interface AppCredentialsService {
 	public abstract AppCredentials findAppCredentials(Long id);
 
 
-	public abstract List<AppCredentials> findAllAppCredentialses();
+	public abstract List<AppCredentials> findAllAppCredentials();
 
 
 	public abstract List<AppCredentials> findAppCredentialsEntries(int firstResult, int maxResults);

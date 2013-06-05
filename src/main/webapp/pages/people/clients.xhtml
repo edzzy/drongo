@@ -4,7 +4,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:components="http://java.sun.com/jsf/composite/components">
     <ui:composition template="peopleTemplate.xhtml">
         <ui:define name="content">
             <p:spacer height="50"/>
@@ -37,9 +38,6 @@
                                 <p:inputText value="#{client.lastname}" />  
                             </f:facet>
                         </p:cellEditor>
-                        <f:facet name="footer">  
-                            #{clientBean.clientNumber} #{messages.label_client}
-                        </f:facet>
                     </p:column>
 
                     <p:column headerText="#{messages.persons_firstname}" sortBy="#{client.firstname}" filterBy="#{client.firstname}" id="firstname">  
@@ -78,17 +76,8 @@
                         </p:cellEditor>
                     </p:column>  
 
-                    <p:column headerText="#{messages.clients_type}" sortBy="#{client.type.name}" filterBy="#{client.type.name}" id="type">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{client.type}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:selectOneMenu value="#{client.type}" converter="#{clientTypeConverter}" style="width: 130px" >  
-                                    <f:selectItems value="#{clientBean.clientTypeList}" /> 
-                                </p:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
+                    <p:column headerText="#{messages.clients_type}" sortBy="#{client.type.name}" filterBy="#{client.type.name}" id="type">
+                        <h:outputText value="#{client.type}" /> 
                     </p:column>
 
                     <p:column headerText="#{messages.persons_registrationDate}" sortBy="#{client.registeredOn}" id="registered">
@@ -110,14 +99,20 @@
                         <p:tooltip for="deleteButton" value="#{messages.label_delete}" /> 
                     </p:column>
 
+                    <p:columnGroup type="footer">
+                        <p:row>  
+                            <p:column colspan="9" footerText="#{clientBean.clientNumber} #{messages.label_client}"  />
+                        </p:row>  
+                    </p:columnGroup>
+
                     <f:facet name="footer">  
                         <p:commandButton value="#{messages.label_newClient}" action="clientCreate?faces-redirect=true" icon="ui-icon-plus" />
                     </f:facet>
 
                     <p:rowExpansion>  
-                        <h:panelGrid id="display" columns="2" cellpadding="4" style="width:auto" styleClass=" ui-widget-content grid">  
+                        <h:panelGrid id="expansionPanel" columns="2" cellpadding="20" style="width:auto" styleClass="topAligned">  
 
-                            <p:panelGrid columns="2">
+                            <p:panelGrid columns="2" id="addressPanel" rendered="#{client.type.name ne 'interne'}">
                                 <f:facet name="header">
                                     #{messages.label_addressInformations}
                                 </f:facet>
@@ -132,8 +127,27 @@
                                         <f:setPropertyActionListener value="#{client}" target="#{clientBean.selectedClient}" />
                                     </p:commandButton>    
                                 </f:facet>
-
                             </p:panelGrid> 
+
+                            <p:panelGrid columns="2" id="typePanel"> 
+                                <f:facet name="header">
+                                    #{messages.clients_type}
+                                </f:facet>
+                                <h:outputText value="#{messages.clients_type}: " />
+                                <h:outputText styleClass="outputLabel" value="#{client.type}" />
+
+                                <h:outputText value="#{messages.label_researchUnit}: " />
+                                <h:outputText styleClass="outputLabel" value="#{client.researchTeam.researchUnit}" />
+
+                                <h:outputText value="#{messages.label_researchTeam}: " />
+                                <h:outputText styleClass="outputLabel" value="#{client.researchTeam}" />
+
+                                <f:facet name="footer">
+                                    <p:commandButton value="#{messages.label_change}" oncomplete="typeDlg.show();" update=":modalTypeDialog" >
+                                        <f:setPropertyActionListener value="#{client}" target="#{clientBean.selectedClient}" />
+                                    </p:commandButton>    
+                                </f:facet>
+                            </p:panelGrid>
                         </h:panelGrid>
                     </p:rowExpansion>
 
@@ -148,10 +162,10 @@
             </h:form>
 
             <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{clientBean.selectedClient.firstname} #{clientBean.selectedClient.lastname}" message="#{messages.label_confirm_deletion}"
-                             closable="false" showEffect="fade" severity="alert" appendToBody="true" >
+                             closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
                 <h:form id="deleteForm">
                     <h:panelGroup layout="block" style="text-align: right">
-                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{clientBean.deleteClient}" update=":clientListForm:clientListMessages, :clientListForm:clientsTable," oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{clientBean.deleteClient}" update=":clientListForm:clientListMessages, :clientListForm:clientsTable" oncomplete="deleteDlg.hide();" />
                         <p:commandButton value="#{messages.label_cancel}" actionListener="#{clientBean.cancelDeletion}" update=":clientListForm:clientListMessages" oncomplete="deleteDlg.hide();" />
                     </h:panelGroup>
                 </h:form>
@@ -162,13 +176,26 @@
                 <h:form id="addressForm">
                     <h:panelGrid columns="3">
                         <p:outputLabel for="shipping" value="#{messages.client_shippingAddress}" />
-                        <p:inputTextarea id="shipping" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.selectedClient.shippingAddress}" converter="shippingAddressConverter"/>
+                        <p:inputTextarea id="shipping" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.selectedClient.shippingAddress}" converter="#{addressConverter}"/>
                         <p:message for="shipping" />
 
                         <p:outputLabel for="billing" value="#{messages.client_billingAddress}" />
-                        <p:inputTextarea id="billing" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.selectedClient.billingAddress}" converter="billingAddressConverter"/>
+                        <p:inputTextarea id="billing" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.selectedClient.billingAddress}" converter="#{addressConverter}"/>
                         <p:message for="billing" />
+
+                        <f:facet name="footer">
+                            <p:commandButton value="#{messages.label_save}" actionListener="#{clientBean.modifyAddress}" update=":clientListForm:clientListMessages, :clientListForm:clientsTable, :clientListForm:clientsTable:addressPanel" oncomplete="addressDlg.hide();" />
+                            <p:commandButton value="#{messages.label_cancel}" oncomplete="addressDlg.hide();" />
+                        </f:facet>
                     </h:panelGrid>
+                </h:form>
+            </p:dialog> 
+
+            <p:dialog showEffect="fade" hideEffect="explode" id="modalTypeDialog" header="#{messages.clients_type} #{messages.label_for} #{clientBean.selectedClient.firstname} #{clientBean.selectedClient.lastname}" 
+                      widgetVar="typeDlg" modal="true" appendToBody="true">
+                <h:form id="typeForm">
+                    <components:typeFormComponent selClient="#{clientBean.selectedClient}" clientTypeList="#{clientBean.clientTypeList}" unit2teams="#{clientBean.unit2teams}"/>
+                   
                 </h:form>
             </p:dialog> 
 

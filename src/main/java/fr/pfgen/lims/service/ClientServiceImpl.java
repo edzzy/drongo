@@ -1,9 +1,9 @@
 package fr.pfgen.lims.service;
 
+import fr.pfgen.lims.domain.Address;
 import fr.pfgen.lims.domain.Client;
-import fr.pfgen.lims.repository.BillingAddressRepository;
+import fr.pfgen.lims.repository.AddressRespository;
 import fr.pfgen.lims.repository.ClientRepository;
-import fr.pfgen.lims.repository.ShippingAddressRepository;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.text.WordUtils;
@@ -19,10 +19,7 @@ public class ClientServiceImpl implements ClientService {
     ClientRepository clientRepository;
     
     @Autowired
-    ShippingAddressRepository shippingAddressRepository;
-    
-    @Autowired
-    BillingAddressRepository billingAddressRepository;
+    AddressRespository addressRepository;
 
     @Override
     public long countAllClients() {
@@ -62,6 +59,24 @@ public class ClientServiceImpl implements ClientService {
         client.setLastname(WordUtils.capitalizeFully(client.getLastname(), '-', ' '));
         client.setEmail(client.getEmail().toLowerCase());
         
+        if (client.getBillingAddress() != null){
+            Address ad = addressRepository.findByAddress(client.getBillingAddress().getAddress());
+            if (ad != null){
+                client.setBillingAddress(ad);
+            }else{
+                client.setBillingAddress(addressRepository.save(client.getBillingAddress()));
+            }
+        }
+        
+        if (client.getShippingAddress()!= null){
+            Address ad = addressRepository.findByAddress(client.getShippingAddress().getAddress());
+            if (ad != null){
+                client.setShippingAddress(ad);
+            }else{
+                client.setShippingAddress(addressRepository.save(client.getShippingAddress()));
+            }
+        }
+        
         clientRepository.save(client);
     }
 
@@ -70,6 +85,25 @@ public class ClientServiceImpl implements ClientService {
         client.setFirstname(WordUtils.capitalizeFully(client.getFirstname(), '-', ' '));
         client.setLastname(WordUtils.capitalizeFully(client.getLastname(), '-', ' '));
         client.setEmail(client.getEmail().toLowerCase());
+        
+        if (client.getBillingAddress() != null){
+            Address ad = addressRepository.findByAddress(client.getBillingAddress().getAddress());
+            if (ad != null){
+                client.setBillingAddress(ad);
+            }else{
+                client.setBillingAddress(addressRepository.save(client.getBillingAddress()));
+            }
+        }
+        
+        if (client.getShippingAddress()!= null){
+            Address ad = addressRepository.findByAddress(client.getShippingAddress().getAddress());
+            if (ad != null){
+                client.setShippingAddress(ad);
+            }else{
+                client.setShippingAddress(addressRepository.save(client.getShippingAddress()));
+            }
+        }
+        
         return clientRepository.save(client);
     }
 

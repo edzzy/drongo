@@ -8,19 +8,30 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "clients")
-public class Client extends AbstractPerson {
+public class Client extends AbstractPerson{
 
     @ManyToOne
     private ClientType type;
     
     @ManyToOne(cascade = CascadeType.ALL)
-    private ShippingAddress shippingAddress;
+    private Address shippingAddress;
     
     @ManyToOne(cascade = CascadeType.ALL)
-    private BillingAddress billingAddress;
+    private Address billingAddress;
     
     @NotNull
     private boolean deleted = false;
+    
+    @ManyToOne
+    private ResearchTeam researchTeam;
+
+    public ResearchTeam getResearchTeam() {
+        return researchTeam;
+    }
+
+    public void setResearchTeam(ResearchTeam researchTeam) {
+        this.researchTeam = researchTeam;
+    }
 
     public boolean isDeleted() {
         return deleted;
@@ -30,19 +41,19 @@ public class Client extends AbstractPerson {
         this.deleted = deleted;
     }
 
-    public ShippingAddress getShippingAddress() {
+    public Address getShippingAddress() {
         return shippingAddress;
     }
 
-    public void setShippingAddress(ShippingAddress shippingAddress) {
+    public void setShippingAddress(Address shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
 
-    public BillingAddress getBillingAddress() {
+    public Address getBillingAddress() {
         return billingAddress;
     }
 
-    public void setBillingAddress(BillingAddress billingAddress) {
+    public void setBillingAddress(Address billingAddress) {
         this.billingAddress = billingAddress;
     }
 

@@ -22,4 +22,5 @@ public interface ClientService {
     public abstract Client updateClient(Client client);
 
     public abstract Client findByEmail(String email);
+   
 }
