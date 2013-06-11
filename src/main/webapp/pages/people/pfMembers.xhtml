@@ -56,7 +56,7 @@
                             <f:facet name="input">  
                                 <p:inputText value="#{pfMember.email}" style="width:80%" validator="#{pfMemberBean.validateEmail}">
                                     <f:attribute name="pfMemberID" value="#{pfMember.id}"/>
-                                    <f:validator validatorId="emailValidator" />
+                                    <f:validator validatorId="emailFormatValidator" />
                                 </p:inputText>  
                             </f:facet>
                         </p:cellEditor>

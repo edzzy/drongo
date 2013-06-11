@@ -224,23 +224,25 @@
             <artifactId>spring-data-jpa</artifactId>
             <version>1.2.0.RELEASE</version>
         </dependency>
-        <!--
+       
         <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-api</artifactId>
-            <version>2.2.0</version>
+            <version>2.1.22</version>
         </dependency>
         <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-impl</artifactId>
-            <version>2.2.0</version>
+            <version>2.1.22</version>
         </dependency>
-        -->
+        <!--
         <dependency>
-	<groupId>javax.faces</groupId>
-	<artifactId>javax.faces-api</artifactId>
-	<version>2.2</version>
+        <groupId>javax.faces</groupId>
+        <artifactId>javax.faces-api</artifactId>
+        <version>2.2</version>
 </dependency>
+        -->
+        
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
@@ -277,12 +279,21 @@
             <artifactId>commons-io</artifactId>
             <version>2.1</version>
         </dependency>
+        
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
             <type>jar</type>
         </dependency>
+        
+        <!--
+                <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>7.0</version>
+        </dependency>
+        -->
     </dependencies>
     <build>
         <plugins>

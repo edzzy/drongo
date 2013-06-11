@@ -9,10 +9,8 @@
     <ui:composition template="peopleTemplate.xhtml">
         <ui:define name="content">
             <p:spacer height="50"/>
-            <h:form id="clientListForm">  
-
-                <p:growl id="clientListMessages" showDetail="true" showSummary="true" life="3000"/> 
-
+            <h:form id="clientListForm">
+                <p:growl id="clientListMessages" showDetail="true" showSummary="true" life="3000"/>
                 <p:dataTable var="client" value="#{clientBean.clientList}" rowsPerPageTemplate="5,10,15" rowKey="#{client.id}" paginator="true" rows="10" editable="true"  
                              filteredValue="#{clientBean.filteredClients}"  id="clientsTable" emptyMessage="#{messages.label_emptyRecords}">  
 
@@ -59,7 +57,7 @@
                             <f:facet name="input">  
                                 <p:inputText value="#{client.email}" style="width:80%" validator="#{clientBean.validateEmail}">
                                     <f:attribute name="clientID" value="#{client.id}"/>
-                                    <f:validator validatorId="emailValidator" />
+                                    <f:validator validatorId="emailFormatValidator" />
                                 </p:inputText>  
                             </f:facet>
                         </p:cellEditor>
@@ -87,7 +85,10 @@
                     </p:column>
 
                     <p:column style="width: 5px">  
-                        <p:rowEditor id="editButton"/>
+                        <h:link id="editButton" outcome="client?faces-redirect=true">
+                            <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
+                            <f:param name="clientid" value="#{client.id}" />
+                        </h:link>
                         <p:tooltip for="editButton" value="#{messages.label_edit}" /> 
                     </p:column>  
 
@@ -105,8 +106,8 @@
                         </p:row>  
                     </p:columnGroup>
 
-                    <f:facet name="footer">  
-                        <p:commandButton value="#{messages.label_newClient}" action="clientCreate?faces-redirect=true" icon="ui-icon-plus" />
+                    <f:facet name="footer">
+                        <p:button outcome="client?faces-redirect=true" value="#{messages.label_newClient}" icon="ui-icon-plus" />
                     </f:facet>
 
                     <p:rowExpansion>  
@@ -121,12 +122,6 @@
 
                                 <h:outputText value="#{messages.client_billingAddress}: " />
                                 <h:outputText styleClass="carRetLabel" value="#{client.billingAddress}" />
-
-                                <f:facet name="footer">
-                                    <p:commandButton value="#{messages.label_change}" oncomplete="addressDlg.show();" update=":modalAddressDialog" >
-                                        <f:setPropertyActionListener value="#{client}" target="#{clientBean.selectedClient}" />
-                                    </p:commandButton>    
-                                </f:facet>
                             </p:panelGrid> 
 
                             <p:panelGrid columns="2" id="typePanel"> 
@@ -141,24 +136,11 @@
 
                                 <h:outputText value="#{messages.label_researchTeam}: " />
                                 <h:outputText styleClass="outputLabel" value="#{client.researchTeam}" />
-
-                                <f:facet name="footer">
-                                    <p:commandButton value="#{messages.label_change}" oncomplete="typeDlg.show();" update=":modalTypeDialog" >
-                                        <f:setPropertyActionListener value="#{client}" target="#{clientBean.selectedClient}" />
-                                    </p:commandButton>    
-                                </f:facet>
                             </p:panelGrid>
                         </h:panelGrid>
                     </p:rowExpansion>
 
                 </p:dataTable>
-
-                <!--
-                <p:blockUI block="clientsTable" trigger="clientsTable">  
-                #{messages.loading}<br />  
-                <p:graphicImage value="/resources/images/loading-ring32.gif"/>  
-            </p:blockUI> 
-                -->
             </h:form>
 
             <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{clientBean.selectedClient.firstname} #{clientBean.selectedClient.lastname}" message="#{messages.label_confirm_deletion}"
@@ -170,40 +152,7 @@
                     </h:panelGroup>
                 </h:form>
             </p:confirmDialog>
-
-            <p:dialog showEffect="fade" hideEffect="explode" id="modalAddressDialog" header="#{messages.label_address} #{messages.label_for} #{clientBean.selectedClient.firstname} #{clientBean.selectedClient.lastname}" 
-                      widgetVar="addressDlg" modal="true" appendToBody="true">
-                <h:form id="addressForm">
-                    <h:panelGrid columns="3">
-                        <p:outputLabel for="shipping" value="#{messages.client_shippingAddress}" />
-                        <p:inputTextarea id="shipping" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.selectedClient.shippingAddress}" converter="#{addressConverter}"/>
-                        <p:message for="shipping" />
-
-                        <p:outputLabel for="billing" value="#{messages.client_billingAddress}" />
-                        <p:inputTextarea id="billing" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.selectedClient.billingAddress}" converter="#{addressConverter}"/>
-                        <p:message for="billing" />
-
-                        <f:facet name="footer">
-                            <p:commandButton value="#{messages.label_save}" actionListener="#{clientBean.modifyAddress}" update=":clientListForm:clientListMessages, :clientListForm:clientsTable, :clientListForm:clientsTable:addressPanel" oncomplete="addressDlg.hide();" />
-                            <p:commandButton value="#{messages.label_cancel}" oncomplete="addressDlg.hide();" />
-                        </f:facet>
-                    </h:panelGrid>
-                </h:form>
-            </p:dialog> 
-
-            <p:dialog showEffect="fade" hideEffect="explode" id="modalTypeDialog" header="#{messages.clients_type} #{messages.label_for} #{clientBean.selectedClient.firstname} #{clientBean.selectedClient.lastname}" 
-                      widgetVar="typeDlg" modal="true" appendToBody="true">
-                <h:form id="typeForm">
-                    <components:typeFormComponent selClient="#{clientBean.selectedClient}" clientTypeList="#{clientBean.clientTypeList}" unit2teams="#{clientBean.unit2teams}"/>
-                   
-                </h:form>
-            </p:dialog> 
-
-            <!--
-            <h:form id="clientCreateForm">
-                
-            </h:form>
-            -->
+            
         </ui:define>
     </ui:composition>
 </html>

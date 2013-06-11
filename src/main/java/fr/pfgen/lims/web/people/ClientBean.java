@@ -166,6 +166,10 @@ public class ClientBean implements Serializable {
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_rowchanged"), clientToEdit.toString(), FacesMessage.SEVERITY_WARN);
         }
     }
+    
+    public void cancelModify() {
+        FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
+    }
 
     public void validateEmail(FacesContext context, UIComponent component, Object value) {
         String email = ((String) value).toLowerCase();
@@ -175,11 +179,26 @@ public class ClientBean implements Serializable {
 
         if ((existingClient != null && existingClient.getId() != (Long) component.getAttributes().get("clientID")) || (existingPfMember != null && existingPfMember.getId() != (Long) component.getAttributes().get("clientID"))) {
             ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\""+email+"\" "+FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
     }
-    
+    /*
     public void modifyAddress() {
+        try {
+            Client clientUpdated = clientService.updateClient(selectedClient);
+            int index = clientList.indexOf(selectedClient);
+            clientList.remove(index);
+            clientList.add(index, clientUpdated);
+            RequestContext rcontext = RequestContext.getCurrentInstance();
+            rcontext.update("clientTable");
+
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
+        } catch (Exception e) {
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+        }
+    }
+    */
+    public void modifySelectedClient(){
         try {
             Client clientUpdated = clientService.updateClient(selectedClient);
             int index = clientList.indexOf(selectedClient);

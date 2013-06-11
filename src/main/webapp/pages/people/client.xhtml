@@ -9,6 +9,11 @@
         <ui:define name="content">
             <p:spacer height="50"/>
 
+            <f:metadata>
+                <f:viewParam id="client_id" name="clientid" value="#{createClientBean.clientid}" />
+                <f:event type="preRenderView" listener="#{createClientBean.initClient}" /> 
+            </f:metadata>
+
             <h:form>
                 <p:growl id="clientCreateMessages" life="2500" showDetail="true" />
 
@@ -29,56 +34,13 @@
                         </p:panel>
                     </p:tab>
                     
-                    <p:tab id="typeTab" title="#{messages.clients_type}">
-                        <p:panel id="panelType" header="#{messages.clients_type}">
-                            <p:focus context="panelType" />
-                            <h:panelGrid columns="3">
-                                <p:outputLabel for="type" value="#{messages.clients_type}" />
-                                <p:selectOneMenu id="type" value="#{createClientBean.newClient.type}" converter="#{clientTypeConverter}" required="true" style="width: 130px" >  
-                                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
-                                    <f:selectItems value="#{createClientBean.clientTypeList}" />
-                                    <p:ajax update="panelType" listener="#{createClientBean.onTypeChanged}" />
-                                    
-                                </p:selectOneMenu>
-                                <p:message for="type" />
-                            </h:panelGrid>
-                            <h:panelGrid columns="3" rendered="#{createClientBean.interne}">
-                                <p:outputLabel for="teamInterne" value="#{messages.label_researchTeam}" />
-                                <p:selectOneMenu id="teamInterne" value="#{createClientBean.newClient.researchTeam}" converter="#{researchTeamConverter}" required="true" style="width: 130px" >  
-                                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
-                                    <f:selectItems value="#{createClientBean.teamList}" /> 
-                                </p:selectOneMenu>
-                                <p:message for="teamInterne" />
-                            </h:panelGrid>
-                            
-                            <h:panelGrid columns="3" rendered="#{createClientBean.academique}">
-                                <p:outputLabel for="unitAcademic" value="#{messages.label_researchUnit}" />
-                                <p:selectOneMenu id="unitAcademic" value="#{createClientBean.selectedUnit}" converter="#{researchUnitConverter}" style="width: 130px" >  
-                                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
-                                    <f:selectItems value="#{createClientBean.unitList}" /> 
-                                    <p:ajax update="teamAcademic" listener="#{createClientBean.onUnitChanged}" />
-                                </p:selectOneMenu>
-                                <p:message for="unitAcademic" />
-                                
-                                <p:outputLabel for="teamAcademic" value="#{messages.label_researchTeam}" />
-                                <p:selectOneMenu id="teamAcademic" value="#{createClientBean.newClient.researchTeam}" converter="#{researchTeamConverter}" required="true" style="width: 130px" >  
-                                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
-                                    <f:selectItems value="#{createClientBean.teamList}" /> 
-                                </p:selectOneMenu>
-                                <p:message for="teamAcademic" />
-                                
-                            </h:panelGrid>
-                            
-                        </p:panel>
-                    </p:tab>
-
                     <p:tab id="contact" title="#{messages.label_contact}">
                         <p:panel id="panelContact" header="#{messages.label_contactInformations}">
                             <p:focus context="panelContact"/>
                             <h:panelGrid columns="3">
                                 <p:outputLabel for="email" value="#{messages.persons_email}" />
                                 <p:inputText id="email" required="true" value="#{createClientBean.newClient.email}" validator="#{createClientBean.validateEmail}">
-                                    <f:validator validatorId="emailValidator" />
+                                    <f:validator validatorId="emailFormatValidator" />
                                 </p:inputText>    
                                 <p:message for="email" />
 
@@ -89,16 +51,51 @@
                         </p:panel>
                     </p:tab>
 
+                    <p:tab id="typeTab" title="#{messages.clients_type}">
+                        <p:panel id="panelType" header="#{messages.clients_type}">
+
+                            <h:panelGrid columns="3" id="typeSelectPanel" >
+                                <p:outputLabel for="clientTypeSelect" value="#{messages.clients_type}" />
+                                <p:selectOneMenu id="clientTypeSelect" value="#{createClientBean.newClient.type}" converter="#{clientTypeConverter}" required="true" style="width: 130px" >
+                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
+                                    <f:selectItems value="#{createClientBean.clientTypeList}" />
+                                    <p:ajax listener="#{createClientBean.onTypeChanged}" update="panelType"/>
+                                </p:selectOneMenu>
+                                <p:message for="clientTypeSelect" />
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="3" id="unitSelectPanel" rendered="#{createClientBean.academique}">
+                                <p:outputLabel for="unitSelect" value="#{messages.label_researchUnit}" />
+                                <p:selectOneMenu id="unitSelect" value="#{createClientBean.selectedUnit}" converter="#{researchUnitConverter}" style="width: 130px" >
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                    <f:selectItems value="#{createClientBean.unitList}" />
+                                    <p:ajax listener="#{createClientBean.onUnitChanged}" update="panelType" />
+                                </p:selectOneMenu>
+                                <p:message for="unitSelect" />
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="3" id="teamSelectPanel" rendered="#{createClientBean.academique or createClientBean.interne}">
+                                <p:outputLabel for="teamSelect" value="#{messages.label_researchTeam}" />
+                                <p:selectOneMenu id="teamSelect" value="#{createClientBean.newClient.researchTeam}" converter="#{researchTeamConverter}" required="true" style="width: 130px" >
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                    <f:selectItems value="#{createClientBean.teamList}" />
+                                </p:selectOneMenu>
+                                <p:message for="teamSelect" />
+                            </h:panelGrid>
+
+                        </p:panel>
+                    </p:tab>
+
                     <p:tab id="rights" title="#{messages.label_address}">
                         <p:panel id="panelAddress" header="#{messages.label_addressInformations}" >
                             <p:focus context="panelAddress"/>
-                            <h:panelGrid columns="3">
+                            <h:panelGrid columns="3" >
                                 <p:outputLabel for="shipping" value="#{messages.client_shippingAddress}" />
-                                <p:inputTextarea id="shipping" disabled="#{createClientBean.interne}" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{createClientBean.newClient.shippingAddress}" converter="#{addressConverter}"/>
+                                <p:inputTextarea id="shipping" disabled="#{createClientBean.interne}" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{createClientBean.newClient.shippingAddress}" converter="#{addressConverter}" />
                                 <p:message for="shipping" />
-                                
+
                                 <p:outputLabel for="billing" value="#{messages.client_billingAddress}" />
-                                <p:inputTextarea id="billing" disabled="#{createClientBean.interne}" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{createClientBean.newClient.billingAddress}" converter="#{addressConverter}"/>
+                                <p:inputTextarea id="billing" disabled="#{createClientBean.interne}" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{createClientBean.newClient.billingAddress}" converter="#{addressConverter}" />
                                 <p:message for="billing" />
                             </h:panelGrid>
                         </p:panel>
@@ -118,21 +115,21 @@
                                     <h:outputText value="#{messages.persons_lastname}: " />
                                     <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.lastname}" />
                                 </p:panelGrid>
-                                
+
                                 <p:panelGrid columns="2" > 
                                     <f:facet name="header">
                                         #{messages.clients_type}
                                     </f:facet>
                                     <h:outputText value="#{messages.clients_type}: " />
                                     <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.type}" />
-                                    
+
                                     <h:outputText value="#{messages.label_researchUnit}: " />
                                     <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.researchTeam.researchUnit}" />
-                                    
+
                                     <h:outputText value="#{messages.label_researchTeam}: " />
                                     <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.researchTeam}" />
                                 </p:panelGrid>
-                                
+
                                 <p:panelGrid columns="2">
                                     <f:facet name="header">
                                         #{messages.label_contactInformations}
@@ -143,14 +140,14 @@
                                     <h:outputText value="#{messages.persons_phone}: " />
                                     <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.phone}" />
                                 </p:panelGrid>
-                                
+
                                 <p:panelGrid columns="2">
                                     <f:facet name="header">
                                         #{messages.label_addressInformations}
                                     </f:facet>
                                     <h:outputText value="#{messages.client_shippingAddress}: " />
                                     <h:outputText styleClass="carRetLabel" value="#{createClientBean.newClient.shippingAddress}" />
-                                    
+
                                     <h:outputText value="#{messages.client_billingAddress}: " />
                                     <h:outputText styleClass="carRetLabel" value="#{createClientBean.newClient.billingAddress}" />
                                 </p:panelGrid>
