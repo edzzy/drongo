@@ -4,20 +4,18 @@
  */
 package fr.pfgen.lims.repository;
 
-import fr.pfgen.lims.domain.projects.Project;
-import java.io.Serializable;
+import fr.pfgen.lims.domain.people.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author edouard
+ * @author eric
  */
 @Repository
-public interface ProjectRepository extends JpaSpecificationExecutor<Project>, JpaRepository<Project, Long> {
+public interface CompanyRepository extends JpaSpecificationExecutor<Company>, JpaRepository<Company, Long>{
     
-    public Project findOneByName(String value);
-   
+    public Company findByName(String name);
     
 }

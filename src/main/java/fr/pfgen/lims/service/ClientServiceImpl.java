@@ -1,7 +1,7 @@
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.Address;
-import fr.pfgen.lims.domain.Client;
+import fr.pfgen.lims.domain.people.Address;
+import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.repository.AddressRespository;
 import fr.pfgen.lims.repository.ClientRepository;
 import java.util.Date;

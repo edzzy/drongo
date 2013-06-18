@@ -1,8 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package fr.pfgen.lims.domain;
+package fr.pfgen.lims.domain.people;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -20,37 +16,42 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 /**
  *
  * @author eric
  */
 @Entity
-@Table(name = "research_units")
-public class ResearchUnit implements Serializable {
+@Table(name = "companies")
+public class Company implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+   
+    @NotNull
+    @Column(unique = true)
+    @Size(min = 2, max = 30)
+    private String name;
     
     @Version
     @Column(name = "version")
     private Integer version;
     
-    @NotNull
-    @Column(unique = true)
-    @Size(min = 2, max = 50)
-    private String name;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "researchUnit")
-    private Set<ResearchTeam> researchTeams = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
+    private Set<Client> clients = new HashSet<>();
 
-    public Set<ResearchTeam> getResearchTeams() {
-        return researchTeams;
+    public Set<Client> getClients() {
+        return clients;
     }
 
-    public void setResearchTeams(Set<ResearchTeam> researchTeams) {
-        this.researchTeams = researchTeams;
+    public void setClients(Set<Client> clients) {
+        this.clients = clients;
     }
 
     public Long getId() {
@@ -61,14 +62,6 @@ public class ResearchUnit implements Serializable {
         this.id = id;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
     public String getName() {
         return name;
     }
@@ -77,10 +70,18 @@ public class ResearchUnit implements Serializable {
         this.name = name;
     }
 
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 61 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -92,13 +93,13 @@ public class ResearchUnit implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ResearchUnit other = (ResearchUnit) obj;
+        final Company other = (Company) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
     }
-
+    
     @Override
     public String toString() {
         return this.name;

@@ -1,6 +1,6 @@
 package fr.pfgen.lims.repository;
 
-import fr.pfgen.lims.domain.AppAction;
+import fr.pfgen.lims.domain.people.AppAction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

@@ -4,7 +4,7 @@
  */
 package fr.pfgen.lims.web.people;
 
-import fr.pfgen.lims.domain.ClientType;
+import fr.pfgen.lims.domain.people.ClientType;
 import fr.pfgen.lims.service.ClientTypeService;
 import java.util.List;
 import javax.faces.bean.ManagedBean;

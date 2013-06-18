@@ -11,16 +11,18 @@
             <p:spacer height="50"/>
             <h:form id="clientListForm">
                 <p:growl id="clientListMessages" showDetail="true" showSummary="true" life="3000"/>
-                <p:dataTable var="client" value="#{clientBean.clientList}" rowsPerPageTemplate="5,10,15" rowKey="#{client.id}" paginator="true" rows="10" editable="true"  
-                             filteredValue="#{clientBean.filteredClients}"  id="clientsTable" emptyMessage="#{messages.label_emptyRecords}">  
+                <p:dataTable var="client" value="#{clientsBean.clientList}" rowsPerPageTemplate="5,10,15" rowKey="#{client.id}" paginator="true" rows="10" editable="true"  
+                             filteredValue="#{clientsBean.filteredClients}"  id="clientsTable" emptyMessage="#{messages.label_emptyRecords}">  
 
                     <f:facet name="header">
                         #{messages.label_client}
                     </f:facet>  
 
-                    <p:ajax event="rowEdit" listener="#{clientBean.onEdit}" update=":clientListForm:clientListMessages" />  
-                    <p:ajax event="rowEditCancel" listener="#{clientBean.onCancel}" update=":clientListForm:clientListMessages" />
-                    <p:ajax event="rowEditInit" listener="#{clientBean.onEditInit}" update=":clientListForm:clientListMessages" />
+                    <!--
+                    <p:ajax event="rowEdit" listener="#{clientsBean.onEdit}" update=":clientListForm:clientListMessages" />  
+                    <p:ajax event="rowEditCancel" listener="#{clientsBean.onCancel}" update=":clientListForm:clientListMessages" />
+                    <p:ajax event="rowEditInit" listener="#{clientsBean.onEditInit}" update=":clientListForm:clientListMessages" />
+                    -->
                     <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
 
                     <p:column style="width: 5px">  
@@ -55,7 +57,7 @@
                                 <h:outputText value="#{client.email}" />  
                             </f:facet>  
                             <f:facet name="input">  
-                                <p:inputText value="#{client.email}" style="width:80%" validator="#{clientBean.validateEmail}">
+                                <p:inputText value="#{client.email}" style="width:80%" validator="#{clientsBean.validateEmail}">
                                     <f:attribute name="clientID" value="#{client.id}"/>
                                     <f:validator validatorId="emailFormatValidator" />
                                 </p:inputText>  
@@ -84,30 +86,37 @@
                         </h:outputText>
                     </p:column>
 
-                    <p:column style="width: 5px">  
+                    <p:column style="width: 5px"> 
+                        <!--
                         <h:link id="editButton" outcome="client?faces-redirect=true">
                             <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
                             <f:param name="clientid" value="#{client.id}" />
                         </h:link>
+                        -->
+                        <p:commandLink id="editButton" action="#{clientsBean.editClient}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
+                            <f:setPropertyActionListener value="#{client}" target="#{clientsBean.selectedClient}" />
+                        </p:commandLink>
                         <p:tooltip for="editButton" value="#{messages.label_edit}" /> 
                     </p:column>  
 
                     <p:column style="width: 5px">
                         <p:commandLink id="deleteButton" oncomplete="deleteDlg.show();" update=":deleteDialog" title="#{messages.label_delete}">
                             <h:panelGroup styleClass="ui-icon ui-icon-trash" />
-                            <f:setPropertyActionListener value="#{client}" target="#{clientBean.selectedClient}" />
+                            <f:setPropertyActionListener value="#{client}" target="#{clientsBean.selectedClient}" />
                         </p:commandLink>
                         <p:tooltip for="deleteButton" value="#{messages.label_delete}" /> 
                     </p:column>
 
                     <p:columnGroup type="footer">
                         <p:row>  
-                            <p:column colspan="9" footerText="#{clientBean.clientNumber} #{messages.label_client}"  />
+                            <p:column colspan="9" footerText="#{clientsBean.clientNumber} #{messages.label_client}"  />
                         </p:row>  
                     </p:columnGroup>
 
                     <f:facet name="footer">
-                        <p:button outcome="client?faces-redirect=true" value="#{messages.label_newClient}" icon="ui-icon-plus" />
+                        <p:commandButton value="#{messages.label_newClient}" icon="ui-icon-plus" action="#{clientsBean.createNewClient}"/>
+                        <!--<p:button outcome="client?faces-redirect=true" value="#{messages.label_newClient}" icon="ui-icon-plus" />-->
                     </f:facet>
 
                     <p:rowExpansion>  
@@ -131,11 +140,14 @@
                                 <h:outputText value="#{messages.clients_type}: " />
                                 <h:outputText styleClass="outputLabel" value="#{client.type}" />
 
-                                <h:outputText value="#{messages.label_researchUnit}: " />
-                                <h:outputText styleClass="outputLabel" value="#{client.researchTeam.researchUnit}" />
+                                <h:outputText value="#{messages.label_researchUnit}: " rendered="#{client.type.name ne 'privé'}" />
+                                <h:outputText styleClass="outputLabel" value="#{client.researchTeam.researchUnit}" rendered="#{client.type.name ne 'privé'}" />
 
-                                <h:outputText value="#{messages.label_researchTeam}: " />
-                                <h:outputText styleClass="outputLabel" value="#{client.researchTeam}" />
+                                <h:outputText value="#{messages.label_researchTeam}: " rendered="#{client.type.name ne 'privé'}"/>
+                                <h:outputText styleClass="outputLabel" value="#{client.researchTeam}" rendered="#{client.type.name ne 'privé'}"/>
+                                
+                                <h:outputText value="#{messages.label_company}: " rendered="#{client.type.name eq 'privé'}" />
+                                <h:outputText styleClass="outputLabel" value="#{client.company}" rendered="#{client.type.name eq 'privé'}"/>
                             </p:panelGrid>
                         </h:panelGrid>
                     </p:rowExpansion>
@@ -143,12 +155,12 @@
                 </p:dataTable>
             </h:form>
 
-            <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{clientBean.selectedClient.firstname} #{clientBean.selectedClient.lastname}" message="#{messages.label_confirm_deletion}"
+            <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{clientsBean.selectedClient.firstname} #{clientsBean.selectedClient.lastname}" message="#{messages.label_confirm_deletion}"
                              closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
                 <h:form id="deleteForm">
                     <h:panelGroup layout="block" style="text-align: right">
-                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{clientBean.deleteClient}" update=":clientListForm:clientListMessages, :clientListForm:clientsTable" oncomplete="deleteDlg.hide();" />
-                        <p:commandButton value="#{messages.label_cancel}" actionListener="#{clientBean.cancelDeletion}" update=":clientListForm:clientListMessages" oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{clientsBean.deleteClient}" update=":clientListForm:clientListMessages, :clientListForm:clientsTable" oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_cancel}" actionListener="#{clientsBean.cancelDeletion}" update=":clientListForm:clientListMessages" oncomplete="deleteDlg.hide();" />
                     </h:panelGroup>
                 </h:form>
             </p:confirmDialog>

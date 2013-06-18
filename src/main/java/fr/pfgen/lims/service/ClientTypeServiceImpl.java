@@ -1,6 +1,6 @@
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.ClientType;
+import fr.pfgen.lims.domain.people.ClientType;
 import fr.pfgen.lims.repository.ClientTypeRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

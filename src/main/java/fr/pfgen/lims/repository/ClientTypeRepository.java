@@ -1,6 +1,6 @@
 package fr.pfgen.lims.repository;
 
-import fr.pfgen.lims.domain.ClientType;
+import fr.pfgen.lims.domain.people.ClientType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,6 @@
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.PfMember;
+import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.repository.PfMemberRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

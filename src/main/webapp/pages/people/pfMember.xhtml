@@ -19,11 +19,11 @@
                             <p:focus context="panelPersonal"/>
                             <h:panelGrid columns="3">
                                 <p:outputLabel for="firstname" value="#{messages.persons_firstname}" />
-                                <p:inputText id="firstname" required="true" value="#{createClientBean.newClient.firstname}" />
+                                <p:inputText id="firstname" required="true" value="#{clientBean.newClient.firstname}" />
                                 <p:message for="firstname" />
 
                                 <p:outputLabel for="lastname" value="#{messages.persons_lastname}" />
-                                <p:inputText id="lastname" required="true" value="#{createClientBean.newClient.lastname}" />
+                                <p:inputText id="lastname" required="true" value="#{clientBean.newClient.lastname}" />
                                 <p:message for="lastname" />
                             </h:panelGrid>
                         </p:panel>
@@ -34,13 +34,13 @@
                             <p:focus context="panelContact"/>
                             <h:panelGrid columns="3">
                                 <p:outputLabel for="email" value="#{messages.persons_email}" />
-                                <p:inputText id="email" required="true" value="#{createClientBean.newClient.email}" validator="#{createClientBean.validateEmail}">
+                                <p:inputText id="email" required="true" value="#{clientBean.newClient.email}" validator="#{clientBean.validateEmail}">
                                     <f:validator validatorId="emailValidator" />
                                 </p:inputText>    
                                 <p:message for="email" />
 
                                 <p:outputLabel for="phone" value="#{messages.persons_phone}" />
-                                <p:inputMask id="phone" required="false" mask="99.99.99.99.99" value="#{createClientBean.newClient.phone}"/>
+                                <p:inputMask id="phone" required="false" mask="99.99.99.99.99" value="#{clientBean.newClient.phone}"/>
                                 <p:message for="phone" />
                             </h:panelGrid>
                         </p:panel>
@@ -64,24 +64,24 @@
                                     </f:facet> 
 
                                     <h:outputText value="#{messages.persons_firstname}: " />
-                                    <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.firstname}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.firstname}" />
 
                                     <h:outputText value="#{messages.persons_lastname}: " />
-                                    <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.lastname}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.lastname}" />
                                 </p:panelGrid>
                                 <p:panelGrid columns="2">
                                     <f:facet name="header">
                                         Contact
                                     </f:facet>
                                     <h:outputText value="#{messages.persons_email}: " />
-                                    <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.email}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.email}" />
 
                                     <h:outputText value="#{messages.persons_phone}: " />
-                                    <h:outputText styleClass="outputLabel" value="#{createClientBean.newClient.phone}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.phone}" />
                                 </p:panelGrid>
                             </h:panelGrid>
                             <f:facet name="footer"> 
-                                <p:commandButton id="submitButton" value="Submit" update="clientCreateMessages" action="#{createClientBean.saveNewClient}" />
+                                <p:commandButton id="submitButton" value="Submit" update="clientCreateMessages" action="#{clientBean.saveNewClient}" />
                             </f:facet>
                         </p:panel>
                     </p:tab>

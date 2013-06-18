@@ -4,13 +4,15 @@
  */
 package fr.pfgen.lims.web.people;
 
-import fr.pfgen.lims.domain.Client;
-import fr.pfgen.lims.domain.ClientType;
-import fr.pfgen.lims.domain.PfMember;
-import fr.pfgen.lims.domain.ResearchTeam;
-import fr.pfgen.lims.domain.ResearchUnit;
+import fr.pfgen.lims.domain.people.Client;
+import fr.pfgen.lims.domain.people.ClientType;
+import fr.pfgen.lims.domain.people.Company;
+import fr.pfgen.lims.domain.people.PfMember;
+import fr.pfgen.lims.domain.people.ResearchTeam;
+import fr.pfgen.lims.domain.people.ResearchUnit;
 import fr.pfgen.lims.service.ClientService;
 import fr.pfgen.lims.service.ClientTypeService;
+import fr.pfgen.lims.service.CompanyService;
 import fr.pfgen.lims.service.PfMemberService;
 import fr.pfgen.lims.service.ResearchTeamService;
 import fr.pfgen.lims.web.util.FacesUtils;
@@ -26,8 +28,6 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
-import org.primefaces.context.RequestContext;
-import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -41,41 +41,120 @@ import org.springframework.stereotype.Controller;
 @ManagedBean
 public class ClientBean implements Serializable {
 
+    /**
+     * Creates a new instance of CreateClientBean
+     */
+    private static final String internUnitName = "UMR 1087";
+    private Client newClient;
+    private List<ClientType> clientTypeList;
+    private boolean isInterne = false;
+    private boolean isAcademique = false;
+    private boolean isPrive = false;
+    private Map<ResearchUnit, List<ResearchTeam>> unit2teams;
+    private List<ResearchUnit> unitList = new ArrayList<>();
+    private List<ResearchTeam> teamList = new ArrayList<>();
+    private ResearchUnit selectedUnit;
+    private String clientid;
+    private List<Company> companyList;
     @Autowired
-    ClientService clientService;
-    
+    private ClientService clientService;
     @Autowired
-    ClientTypeService clientTypeService;
-    
-    @Autowired
-    PfMemberService pfMemberService;
-    
+    private ClientTypeService clientTypeService;
     @Autowired
     private ResearchTeamService researchTeamService;
-    
-    private List<Client> clientList;
-    private List<ClientType> clientTypeList;
-    private List<Client> filteredClients;
-    private Client selectedClient;
-    private Map<ResearchUnit, List<ResearchTeam>> unit2teams;
-    
+    @Autowired
+    private PfMemberService pfMemberService;
+    @Autowired
+    private CompanyService companyService;
+    private String wizStep;
+    private String saveOrEditLabel;
+    private String plusOrPen;
+
     @PostConstruct
     public void init() {
-        clientList = clientService.findAllActiveClients();
+
         clientTypeList = clientTypeService.findAllClientTypes();
         unit2teams = researchTeamService.getUnits2Teams();
-        
-        /*
-         * export to independent bean
-         */
-        /*
-        unit2teams = researchTeamService.getUnits2Teams();
         for (ResearchUnit unit : unit2teams.keySet()) {
-            if (!unit.getName().equals("UMR 1087")){
+            if (!unit.getName().equals(internUnitName)) {
                 unitList.add(unit);
             }
         }
-        * */
+
+        companyList = companyService.findAllCompanies();
+    }
+
+    public void initClient() {
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+
+            newClient = (Client) sessionMap.get("client");
+            //sessionMap.remove("client");
+            wizStep = (String) sessionMap.get("wizStep");
+            sessionMap.remove("wizStep");
+            if (wizStep == null) {
+                wizStep = "personal";
+            }
+
+            if (newClient == null) {
+                newClient = new Client();
+            } else {
+                switchAccordingToType(newClient.getType());
+                if (newClient.getResearchTeam() != null) {
+                    ResearchUnit unit = newClient.getResearchTeam().getResearchUnit();
+                    selectedUnit = unit;
+                    switchAccordingToUnit(unit);
+                }
+            }
+        }
+    }
+
+    public String getWizStep() {
+        return wizStep;
+    }
+
+    public void setWizStep(String wizStep) {
+        this.wizStep = wizStep;
+    }
+
+    public List<Company> getCompanyList() {
+        return companyList;
+    }
+
+    public void setCompanyList(List<Company> companyList) {
+        this.companyList = companyList;
+    }
+
+    public String getClientid() {
+        return clientid;
+    }
+
+    public void setClientid(String clientid) {
+        this.clientid = clientid;
+    }
+
+    public List<ResearchUnit> getUnitList() {
+        return unitList;
+    }
+
+    public void setUnitList(List<ResearchUnit> unitList) {
+        this.unitList = unitList;
+    }
+
+    public ResearchUnit getSelectedUnit() {
+        return selectedUnit;
+    }
+
+    public void setSelectedUnit(ResearchUnit selectedUnit) {
+        this.selectedUnit = selectedUnit;
+    }
+
+    public List<ResearchTeam> getTeamList() {
+        return teamList;
+    }
+
+    public void setTeamList(List<ResearchTeam> teamList) {
+        this.teamList = teamList;
     }
 
     public Map<ResearchUnit, List<ResearchTeam>> getUnit2teams() {
@@ -85,165 +164,6 @@ public class ClientBean implements Serializable {
     public void setUnit2teams(Map<ResearchUnit, List<ResearchTeam>> unit2teams) {
         this.unit2teams = unit2teams;
     }
-
-    public Client getSelectedClient() {
-        return selectedClient;
-    }
-
-    public void setSelectedClient(Client selectedClient) {
-        this.selectedClient = selectedClient;
-    }
-
-    public List<ClientType> getClientTypeList() {
-        return clientTypeList;
-    }
-
-    public void setClientTypeList(List<ClientType> clientTypeList) {
-        this.clientTypeList = clientTypeList;
-    }
-
-    public ClientService getClientService() {
-        return clientService;
-    }
-
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
-    }
-
-    public int getClientNumber() {
-        return clientList.size();
-    }
-
-    public List<Client> getClientList() {
-        return clientList;
-    }
-
-    public void setClientList(List<Client> clientList) {
-        this.clientList = clientList;
-    }
-
-    public List<Client> getFilteredClients() {
-        return filteredClients;
-    }
-
-    public void setFilteredClients(List<Client> filteredClients) {
-        this.filteredClients = filteredClients;
-    }
-
-    public void onEdit(RowEditEvent event) {
-        Client clientToEdit = (Client) event.getObject();
-        FacesContext context = FacesContext.getCurrentInstance();
-        try {
-            Client clientUpdated = clientService.updateClient(clientToEdit);
-            int index = clientList.indexOf(clientToEdit);
-            clientList.remove(index);
-            clientList.add(index, clientUpdated);
-            RequestContext rcontext = RequestContext.getCurrentInstance();
-            rcontext.update("clientTable");
-
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), ((Client) event.getObject()).toString(), FacesMessage.SEVERITY_INFO);
-        } catch (Exception e) {
-            context.validationFailed();
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
-        }
-    }
-
-    public void onCancel(RowEditEvent event) {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), ((Client) event.getObject()).toString(), FacesMessage.SEVERITY_INFO);
-    }
-
-    public void onEditInit(RowEditEvent event) {
-        Client clientToEdit = (Client) event.getObject();
-        Client clientIdDb = clientService.findClient(clientToEdit.getId());
-
-        if (clientToEdit.getVersion() != clientIdDb.getVersion()) {
-            int index = clientList.indexOf(clientToEdit);
-            clientList.remove(index);
-            clientList.add(index, clientIdDb);
-            RequestContext rcontext = RequestContext.getCurrentInstance();
-            rcontext.update("clientTable");
-
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_rowchanged"), clientToEdit.toString(), FacesMessage.SEVERITY_WARN);
-        }
-    }
-    
-    public void cancelModify() {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
-    }
-
-    public void validateEmail(FacesContext context, UIComponent component, Object value) {
-        String email = ((String) value).toLowerCase();
-
-        Client existingClient = clientService.findByEmail(email);
-        PfMember existingPfMember = pfMemberService.findByEmail(email);
-
-        if ((existingClient != null && existingClient.getId() != (Long) component.getAttributes().get("clientID")) || (existingPfMember != null && existingPfMember.getId() != (Long) component.getAttributes().get("clientID"))) {
-            ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\""+email+"\" "+FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
-        }
-    }
-    /*
-    public void modifyAddress() {
-        try {
-            Client clientUpdated = clientService.updateClient(selectedClient);
-            int index = clientList.indexOf(selectedClient);
-            clientList.remove(index);
-            clientList.add(index, clientUpdated);
-            RequestContext rcontext = RequestContext.getCurrentInstance();
-            rcontext.update("clientTable");
-
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
-        } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
-        }
-    }
-    */
-    public void modifySelectedClient(){
-        try {
-            Client clientUpdated = clientService.updateClient(selectedClient);
-            int index = clientList.indexOf(selectedClient);
-            clientList.remove(index);
-            clientList.add(index, clientUpdated);
-            RequestContext rcontext = RequestContext.getCurrentInstance();
-            rcontext.update("clientTable");
-
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
-        } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
-        }
-    }
-
-    public void deleteClient() {
-        try {
-            clientService.deleteClient(selectedClient);
-            clientList.remove(selectedClient);
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteDone"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
-        } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
-        }
-    }
-
-    public void cancelDeletion() {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteCanceled"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
-    }
-    
-    
-    
-    
-    /*
-     * From here, should be exporte to composite component
-     */
-    /*
-    private boolean isInterne = false;
-    private boolean isAcademique = false;
-    private boolean isPrive = false;
-    private Map<ResearchUnit, List<ResearchTeam>> unit2teams;
-    private List<ResearchUnit> unitList = new ArrayList<>();
-    private List<ResearchTeam> teamList = new ArrayList<>();
-    private ResearchUnit selectedUnit;
-    
-    @Autowired
-    private ResearchTeamService researchTeamService;
 
     public boolean isInterne() {
         return isInterne;
@@ -269,80 +189,151 @@ public class ClientBean implements Serializable {
         this.isPrive = isPrive;
     }
 
-    public Map<ResearchUnit, List<ResearchTeam>> getUnit2teams() {
-        return unit2teams;
+    public List<ClientType> getClientTypeList() {
+        return clientTypeList;
     }
 
-    public void setUnit2teams(Map<ResearchUnit, List<ResearchTeam>> unit2teams) {
-        this.unit2teams = unit2teams;
+    public void setClientTypeList(List<ClientType> clientTypeList) {
+        this.clientTypeList = clientTypeList;
     }
 
-    public List<ResearchUnit> getUnitList() {
-        return unitList;
+    public ClientTypeService getClientTypeService() {
+        return clientTypeService;
     }
 
-    public void setUnitList(List<ResearchUnit> unitList) {
-        this.unitList = unitList;
+    public void setClientTypeService(ClientTypeService clientTypeService) {
+        this.clientTypeService = clientTypeService;
     }
 
-    public List<ResearchTeam> getTeamList() {
-        return teamList;
+    public Client getNewClient() {
+        return newClient;
     }
 
-    public void setTeamList(List<ResearchTeam> teamList) {
-        this.teamList = teamList;
+    public void setNewClient(Client newClient) {
+        this.newClient = newClient;
     }
 
-    public ResearchUnit getSelectedUnit() {
-        return selectedUnit;
-    }
+    public String saveNewClient() {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            if (newClient.getId() == null) {
+                clientService.saveClient(newClient);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newClient_added"), newClient.toString(), FacesMessage.SEVERITY_INFO);
 
-    public void setSelectedUnit(ResearchUnit selectedUnit) {
-        this.selectedUnit = selectedUnit;
-    }
-    
-    public void onTypeChanged(AjaxBehaviorEvent event) {
-        ClientType type = (ClientType) ((UIOutput) event.getSource()).getValue();
-        switch (type.toString()) {
-            case "interne":
-                isInterne = true;
-                isAcademique = false;
-                isPrive = false;
-                teamList.clear();
-                for (ResearchUnit unit : unit2teams.keySet()) {
-                    if (unit.getName().equals("UMR 1087")){
-                        teamList.addAll(unit2teams.get(unit));
-                    }
-                }
-                selectedUnit = null;
-                break;
-            case "académique":
-                isInterne = false;
-                isAcademique = true;
-                isPrive = false;
-                teamList.clear();
-                for (ResearchUnit unit : unitList) {
-                    teamList.addAll(unit2teams.get(unit));
-                }
-                break;
-            case "privé":
-                isInterne = false;
-                isAcademique = false;
-                isPrive = true;
-                selectedUnit = null;
-                break;
-            default:
-                isInterne = false;
-                isAcademique = false;
-                isPrive = false;
-                selectedUnit = null;
-                break;
+            } else {
+                clientService.updateClient(newClient);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), newClient.toString(), FacesMessage.SEVERITY_INFO);
+            }
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            return "clients?faces-redirect=true";
+        } catch (Exception e) {
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            return null;
         }
     }
-    
-    public void onUnitChanged(AjaxBehaviorEvent event){
-        teamList.clear();
-        teamList.addAll(unit2teams.get(selectedUnit));
+
+    public String cancelNewClient() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (newClient.getId() == null) {
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
+        } else {
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), newClient.toString(), FacesMessage.SEVERITY_INFO);
+        }
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        return "clients?faces-redirect=true";
     }
-    */
+
+    public void validateEmail(FacesContext context, UIComponent component, Object value) {
+        String email = ((String) value).toLowerCase();
+
+        Client existingClient = clientService.findByEmail(email);
+        PfMember existingPfMember = pfMemberService.findByEmail(email);
+
+        if ((existingClient != null && existingClient.getId() != newClient.getId()) || (existingPfMember != null && existingPfMember.getId() != newClient.getId())) {
+            ((UIInput) component).setValid(false);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\"" + email + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+        }
+    }
+
+    public void onTypeChanged(AjaxBehaviorEvent event) {
+        ClientType type = (ClientType) ((UIOutput) event.getSource()).getValue();
+        switchAccordingToType(type);
+    }
+
+    private void switchAccordingToType(ClientType type) {
+        if (type != null) {
+            switch (type.toString()) {
+                case "interne":
+                    isInterne = true;
+                    isAcademique = false;
+                    isPrive = false;
+                    teamList.clear();
+                    for (ResearchUnit unit : unit2teams.keySet()) {
+                        if (unit.getName().equals(internUnitName)) {
+                            teamList.addAll(unit2teams.get(unit));
+                        }
+                    }
+                    selectedUnit = null;
+                    break;
+                case "académique":
+                    isInterne = false;
+                    isAcademique = true;
+                    isPrive = false;
+                    teamList.clear();
+                    for (ResearchUnit unit : unitList) {
+                        teamList.addAll(unit2teams.get(unit));
+                    }
+                    break;
+                case "privé":
+                    isInterne = false;
+                    isAcademique = false;
+                    isPrive = true;
+                    selectedUnit = null;
+                    break;
+                default:
+                    isInterne = false;
+                    isAcademique = false;
+                    isPrive = false;
+                    selectedUnit = null;
+                    break;
+            }
+        }
+    }
+
+    public void onUnitChanged(AjaxBehaviorEvent event) {
+        ResearchUnit unit = (ResearchUnit) ((UIOutput) event.getSource()).getValue();
+        switchAccordingToUnit(unit);
+    }
+
+    private void switchAccordingToUnit(ResearchUnit unit) {
+        if (unit == null) {
+            teamList.clear();
+            for (ResearchUnit u : unitList) {
+                teamList.addAll(unit2teams.get(u));
+            }
+        } else {
+            teamList.clear();
+            teamList.addAll(unit2teams.get(unit));
+        }
+    }
+
+    public String createNewCompany() {
+        return "companyCreate?faces-redirect=true";
+    }
+
+    public String getSaveOrEditLabel() {
+        if (newClient.getId() != null) {
+            return FacesUtils.getI18nValue("label_edit");
+        } else {
+            return FacesUtils.getI18nValue("label_save");
+        }
+    }
+
+    public String getPlusOrPen() {
+        if (newClient.getId() != null) {
+            return "ui-icon-pencil";
+        } else {
+            return "ui-icon-plus";
+        }
+    }
 }

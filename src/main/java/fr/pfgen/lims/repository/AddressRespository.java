@@ -4,7 +4,7 @@
  */
 package fr.pfgen.lims.repository;
 
-import fr.pfgen.lims.domain.Address;
+import fr.pfgen.lims.domain.people.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

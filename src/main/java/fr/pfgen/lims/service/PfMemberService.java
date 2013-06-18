@@ -1,6 +1,6 @@
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.PfMember;
+import fr.pfgen.lims.domain.people.PfMember;
 import java.util.List;
 
 public interface PfMemberService {

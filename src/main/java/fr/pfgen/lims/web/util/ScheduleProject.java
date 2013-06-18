@@ -4,7 +4,7 @@
  */
 package fr.pfgen.lims.web.util;
 
-import fr.pfgen.lims.domain.Project;
+import fr.pfgen.lims.domain.projects.Project;
 import fr.pfgen.lims.service.ProjectService;
 import fr.pfgen.lims.web.project.ProjectBean;
 

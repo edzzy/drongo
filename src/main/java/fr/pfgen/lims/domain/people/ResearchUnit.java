@@ -1,4 +1,8 @@
-package fr.pfgen.lims.domain;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package fr.pfgen.lims.domain.people;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -16,49 +20,41 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ *
+ * @author eric
+ */
 @Entity
-@Table(name = "client_types")
-public class ClientType implements Serializable {
-
-    @NotNull
-    @Size(min = 2, max = 30)
-    @Column(unique = true)
-    private String name;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "type")
-    private Set<Client> clients = new HashSet<>();
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Client> getClients() {
-        return this.clients;
-    }
-
-    public void setClients(Set<Client> clients) {
-        this.clients = clients;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
+@Table(name = "research_units")
+public class ResearchUnit implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+    
     @Version
     @Column(name = "version")
     private Integer version;
+    
+    @NotNull
+    @Column(unique = true)
+    @Size(min = 2, max = 50)
+    private String name;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "researchUnit")
+    private Set<ResearchTeam> researchTeams = new HashSet<>();
+
+    public Set<ResearchTeam> getResearchTeams() {
+        return researchTeams;
+    }
+
+    public void setResearchTeams(Set<ResearchTeam> researchTeams) {
+        this.researchTeams = researchTeams;
+    }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -66,17 +62,25 @@ public class ClientType implements Serializable {
     }
 
     public Integer getVersion() {
-        return this.version;
+        return version;
     }
 
     public void setVersion(Integer version) {
         this.version = version;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 11 * hash + Objects.hashCode(this.id);
+        hash = 83 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -88,10 +92,15 @@ public class ClientType implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ClientType other = (ClientType) obj;
+        final ResearchUnit other = (ResearchUnit) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

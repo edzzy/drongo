@@ -1,4 +1,4 @@
-package fr.pfgen.lims.domain;
+package fr.pfgen.lims.domain.people;
 
 import java.io.Serializable;
 import java.util.Date;

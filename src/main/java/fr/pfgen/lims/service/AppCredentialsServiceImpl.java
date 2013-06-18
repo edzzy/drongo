@@ -1,6 +1,6 @@
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.AppCredentials;
+import fr.pfgen.lims.domain.people.AppCredentials;
 import fr.pfgen.lims.repository.AppCredentialsRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

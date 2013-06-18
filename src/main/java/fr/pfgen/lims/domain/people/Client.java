@@ -1,4 +1,4 @@
-package fr.pfgen.lims.domain;
+package fr.pfgen.lims.domain.people;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -24,6 +24,17 @@ public class Client extends AbstractPerson{
     
     @ManyToOne
     private ResearchTeam researchTeam;
+    
+    @ManyToOne
+    private Company company;
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
 
     public ResearchTeam getResearchTeam() {
         return researchTeam;

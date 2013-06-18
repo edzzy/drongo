@@ -4,8 +4,8 @@
  */
 package fr.pfgen.lims.web.people;
 
-import fr.pfgen.lims.domain.Client;
-import fr.pfgen.lims.domain.PfMember;
+import fr.pfgen.lims.domain.people.Client;
+import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.service.ClientService;
 import fr.pfgen.lims.service.PfMemberService;
 import java.io.Serializable;

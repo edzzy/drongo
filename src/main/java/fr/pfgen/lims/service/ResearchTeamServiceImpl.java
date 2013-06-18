@@ -4,8 +4,8 @@
  */
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.ResearchTeam;
-import fr.pfgen.lims.domain.ResearchUnit;
+import fr.pfgen.lims.domain.people.ResearchTeam;
+import fr.pfgen.lims.domain.people.ResearchUnit;
 import fr.pfgen.lims.repository.ResearchTeamRepository;
 import fr.pfgen.lims.repository.ResearchUnitRepository;
 import java.util.HashMap;

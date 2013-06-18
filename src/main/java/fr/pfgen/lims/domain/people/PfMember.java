@@ -1,4 +1,4 @@
-package fr.pfgen.lims.domain;
+package fr.pfgen.lims.domain.people;
 
 import java.util.Date;
 import javax.persistence.Entity;

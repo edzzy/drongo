@@ -4,7 +4,7 @@
  */
 package fr.pfgen.lims.web.converters;
 
-import fr.pfgen.lims.domain.Address;
+import fr.pfgen.lims.domain.people.Address;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
