@@ -93,7 +93,7 @@ public class ClientBean implements Serializable {
             wizStep = (String) sessionMap.get("wizStep");
             sessionMap.remove("wizStep");
             if (wizStep == null) {
-                wizStep = "personal";
+                wizStep = "personalTab";
             }
 
             if (newClient == null) {
@@ -319,6 +319,10 @@ public class ClientBean implements Serializable {
 
     public String createNewCompany() {
         return "companyCreate?faces-redirect=true";
+    }
+    
+    public String createNewResearchTeam(){
+        return "researchTeamCreate?faces-redirect=true";
     }
 
     public String getSaveOrEditLabel() {

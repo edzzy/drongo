@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.pfgen.lims.domain.people;
+package fr.pfgen.lims.domain.equipments;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -17,69 +16,57 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
  * @author eric
  */
 @Entity
-@Table(name = "research_teams", uniqueConstraints = @UniqueConstraint(columnNames = {"research_unit", "name"}))
-public class ResearchTeam implements Serializable{
-    
+@Table(name = "reagents")
+public class Reagent implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+   
+    @NotNull
+    @Column(unique = true)
+    private String name;
     
     @Version
     @Column(name = "version")
     private Integer version;
     
-    @NotNull
-    @Size(min = 2, max = 50)
-    private String name;
-
-    @NotNull
     @ManyToOne
-    private ResearchUnit researchUnit;
+    private Device usedInDevice;
     
-    @OneToMany(mappedBy = "researchTeam", cascade = CascadeType.ALL)
-    private Set<Client> clients = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "reagent")
+    private Set<ReagentBatch> batches;
 
-    public Set<Client> getClients() {
-        return clients;
+    public Set<ReagentBatch> getBatches() {
+        return batches;
     }
 
-    public void setClients(Set<Client> clients) {
-        this.clients = clients;
+    public void setBatches(Set<ReagentBatch> batches) {
+        this.batches = batches;
     }
 
-    public ResearchUnit getResearchUnit() {
-        return researchUnit;
+    public Device getUsedInDevice() {
+        return usedInDevice;
     }
 
-    public void setResearchUnit(ResearchUnit researchUnit) {
-        this.researchUnit = researchUnit;
+    public void setUsedInDevice(Device usedInDevice) {
+        this.usedInDevice = usedInDevice;
     }
-    
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public String getName() {
@@ -90,10 +77,18 @@ public class ResearchTeam implements Serializable{
         this.name = name;
     }
 
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 41 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -105,7 +100,7 @@ public class ResearchTeam implements Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ResearchTeam other = (ResearchTeam) obj;
+        final Reagent other = (Reagent) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -114,6 +109,6 @@ public class ResearchTeam implements Serializable{
 
     @Override
     public String toString() {
-        return this.name+" ("+this.researchUnit.getName()+")";
+        return this.name;
     }
 }

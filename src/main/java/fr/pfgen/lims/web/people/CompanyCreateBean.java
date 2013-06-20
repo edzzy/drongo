@@ -61,6 +61,7 @@ public class CompanyCreateBean {
                 sessionMap.put("wizStep", "typeTab");
                 return "client?faces-redirect=true";
             } else {
+                //TODO redirect to company list when created !!!!
                 return null;
             }
         } catch (Exception e) {
@@ -77,7 +78,8 @@ public class CompanyCreateBean {
             sessionMap.put("wizStep", "typeTab");
             return "client?faces-redirect=true";
         }else{
-            return "clients?faces-redirect=true";
+            //TODO redirect to company list when created !!!!
+            return null;
         }
     }
 }

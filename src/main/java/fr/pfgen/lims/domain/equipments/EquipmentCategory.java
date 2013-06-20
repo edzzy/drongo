@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.pfgen.lims.domain.people;
+package fr.pfgen.lims.domain.equipments;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -14,10 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,51 +24,47 @@ import javax.validation.constraints.Size;
  * @author eric
  */
 @Entity
-@Table(name = "research_teams", uniqueConstraints = @UniqueConstraint(columnNames = {"research_unit", "name"}))
-public class ResearchTeam implements Serializable{
-    
+@Table(name = "equipment_categories")
+public class EquipmentCategory implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+   
+    @NotNull
+    @Column(unique = true)
+    @Size(min = 2, max = 30)
+    private String name;
     
     @Version
     @Column(name = "version")
     private Integer version;
     
-    @NotNull
-    @Size(min = 2, max = 50)
-    private String name;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    private Set<Equipment> equipments;
 
-    @NotNull
-    @ManyToOne
-    private ResearchUnit researchUnit;
-    
-    @OneToMany(mappedBy = "researchTeam", cascade = CascadeType.ALL)
-    private Set<Client> clients = new HashSet<>();
-
-    public Set<Client> getClients() {
-        return clients;
+    public Set<Equipment> getEquipments() {
+        return equipments;
     }
 
-    public void setClients(Set<Client> clients) {
-        this.clients = clients;
+    public void setEquipments(Set<Equipment> equipments) {
+        this.equipments = equipments;
     }
 
-    public ResearchUnit getResearchUnit() {
-        return researchUnit;
-    }
-
-    public void setResearchUnit(ResearchUnit researchUnit) {
-        this.researchUnit = researchUnit;
-    }
-    
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getVersion() {
@@ -80,14 +73,6 @@ public class ResearchTeam implements Serializable{
 
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
@@ -105,7 +90,7 @@ public class ResearchTeam implements Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ResearchTeam other = (ResearchTeam) obj;
+        final EquipmentCategory other = (EquipmentCategory) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -114,6 +99,6 @@ public class ResearchTeam implements Serializable{
 
     @Override
     public String toString() {
-        return this.name+" ("+this.researchUnit.getName()+")";
+        return this.name;
     }
 }

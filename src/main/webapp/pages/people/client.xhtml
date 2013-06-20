@@ -20,7 +20,7 @@
 
                 <p:wizard widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}" step="#{clientBean.wizStep}">
 
-                    <p:tab id="personal" title="#{messages.label_informations}">
+                    <p:tab id="personalTab" title="#{messages.label_informations}">
                         <p:panel id="panelPersonal" header="#{messages.label_PersonalDetails}">
                             <p:focus context="panelPersonal"/>
                             <h:panelGrid columns="3">
@@ -35,7 +35,7 @@
                         </p:panel>
                     </p:tab>
 
-                    <p:tab id="contact" title="#{messages.label_contact}">
+                    <p:tab id="contactTab" title="#{messages.label_contact}">
                         <p:panel id="panelContact" header="#{messages.label_contactInformations}">
                             <p:focus context="panelContact"/>
                             <h:panelGrid columns="3">
@@ -77,10 +77,15 @@
 
                             <h:panelGrid columns="3" id="teamSelectPanel" rendered="#{clientBean.academique or clientBean.interne}">
                                 <p:outputLabel for="teamSelect" value="#{messages.label_researchTeam}" />
-                                <p:selectOneMenu id="teamSelect" value="#{clientBean.newClient.researchTeam}" converter="#{researchTeamConverter}" required="true" style="width: 130px" >
-                                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
-                                    <f:selectItems value="#{clientBean.teamList}" />
-                                </p:selectOneMenu>
+                                <h:panelGrid columns="2">
+                                    <p:selectOneMenu id="teamSelect" value="#{clientBean.newClient.researchTeam}" converter="#{researchTeamConverter}" required="true" style="width: 130px" >
+                                        <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                        <f:selectItems value="#{clientBean.teamList}" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" action="#{clientBean.createNewResearchTeam}" >
+                                        <o:ignoreValidationFailed />
+                                    </p:commandButton>
+                                </h:panelGrid>
                                 <p:message for="teamSelect" />
                             </h:panelGrid>
 
@@ -91,7 +96,7 @@
                                         <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
                                         <f:selectItems value="#{clientBean.companyList}" />
                                     </p:selectOneMenu>
-                                    <p:commandButton value="#{messages.label_new}" icon="ui-icon-plus" action="#{clientBean.createNewCompany}" >
+                                    <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" action="#{clientBean.createNewCompany}" >
                                         <o:ignoreValidationFailed />
                                     </p:commandButton>
                                 </h:panelGrid>
@@ -101,7 +106,7 @@
                         </p:panel>
                     </p:tab>
 
-                    <p:tab id="rights" title="#{messages.label_address}">
+                    <p:tab id="adressTab" title="#{messages.label_address}" rendered="#{not clientBean.interne}">
                         <p:panel id="panelAddress" header="#{messages.label_addressInformations}" >
                             <p:focus context="panelAddress"/>
                             <h:panelGrid columns="3" >
@@ -116,7 +121,7 @@
                         </p:panel>
                     </p:tab>
 
-                    <p:tab id="confirm" title="#{messages.label_confirmation}">
+                    <p:tab id="confirmTab" title="#{messages.label_confirmation}">
                         <p:panel header="#{messages.label_confirmation}" >
                             <p:focus context="submitButton"/>
                             <h:panelGrid columns="2" cellpadding="20" styleClass="topAligned">
@@ -138,14 +143,14 @@
                                     <h:outputText value="#{messages.clients_type}: " />
                                     <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.type}" />
 
-                                    <h:outputText value="#{messages.label_researchUnit}: " rendered="#{clientBean.newClient.type.name ne 'privé'}" />
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.researchTeam.researchUnit}" rendered="#{clientBean.newClient.type.name ne 'privé'}" />
+                                    <h:outputText value="#{messages.label_researchUnit}: " rendered="#{not clientBean.prive}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.researchTeam.researchUnit}" rendered="#{not clientBean.prive}" />
 
-                                    <h:outputText value="#{messages.label_researchTeam}: " rendered="#{clientBean.newClient.type.name ne 'privé'}"/>
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.researchTeam}" rendered="#{clientBean.newClient.type.name ne 'privé'}"/>
+                                    <h:outputText value="#{messages.label_researchTeam}: " rendered="#{not clientBean.prive}"/>
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.researchTeam}" rendered="#{not clientBean.prive}"/>
 
-                                    <h:outputText value="#{messages.label_company}: " rendered="#{clientBean.newClient.type.name eq 'privé'}" />
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.company}" rendered="#{clientBean.newClient.type.name eq 'privé'}"/>
+                                    <h:outputText value="#{messages.label_company}: " rendered="#{clientBean.prive}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.company}" rendered="#{clientBean.prive}"/>
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="2">

@@ -4,7 +4,7 @@
  */
 package fr.pfgen.lims.repository;
 
-import fr.pfgen.lims.domain.people.ResearchUnit;
+import fr.pfgen.lims.domain.equipments.EquipmentCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  * @author eric
  */
 @Repository
-public interface ResearchUnitRepository extends JpaSpecificationExecutor<ResearchUnit>, JpaRepository<ResearchUnit, Long>{
+public interface EquipmentCategoryRepository extends JpaSpecificationExecutor<EquipmentCategory>, JpaRepository<EquipmentCategory, Long>{
     
-    public ResearchUnit findByName(String name);
+    public EquipmentCategory findByName(String name);
 }

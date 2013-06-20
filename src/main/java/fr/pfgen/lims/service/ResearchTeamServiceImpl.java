@@ -25,10 +25,10 @@ public class ResearchTeamServiceImpl implements ResearchTeamService {
 
     @Autowired
     ResearchTeamRepository researchTeamRepository;
-    
     @Autowired
     ResearchUnitRepository researchUnitRepository;
-    
+
+    //methode impl for Research Teams
     @Override
     public long countAllResearchTeams() {
         return researchTeamRepository.count();
@@ -72,13 +72,54 @@ public class ResearchTeamServiceImpl implements ResearchTeamService {
     @Override
     public Map<ResearchUnit, List<ResearchTeam>> getUnits2Teams() {
         Map<ResearchUnit, List<ResearchTeam>> map = new HashMap<>();
-        
+
         List<ResearchUnit> unitList = researchUnitRepository.findAll();
         for (ResearchUnit researchUnit : unitList) {
             List<ResearchTeam> teamList = researchTeamRepository.findByResearchUnit(researchUnit);
             map.put(researchUnit, teamList);
         }
-        
+
         return map;
+    }
+
+    //methode impl for Research Teams
+    @Override
+    public List<ResearchUnit> findAllResearchUnits() {
+        return researchUnitRepository.findAll();
+    }
+
+    @Override
+    public long countAllResearchUnits() {
+        return researchUnitRepository.count();
+    }
+
+    @Override
+    public void deleteResearchUnit(ResearchUnit researchUnit) {
+        researchUnitRepository.delete(researchUnit);
+    }
+
+    @Override
+    public ResearchUnit findResearchUnit(Long id) {
+        return researchUnitRepository.findOne(id);
+    }
+
+    @Override
+    public List<ResearchUnit> findResearchUnitEntries(int firstResult, int maxResults) {
+        return researchUnitRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+    }
+
+    @Override
+    public void saveResearchUnit(ResearchUnit researchUnit) {
+        researchUnitRepository.save(researchUnit);
+    }
+
+    @Override
+    public ResearchUnit updateResearchUnit(ResearchUnit researchUnit) {
+        return researchUnitRepository.save(researchUnit);
+    }
+
+    @Override
+    public ResearchUnit findResearchUnitByName(String name) {
+        return researchUnitRepository.findByName(name);
     }
 }

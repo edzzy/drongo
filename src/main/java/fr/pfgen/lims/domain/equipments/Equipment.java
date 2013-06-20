@@ -2,84 +2,65 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.pfgen.lims.domain.people;
+package fr.pfgen.lims.domain.equipments;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
  * @author eric
  */
 @Entity
-@Table(name = "research_teams", uniqueConstraints = @UniqueConstraint(columnNames = {"research_unit", "name"}))
-public class ResearchTeam implements Serializable{
-    
+@Table(name = "equipments")
+public class Equipment implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+   
+    @NotNull
+    private String name;
     
     @Version
     @Column(name = "version")
     private Integer version;
     
     @NotNull
-    @Size(min = 2, max = 50)
-    private String name;
-
+    private String serial;
+    
     @NotNull
+    private String room;
+    
+    @Column(unique = true)
+    private String itx;
+    
     @ManyToOne
-    private ResearchUnit researchUnit;
-    
-    @OneToMany(mappedBy = "researchTeam", cascade = CascadeType.ALL)
-    private Set<Client> clients = new HashSet<>();
+    private EquipmentCategory category;
 
-    public Set<Client> getClients() {
-        return clients;
+    public EquipmentCategory getCategory() {
+        return category;
     }
 
-    public void setClients(Set<Client> clients) {
-        this.clients = clients;
+    public void setCategory(EquipmentCategory category) {
+        this.category = category;
     }
 
-    public ResearchUnit getResearchUnit() {
-        return researchUnit;
-    }
-
-    public void setResearchUnit(ResearchUnit researchUnit) {
-        this.researchUnit = researchUnit;
-    }
-    
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public String getName() {
@@ -90,10 +71,42 @@ public class ResearchTeam implements Serializable{
         this.name = name;
     }
 
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public String getSerial() {
+        return serial;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    public String getItx() {
+        return itx;
+    }
+
+    public void setItx(String itx) {
+        this.itx = itx;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -105,7 +118,7 @@ public class ResearchTeam implements Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ResearchTeam other = (ResearchTeam) obj;
+        final Equipment other = (Equipment) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -114,6 +127,10 @@ public class ResearchTeam implements Serializable{
 
     @Override
     public String toString() {
-        return this.name+" ("+this.researchUnit.getName()+")";
+        if (this.category==null){
+            return this.name;
+        }else{
+            return this.category.getName()+" - "+this.name+" ("+this.serial+")";
+        }
     }
 }
