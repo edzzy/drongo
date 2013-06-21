@@ -46,6 +46,10 @@ public class Device implements Serializable{
     
     @NotNull
     @Column(unique = true)
+    private String internalNumber;
+    
+    @NotNull
+    @Column(unique = true)
     private String serial;
     
     @NotNull
@@ -58,8 +62,17 @@ public class Device implements Serializable{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usedInDevice")
     private Set<Reagent> reagents;
 
+    
     public Set<Reagent> getReagents() {
         return reagents;
+    }
+
+    public String getInternalNumber() {
+        return internalNumber;
+    }
+
+    public void setInternalNumber(String internalNumber) {
+        this.internalNumber = internalNumber;
     }
 
     public void setReagents(Set<Reagent> reagents) {

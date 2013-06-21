@@ -39,6 +39,10 @@ public class Equipment implements Serializable{
     private String serial;
     
     @NotNull
+    @Column(unique = true)
+    private String internalNumber;
+    
+    @NotNull
     private String room;
     
     @Column(unique = true)
@@ -46,6 +50,14 @@ public class Equipment implements Serializable{
     
     @ManyToOne
     private EquipmentCategory category;
+
+    public String getInternalNumber() {
+        return internalNumber;
+    }
+
+    public void setInternalNumber(String internalNumber) {
+        this.internalNumber = internalNumber;
+    }
 
     public EquipmentCategory getCategory() {
         return category;
