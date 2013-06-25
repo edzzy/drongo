@@ -45,7 +45,7 @@ public class ClientBean implements Serializable {
      * Creates a new instance of CreateClientBean
      */
     private static final String internUnitName = "UMR 1087";
-    private Client newClient;
+    private Client client;
     private List<ClientType> clientTypeList;
     private boolean isInterne = false;
     private boolean isAcademique = false;
@@ -54,7 +54,6 @@ public class ClientBean implements Serializable {
     private List<ResearchUnit> unitList = new ArrayList<>();
     private List<ResearchTeam> teamList = new ArrayList<>();
     private ResearchUnit selectedUnit;
-    private String clientid;
     private List<Company> companyList;
     @Autowired
     private ClientService clientService;
@@ -67,8 +66,6 @@ public class ClientBean implements Serializable {
     @Autowired
     private CompanyService companyService;
     private String wizStep;
-    private String saveOrEditLabel;
-    private String plusOrPen;
 
     @PostConstruct
     public void init() {
@@ -88,7 +85,7 @@ public class ClientBean implements Serializable {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 
-            newClient = (Client) sessionMap.get("client");
+            client = (Client) sessionMap.get("client");
             //sessionMap.remove("client");
             wizStep = (String) sessionMap.get("wizStep");
             sessionMap.remove("wizStep");
@@ -96,12 +93,12 @@ public class ClientBean implements Serializable {
                 wizStep = "personalTab";
             }
 
-            if (newClient == null) {
-                newClient = new Client();
+            if (client == null) {
+                client = new Client();
             } else {
-                switchAccordingToType(newClient.getType());
-                if (newClient.getResearchTeam() != null) {
-                    ResearchUnit unit = newClient.getResearchTeam().getResearchUnit();
+                switchAccordingToType(client.getType());
+                if (client.getResearchTeam() != null) {
+                    ResearchUnit unit = client.getResearchTeam().getResearchUnit();
                     selectedUnit = unit;
                     switchAccordingToUnit(unit);
                 }
@@ -123,14 +120,6 @@ public class ClientBean implements Serializable {
 
     public void setCompanyList(List<Company> companyList) {
         this.companyList = companyList;
-    }
-
-    public String getClientid() {
-        return clientid;
-    }
-
-    public void setClientid(String clientid) {
-        this.clientid = clientid;
     }
 
     public List<ResearchUnit> getUnitList() {
@@ -205,24 +194,24 @@ public class ClientBean implements Serializable {
         this.clientTypeService = clientTypeService;
     }
 
-    public Client getNewClient() {
-        return newClient;
+    public Client getClient() {
+        return client;
     }
 
-    public void setNewClient(Client newClient) {
-        this.newClient = newClient;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public String saveNewClient() {
+    public String saveClient() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            if (newClient.getId() == null) {
-                clientService.saveClient(newClient);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newClient_added"), newClient.toString(), FacesMessage.SEVERITY_INFO);
+            if (client.getId() == null) {
+                clientService.saveClient(client);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newClient_added"), client.toString(), FacesMessage.SEVERITY_INFO);
 
             } else {
-                clientService.updateClient(newClient);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), newClient.toString(), FacesMessage.SEVERITY_INFO);
+                clientService.updateClient(client);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), client.toString(), FacesMessage.SEVERITY_INFO);
             }
             context.getExternalContext().getFlash().setKeepMessages(true);
             return "clients?faces-redirect=true";
@@ -232,12 +221,12 @@ public class ClientBean implements Serializable {
         }
     }
 
-    public String cancelNewClient() {
+    public String cancelClient() {
         FacesContext context = FacesContext.getCurrentInstance();
-        if (newClient.getId() == null) {
+        if (client.getId() == null) {
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
         } else {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), newClient.toString(), FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), client.toString(), FacesMessage.SEVERITY_INFO);
         }
         context.getExternalContext().getFlash().setKeepMessages(true);
         return "clients?faces-redirect=true";
@@ -249,7 +238,7 @@ public class ClientBean implements Serializable {
         Client existingClient = clientService.findByEmail(email);
         PfMember existingPfMember = pfMemberService.findByEmail(email);
 
-        if ((existingClient != null && existingClient.getId() != newClient.getId()) || (existingPfMember != null && existingPfMember.getId() != newClient.getId())) {
+        if ((existingClient != null && existingClient.getId() != client.getId()) || (existingPfMember != null && existingPfMember.getId() != client.getId())) {
             ((UIInput) component).setValid(false);
             FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\"" + email + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
@@ -326,7 +315,7 @@ public class ClientBean implements Serializable {
     }
 
     public String getSaveOrEditLabel() {
-        if (newClient.getId() != null) {
+        if (client.getId() != null) {
             return FacesUtils.getI18nValue("label_edit");
         } else {
             return FacesUtils.getI18nValue("label_save");
@@ -334,7 +323,7 @@ public class ClientBean implements Serializable {
     }
 
     public String getPlusOrPen() {
-        if (newClient.getId() != null) {
+        if (client.getId() != null) {
             return "ui-icon-pencil";
         } else {
             return "ui-icon-plus";

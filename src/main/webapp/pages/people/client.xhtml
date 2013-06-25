@@ -25,11 +25,11 @@
                             <p:focus context="panelPersonal"/>
                             <h:panelGrid columns="3">
                                 <p:outputLabel for="firstname" value="#{messages.persons_firstname}" />
-                                <p:inputText id="firstname" required="true" value="#{clientBean.newClient.firstname}" />
+                                <p:inputText id="firstname" required="true" value="#{clientBean.client.firstname}" />
                                 <p:message for="firstname" />
 
                                 <p:outputLabel for="lastname" value="#{messages.persons_lastname}" />
-                                <p:inputText id="lastname" required="true" value="#{clientBean.newClient.lastname}" />
+                                <p:inputText id="lastname" required="true" value="#{clientBean.client.lastname}" />
                                 <p:message for="lastname" />
                             </h:panelGrid>
                         </p:panel>
@@ -40,13 +40,13 @@
                             <p:focus context="panelContact"/>
                             <h:panelGrid columns="3">
                                 <p:outputLabel for="email" value="#{messages.persons_email}" />
-                                <p:inputText id="email" required="true" value="#{clientBean.newClient.email}" validator="#{clientBean.validateEmail}">
+                                <p:inputText id="email" required="true" value="#{clientBean.client.email}" validator="#{clientBean.validateEmail}">
                                     <f:validator validatorId="emailFormatValidator" />
                                 </p:inputText>    
                                 <p:message for="email" />
 
                                 <p:outputLabel for="phone" value="#{messages.persons_phone}" />
-                                <p:inputMask id="phone" required="false" mask="99.99.99.99.99" value="#{clientBean.newClient.phone}"/>
+                                <p:inputMask id="phone" required="false" mask="99.99.99.99.99" value="#{clientBean.client.phone}"/>
                                 <p:message for="phone" />
                             </h:panelGrid>
                         </p:panel>
@@ -57,7 +57,7 @@
 
                             <h:panelGrid columns="3" id="typeSelectPanel" >
                                 <p:outputLabel for="clientTypeSelect" value="#{messages.clients_type}" />
-                                <p:selectOneMenu id="clientTypeSelect" value="#{clientBean.newClient.type}" converter="#{clientTypeConverter}" required="true" style="width: 130px" >
+                                <p:selectOneMenu id="clientTypeSelect" value="#{clientBean.client.type}" converter="#{clientTypeConverter}" required="true" style="width: 130px" >
                                     <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
                                     <f:selectItems value="#{clientBean.clientTypeList}" />
                                     <p:ajax listener="#{clientBean.onTypeChanged}" update="panelType"/>
@@ -78,7 +78,7 @@
                             <h:panelGrid columns="3" id="teamSelectPanel" rendered="#{clientBean.academique or clientBean.interne}">
                                 <p:outputLabel for="teamSelect" value="#{messages.label_researchTeam}" />
                                 <h:panelGrid columns="2">
-                                    <p:selectOneMenu id="teamSelect" value="#{clientBean.newClient.researchTeam}" converter="#{researchTeamConverter}" required="true" style="width: 130px" >
+                                    <p:selectOneMenu id="teamSelect" value="#{clientBean.client.researchTeam}" converter="#{researchTeamConverter}" required="true" style="width: 130px" >
                                         <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
                                         <f:selectItems value="#{clientBean.teamList}" />
                                     </p:selectOneMenu>
@@ -92,7 +92,7 @@
                             <h:panelGrid columns="3" id="companySelectPanel" rendered="#{clientBean.prive}">
                                 <p:outputLabel for="companySelect" value="#{messages.label_company}" />
                                 <h:panelGrid columns="2">
-                                    <p:selectOneMenu id="companySelect" value="#{clientBean.newClient.company}" converter="#{companyConverter}" required="true" style="width: 130px" >
+                                    <p:selectOneMenu id="companySelect" value="#{clientBean.client.company}" converter="#{companyConverter}" required="true" style="width: 130px" >
                                         <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
                                         <f:selectItems value="#{clientBean.companyList}" />
                                     </p:selectOneMenu>
@@ -111,11 +111,11 @@
                             <p:focus context="panelAddress"/>
                             <h:panelGrid columns="3" >
                                 <p:outputLabel for="shipping" value="#{messages.client_shippingAddress}" />
-                                <p:inputTextarea id="shipping" disabled="#{clientBean.interne}" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.newClient.shippingAddress}" converter="#{addressConverter}" />
+                                <p:inputTextarea id="shipping" disabled="#{clientBean.interne}" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.client.shippingAddress}" converter="#{addressConverter}" />
                                 <p:message for="shipping" />
 
                                 <p:outputLabel for="billing" value="#{messages.client_billingAddress}" />
-                                <p:inputTextarea id="billing" disabled="#{clientBean.interne}" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.newClient.billingAddress}" converter="#{addressConverter}" />
+                                <p:inputTextarea id="billing" disabled="#{clientBean.interne}" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.client.billingAddress}" converter="#{addressConverter}" />
                                 <p:message for="billing" />
                             </h:panelGrid>
                         </p:panel>
@@ -130,10 +130,10 @@
                                         #{messages.label_PersonalDetails}
                                     </f:facet>
                                     <h:outputText value="#{messages.persons_firstname}: " />
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.firstname}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.firstname}" />
 
                                     <h:outputText value="#{messages.persons_lastname}: " />
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.lastname}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.lastname}" />
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="2" > 
@@ -141,16 +141,16 @@
                                         #{messages.clients_type}
                                     </f:facet>
                                     <h:outputText value="#{messages.clients_type}: " />
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.type}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.type}" />
 
                                     <h:outputText value="#{messages.label_researchUnit}: " rendered="#{not clientBean.prive}" />
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.researchTeam.researchUnit}" rendered="#{not clientBean.prive}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.researchTeam.researchUnit}" rendered="#{not clientBean.prive}" />
 
                                     <h:outputText value="#{messages.label_researchTeam}: " rendered="#{not clientBean.prive}"/>
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.researchTeam}" rendered="#{not clientBean.prive}"/>
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.researchTeam}" rendered="#{not clientBean.prive}"/>
 
                                     <h:outputText value="#{messages.label_company}: " rendered="#{clientBean.prive}" />
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.company}" rendered="#{clientBean.prive}"/>
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.company}" rendered="#{clientBean.prive}"/>
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="2">
@@ -158,26 +158,26 @@
                                         #{messages.label_contactInformations}
                                     </f:facet>
                                     <h:outputText value="#{messages.persons_email}: " />
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.email}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.email}" />
 
                                     <h:outputText value="#{messages.persons_phone}: " />
-                                    <h:outputText styleClass="outputLabel" value="#{clientBean.newClient.phone}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.phone}" />
                                 </p:panelGrid>
 
-                                <p:panelGrid columns="2" rendered="#{clientBean.newClient.type.name ne 'interne'}">
+                                <p:panelGrid columns="2" rendered="#{clientBean.client.type.name ne 'interne'}">
                                     <f:facet name="header">
                                         #{messages.label_addressInformations}
                                     </f:facet>
                                     <h:outputText value="#{messages.client_shippingAddress}: " />
-                                    <h:outputText styleClass="carRetLabel" value="#{clientBean.newClient.shippingAddress}" />
+                                    <h:outputText styleClass="carRetLabel" value="#{clientBean.client.shippingAddress}" />
 
                                     <h:outputText value="#{messages.client_billingAddress}: " />
-                                    <h:outputText styleClass="carRetLabel" value="#{clientBean.newClient.billingAddress}" />
+                                    <h:outputText styleClass="carRetLabel" value="#{clientBean.client.billingAddress}" />
                                 </p:panelGrid>
                             </h:panelGrid>
                             <f:facet name="footer"> 
-                                <p:commandButton id="submitButton" value="#{clientBean.saveOrEditLabel}" update="clientCreateMessages" action="#{clientBean.saveNewClient}" icon="#{clientBean.plusOrPen}"/>
-                                <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{clientBean.cancelNewClient}" />
+                                <p:commandButton id="submitButton" value="#{clientBean.saveOrEditLabel}" update="clientCreateMessages" action="#{clientBean.saveClient()}" icon="#{clientBean.plusOrPen}"/>
+                                <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{clientBean.cancelClient()}" />
                             </f:facet>
                         </p:panel>
                     </p:tab>

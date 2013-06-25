@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AppCredentialsRepository extends JpaSpecificationExecutor<AppCredentials>, JpaRepository<AppCredentials, Long> {
+
+    public AppCredentials findByLogin(String login);
 }

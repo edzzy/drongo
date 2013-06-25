@@ -15,13 +15,8 @@
 
                     <f:facet name="header">
                         #{messages.label_client}
-                    </f:facet>  
-
-                    <!--
-                    <p:ajax event="rowEdit" listener="#{clientsBean.onEdit}" update=":clientListForm:clientListMessages" />  
-                    <p:ajax event="rowEditCancel" listener="#{clientsBean.onCancel}" update=":clientListForm:clientListMessages" />
-                    <p:ajax event="rowEditInit" listener="#{clientsBean.onEditInit}" update=":clientListForm:clientListMessages" />
-                    -->
+                    </f:facet>
+                    
                     <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
 
                     <p:column style="width: 5px">  
@@ -29,50 +24,19 @@
                     </p:column>
 
                     <p:column headerText="#{messages.persons_lastname}"  sortBy="#{client.lastname}" filterBy="#{client.lastname}" id="lastname">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{client.lastname}"/>  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputText value="#{client.lastname}" />  
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{client.lastname}"/>
                     </p:column>
 
                     <p:column headerText="#{messages.persons_firstname}" sortBy="#{client.firstname}" filterBy="#{client.firstname}" id="firstname">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{client.firstname}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputText value="#{client.firstname}"/>  
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{client.firstname}" />
                     </p:column>  
 
                     <p:column headerText="#{messages.persons_email}" sortBy="#{client.email}" filterBy="#{client.email}" id="email">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{client.email}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputText value="#{client.email}" style="width:80%" validator="#{clientsBean.validateEmail}">
-                                    <f:attribute name="clientID" value="#{client.id}"/>
-                                    <f:validator validatorId="emailFormatValidator" />
-                                </p:inputText>  
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{client.email}" />
                     </p:column>  
 
                     <p:column headerText="#{messages.persons_phone}" sortBy="#{client.phone}" filterBy="#{client.phone}" id="phone">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{client.phone}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputMask value="#{client.phone}" mask="99.99.99.99.99"/>
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{client.phone}" />
                     </p:column>  
 
                     <p:column headerText="#{messages.clients_type}" sortBy="#{client.type.name}" filterBy="#{client.type.name}" id="type">
@@ -85,13 +49,7 @@
                         </h:outputText>
                     </p:column>
 
-                    <p:column style="width: 5px"> 
-                        <!--
-                        <h:link id="editButton" outcome="client?faces-redirect=true">
-                            <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
-                            <f:param name="clientid" value="#{client.id}" />
-                        </h:link>
-                        -->
+                    <p:column style="width: 5px">
                         <p:commandLink id="editButton" action="#{clientsBean.editClient}">
                             <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
                             <f:setPropertyActionListener value="#{client}" target="#{clientsBean.selectedClient}" />
@@ -115,7 +73,6 @@
 
                     <f:facet name="footer">
                         <p:commandButton value="#{messages.label_newClient}" icon="ui-icon-plus" action="#{clientsBean.createNewClient}"/>
-                        <!--<p:button outcome="client?faces-redirect=true" value="#{messages.label_newClient}" icon="ui-icon-plus" />-->
                     </f:facet>
 
                     <p:rowExpansion>  
@@ -144,7 +101,7 @@
 
                                 <h:outputText value="#{messages.label_researchTeam}: " rendered="#{client.type.name ne 'privé'}"/>
                                 <h:outputText styleClass="outputLabel" value="#{client.researchTeam}" rendered="#{client.type.name ne 'privé'}"/>
-                                
+
                                 <h:outputText value="#{messages.label_company}: " rendered="#{client.type.name eq 'privé'}" />
                                 <h:outputText styleClass="outputLabel" value="#{client.company}" rendered="#{client.type.name eq 'privé'}"/>
                             </p:panelGrid>
@@ -163,7 +120,7 @@
                     </h:panelGroup>
                 </h:form>
             </p:confirmDialog>
-            
+
         </ui:define>
     </ui:composition>
 </html>

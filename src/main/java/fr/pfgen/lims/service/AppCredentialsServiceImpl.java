@@ -48,4 +48,9 @@ public class AppCredentialsServiceImpl implements AppCredentialsService {
     public AppCredentials updateAppCredentials(AppCredentials appCredentials) {
         return appCredentialsRepository.save(appCredentials);
     }
+
+    @Override
+    public AppCredentials findAppCredentialsByLogin(String login) {
+        return appCredentialsRepository.findByLogin(login);
+    }
 }

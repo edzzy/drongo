@@ -49,7 +49,7 @@ public abstract class AbstractPerson implements Serializable {
     @DateTimeFormat(style = "M-")
     private Date registeredOn;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private AppCredentials appCredentials;
     
     @ManyToMany(cascade = CascadeType.ALL)

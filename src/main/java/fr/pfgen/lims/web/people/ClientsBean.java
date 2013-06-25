@@ -114,74 +114,8 @@ public class ClientsBean implements Serializable {
         this.filteredClients = filteredClients;
     }
 
-    /*
-    public void onEdit(RowEditEvent event) {
-        Client clientToEdit = (Client) event.getObject();
-        FacesContext context = FacesContext.getCurrentInstance();
-        try {
-            Client clientUpdated = clientService.updateClient(clientToEdit);
-            int index = clientList.indexOf(clientToEdit);
-            clientList.remove(index);
-            clientList.add(index, clientUpdated);
-            RequestContext rcontext = RequestContext.getCurrentInstance();
-            rcontext.update("clientTable");
-
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), ((Client) event.getObject()).toString(), FacesMessage.SEVERITY_INFO);
-        } catch (Exception e) {
-            context.validationFailed();
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
-        }
-    }
-
-    public void onCancel(RowEditEvent event) {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), ((Client) event.getObject()).toString(), FacesMessage.SEVERITY_INFO);
-    }
-
-    public void onEditInit(RowEditEvent event) {
-        Client clientToEdit = (Client) event.getObject();
-        Client clientIdDb = clientService.findClient(clientToEdit.getId());
-
-        if (clientToEdit.getVersion() != clientIdDb.getVersion()) {
-            int index = clientList.indexOf(clientToEdit);
-            clientList.remove(index);
-            clientList.add(index, clientIdDb);
-            RequestContext rcontext = RequestContext.getCurrentInstance();
-            rcontext.update("clientTable");
-
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_rowchanged"), clientToEdit.toString(), FacesMessage.SEVERITY_WARN);
-        }
-    }
-    */
-    
     public void cancelModify() {
         FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
-    }
-
-    public void validateEmail(FacesContext context, UIComponent component, Object value) {
-        String email = ((String) value).toLowerCase();
-
-        Client existingClient = clientService.findByEmail(email);
-        PfMember existingPfMember = pfMemberService.findByEmail(email);
-
-        if ((existingClient != null && existingClient.getId() != (Long) component.getAttributes().get("clientID")) || (existingPfMember != null && existingPfMember.getId() != (Long) component.getAttributes().get("clientID"))) {
-            ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\""+email+"\" "+FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
-        }
-    }
-    
-    public void modifySelectedClient(){
-        try {
-            Client clientUpdated = clientService.updateClient(selectedClient);
-            int index = clientList.indexOf(selectedClient);
-            clientList.remove(index);
-            clientList.add(index, clientUpdated);
-            RequestContext rcontext = RequestContext.getCurrentInstance();
-            rcontext.update("clientTable");
-
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
-        } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
-        }
     }
 
     public void deleteClient() {

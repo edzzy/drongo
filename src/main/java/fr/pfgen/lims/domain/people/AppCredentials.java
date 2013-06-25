@@ -2,6 +2,7 @@ package fr.pfgen.lims.domain.people;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,8 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "app_credentials")
@@ -25,17 +24,25 @@ public class AppCredentials implements Serializable {
     @Column(unique = true)
     @Size(min = 5, max = 30)
     private String login;
+    
     @NotNull
     private String password;
+    
+    @NotNull
     private String salt;
+    
     private String appTheme;
+    
     private String appLocale;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appCredentials")
     private Set<AbstractPerson> persons = new HashSet<>();
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+    
     @Version
     @Column(name = "version")
     private Integer version;
@@ -58,7 +65,7 @@ public class AppCredentials implements Serializable {
 
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return this.login;
     }
 
     public String getLogin() {
@@ -107,5 +114,27 @@ public class AppCredentials implements Serializable {
 
     public void setPersons(Set<AbstractPerson> persons) {
         this.persons = persons;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AppCredentials other = (AppCredentials) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
 }

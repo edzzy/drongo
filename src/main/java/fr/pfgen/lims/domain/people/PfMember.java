@@ -16,6 +16,28 @@ public class PfMember extends AbstractPerson {
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date memberSince;
+    
+    @NotNull
+    private boolean deleted = false;
+    
+    @NotNull
+    private String office;
+
+    public String getOffice() {
+        return office;
+    }
+
+    public void setOffice(String office) {
+        this.office = office;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     @Override
     public String toString() {
