@@ -41,13 +41,14 @@ public class EquipmentCategory implements Serializable{
     private Integer version;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
-    private Set<Equipment> equipments;
+    private Set<SmallEquipment> equipments;
 
-    public Set<Equipment> getEquipments() {
+
+    public Set<SmallEquipment> getEquipments() {
         return equipments;
     }
 
-    public void setEquipments(Set<Equipment> equipments) {
+    public void setEquipments(Set<SmallEquipment> equipments) {
         this.equipments = equipments;
     }
 

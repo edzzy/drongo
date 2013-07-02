@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:composition template="equipmentsTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{smallEquipmentBean.initEquipment}" /> 
+            </f:metadata>
+
+            <o:form id="equipmentForm">
+                <p:growl id="equipmentCreateMessages" life="2500" showDetail="true" globalOnly="true"/>
+
+                <p:wizard widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}" step="#{smallEquipmentBean.wizStep}" >
+
+                    <p:tab id="descriptionTab" title="#{messages.label_description}">
+                        <p:panel id="panelDescription" header="#{messages.equipment_description}">
+                            <p:focus context="panelDescription"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="name" value="#{messages.equipment_name}" />
+                                <p:inputText id="name" required="true" value="#{smallEquipmentBean.equipment.name}" />
+                                <p:message for="name" />
+
+                                <p:outputLabel for="type" value="#{messages.equipment_type}" />
+                                <p:inputText id="type" required="true" value="#{smallEquipmentBean.equipment.type}" />
+                                <p:message for="type" />
+
+                                <p:outputLabel for="manufacturer" value="#{messages.equipment_manufacturer}" />
+                                <p:inputText id="manufacturer" required="true" value="#{smallEquipmentBean.equipment.manufacturer}" />
+                                <p:message for="manufacturer" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="identificationTab" title="#{messages.label_identification}">
+                        <p:panel id="panelIdentification" header="#{messages.equipment_deviceIdentification}">
+                            <p:focus context="panelIdentification"/>
+                            <h:panelGrid columns="3" >
+                                <p:outputLabel for="serial" value="#{messages.equipment_serialNumber}" />
+                                <p:inputText id="serial" required="true" value="#{smallEquipmentBean.equipment.serialNumber}" validator="#{smallEquipmentBean.validateSerial}"/>
+                                <p:message for="serial" />
+
+                                <p:outputLabel for="itx" value="#{messages.equipment_itx}" />
+                                <p:inputMask id="itx" mask="ITX9999" value="#{smallEquipmentBean.equipment.itx}" validator="#{smallEquipmentBean.validateItx}"/>
+                                <p:message for="itx" />
+
+                                <p:outputLabel for="internal" value="#{messages.equipment_internalNumber}" rendered="#{not smallEquipmentBean.isNewEquipment}"/>
+                                <p:inputText id="internal" required="true"  value="#{smallEquipmentBean.equipment.internalNumber}" readonly="true" rendered="#{not smallEquipmentBean.isNewEquipment}"/>
+                                <p:message for="internal" rendered="#{not smallEquipmentBean.isNewEquipment}"/>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="otherTab" title="#{messages.label_informations}" >
+                        <p:panel id="panelOther" header="#{messages.label_otherInformations}" >
+                            <p:focus context="panelOther"/>
+                            <h:panelGrid columns="3" >
+                                <p:outputLabel for="room" value="#{messages.equipment_room}" />
+                                <p:inputText id="room" required="true" value="#{smallEquipmentBean.equipment.room}" />
+                                <p:message for="room" />
+
+                                <p:outputLabel for="acquisition" value="#{messages.equipment_acquisitionDate}" />
+                                <p:calendar id="acquisition" value="#{smallEquipmentBean.equipment.acquisitionDate}" />
+                                <p:message for="acquisition" />
+                                
+                                <p:outputLabel for="categorySelect" value="#{messages.equipment_category}" />
+                                <h:panelGrid columns="2">
+                                    <p:selectOneMenu id="categorySelect" value="#{smallEquipmentBean.equipment.category}" converter="#{equipmentCategoryConverter}" style="width: 130px" >
+                                        <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                        <f:selectItems value="#{smallEquipmentBean.equipmentCategoryList}" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" action="#{smallEquipmentBean.createNewEquipmentCategory}" >
+                                        <o:ignoreValidationFailed />
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <p:message for="categorySelect" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="confirmTab" title="#{messages.label_confirmation}">
+                        <p:panel header="#{messages.label_confirmation}" >
+                            <p:focus context="submitButton"/>
+                            <h:panelGrid columns="2" cellpadding="20" styleClass="topAligned">
+
+                                <p:panelGrid columns="2" > 
+                                    <f:facet name="header">
+                                        #{messages.equipment_description}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.equipment_name}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.name}" />
+
+                                    <h:outputText value="#{messages.equipment_type}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.type}" />
+
+                                    <h:outputText value="#{messages.equipment_manufacturer}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.manufacturer}" />
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" > 
+                                    <f:facet name="header">
+                                        #{messages.equipment_deviceIdentification}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.equipment_serialNumber}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.serialNumber}" />
+
+                                    <h:outputText value="#{messages.equipment_itx}: "/>
+                                    <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.itx}" />
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        #{messages.label_otherInformations}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.equipment_room}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.room}" />
+
+                                    <h:outputText value="#{messages.equipment_acquisitionDate}: " />
+                                    <h:outputText value="#{smallEquipmentBean.equipment.acquisitionDate}">
+                                        <f:convertDateTime dateStyle="long" type="date" />
+                                    </h:outputText>
+                                    
+                                    <h:outputText value="#{messages.equipment_category}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.category}" />
+                                </p:panelGrid>
+                            </h:panelGrid>
+                            <f:facet name="footer"> 
+                                <p:commandButton id="submitButton" value="#{smallEquipmentBean.saveOrEditLabel}" update="equipmentCreateMessages" action="#{smallEquipmentBean.saveEquipment}" icon="#{smallEquipmentBean.plusOrPen}" ajax="false"/>
+                                <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{smallEquipmentBean.cancelEquipment}" ajax="false"/>
+                            </f:facet>
+                        </p:panel>
+                    </p:tab>
+
+                </p:wizard>
+            </o:form>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -6,6 +6,8 @@ package fr.pfgen.lims.service;
 
 import fr.pfgen.lims.domain.equipments.Equipment;
 import fr.pfgen.lims.domain.equipments.EquipmentCategory;
+import fr.pfgen.lims.domain.equipments.RunDevice;
+import fr.pfgen.lims.domain.equipments.SmallEquipment;
 import java.util.List;
 
 /**
@@ -14,25 +16,7 @@ import java.util.List;
  */
 public interface EquipmentService {
     
-    //methods for Equipment Categories
-    public abstract long countAllEquipmentCategories();
-
-    public abstract void deleteEquipmentCategory(EquipmentCategory equipmentCategory);
-
-    public abstract EquipmentCategory findEquipmentCategory(Long id);
-
-    public abstract List<EquipmentCategory> findAllEquipmentCategories();
-
-    public abstract List<EquipmentCategory> findEquipmentCategoryEntries(int firstResult, int maxResults);
-
-    public abstract void saveEquipmentCategory(EquipmentCategory equipmentCategory);
-
-    public abstract EquipmentCategory updateEquipmentCategory(EquipmentCategory equipmentCategory);
-    
-    public abstract EquipmentCategory findEquipmentCategoryByName(String name);
-    
-    
-    //methods for Equipments
+    //methods for equipments
     public abstract long countAllEquipments();
 
     public abstract void deleteEquipment(Equipment equipment);
@@ -47,9 +31,29 @@ public interface EquipmentService {
 
     public abstract Equipment updateEquipment(Equipment equipment);
     
-    public abstract List<Equipment> findEquipmentsByCategory(EquipmentCategory category);
-    
-    public abstract List<Equipment> findEquipmentsByRoom(String room);
+    public abstract Equipment findEquipmentBySerial(String serial);
     
     public abstract Equipment findEquipmentByItx(String itx);
+    
+    
+    //methods for devices
+    public abstract void saveRunDevice(RunDevice device);
+    
+    public abstract RunDevice updateRunDevice(RunDevice device);
+    
+    public abstract List<RunDevice> findAllDevices();
+    
+    public abstract long countAllRunDevices();
+    
+    //methods for small equipments
+    public abstract List<SmallEquipment> findAllSmallEquipments();
+    
+    public abstract long countAllSmallEquipments();
+    
+    //methods for equipment categories
+    public abstract List<EquipmentCategory> findAllEquipmentCategories();
+    
+    public abstract EquipmentCategory findEquipmentCategoryByName(String name);
+    
+    public abstract void saveEquipmentCategory(EquipmentCategory category);
 }

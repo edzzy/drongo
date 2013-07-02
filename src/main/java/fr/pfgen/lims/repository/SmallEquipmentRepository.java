@@ -4,7 +4,7 @@
  */
 package fr.pfgen.lims.repository;
 
-import fr.pfgen.lims.domain.equipments.Equipment;
+import fr.pfgen.lims.domain.equipments.SmallEquipment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -14,9 +14,6 @@ import org.springframework.stereotype.Repository;
  * @author eric
  */
 @Repository
-public interface EquipmentRepository extends JpaSpecificationExecutor<Equipment>, JpaRepository<Equipment, Long>{
+public interface SmallEquipmentRepository extends JpaSpecificationExecutor<SmallEquipment>, JpaRepository<SmallEquipment, Long>{
     
-    public Equipment findBySerialNumber(String serial);
-    
-    public Equipment findByItx(String itx);
 }

@@ -5,38 +5,46 @@
 package fr.pfgen.lims.domain.equipments;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
  * @author eric
  */
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "equipments")
-public class Equipment implements Serializable{
+public abstract class Equipment implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-   
+    
     @NotNull
     private String name;
     
-    @Version
-    @Column(name = "version")
-    private Integer version;
+    @NotNull
+    private String Manufacturer;
+    
+    private String type;
     
     @NotNull
-    private String serial;
+    @Column(unique = true)
+    private String serialNumber;
     
     @NotNull
     @Column(unique = true)
@@ -48,9 +56,14 @@ public class Equipment implements Serializable{
     @Column(unique = true)
     private String itx;
     
-    @ManyToOne
-    private EquipmentCategory category;
-
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date acquisitionDate;
+    
+    @Version
+    @Column(name = "version")
+    private Integer version;
+    
     public String getInternalNumber() {
         return internalNumber;
     }
@@ -59,20 +72,20 @@ public class Equipment implements Serializable{
         this.internalNumber = internalNumber;
     }
 
-    public EquipmentCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(EquipmentCategory category) {
-        this.category = category;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public String getName() {
@@ -91,14 +104,6 @@ public class Equipment implements Serializable{
         this.version = version;
     }
 
-    public String getSerial() {
-        return serial;
-    }
-
-    public void setSerial(String serial) {
-        this.serial = serial;
-    }
-
     public String getRoom() {
         return room;
     }
@@ -115,10 +120,34 @@ public class Equipment implements Serializable{
         this.itx = itx;
     }
 
+    public String getManufacturer() {
+        return Manufacturer;
+    }
+
+    public void setManufacturer(String Manufacturer) {
+        this.Manufacturer = Manufacturer;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Date getAcquisitionDate() {
+        return acquisitionDate;
+    }
+
+    public void setAcquisitionDate(Date acquisitionDate) {
+        this.acquisitionDate = acquisitionDate;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -139,10 +168,6 @@ public class Equipment implements Serializable{
 
     @Override
     public String toString() {
-        if (this.category==null){
-            return this.name;
-        }else{
-            return this.category.getName()+" - "+this.name+" ("+this.serial+")";
-        }
+        return this.name+" ("+this.internalNumber+")";
     }
 }

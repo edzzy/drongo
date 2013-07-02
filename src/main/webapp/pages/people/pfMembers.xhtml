@@ -12,8 +12,16 @@
 
                 <p:growl id="pfMemberListMessages" showDetail="true" life="3000"/> 
 
-                <p:dataTable var="pfMember" value="#{pfMembersBean.pfMemberList}" rowsPerPageTemplate="5,10,15" rowKey="#{pfMember.id}" paginator="true" rows="10" editable="true"  
-                             filteredValue="#{pfMembersBean.filteredPfMembers}" id="pfMembersTable" emptyMessage="#{messages.label_emptyRecords}">  
+                <p:dataTable var="pfMember" 
+                             value="#{pfMembersBean.pfMemberList}" 
+                             rowsPerPageTemplate="5,10,15" 
+                             rowKey="#{pfMember.id}" 
+                             paginator="true" 
+                             rows="10" 
+                             filteredValue="#{pfMembersBean.filteredPfMembers}" 
+                             id="pfMembersTable" 
+                             emptyMessage="#{messages.label_emptyRecords}"
+                             sortMode="multiple">  
 
                     <f:facet name="header">
                         #{messages.label_pfMember}

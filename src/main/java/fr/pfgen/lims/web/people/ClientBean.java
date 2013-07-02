@@ -95,6 +95,7 @@ public class ClientBean implements Serializable {
 
             if (client == null) {
                 client = new Client();
+                sessionMap.put("client", client);
             } else {
                 switchAccordingToType(client.getType());
                 if (client.getResearchTeam() != null) {
@@ -326,7 +327,7 @@ public class ClientBean implements Serializable {
         if (client.getId() != null) {
             return "ui-icon-pencil";
         } else {
-            return "ui-icon-plus";
+            return "ui-icon-disk";
         }
     }
 }

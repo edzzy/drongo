@@ -5,7 +5,6 @@
 package fr.pfgen.lims.repository;
 
 import fr.pfgen.lims.domain.projects.Project;
-import java.io.Serializable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

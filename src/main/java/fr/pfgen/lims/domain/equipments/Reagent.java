@@ -40,7 +40,7 @@ public class Reagent implements Serializable{
     private Integer version;
     
     @ManyToOne
-    private Device usedInDevice;
+    private RunDevice usedInDevice;
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "reagent")
     private Set<ReagentBatch> batches;
@@ -53,11 +53,11 @@ public class Reagent implements Serializable{
         this.batches = batches;
     }
 
-    public Device getUsedInDevice() {
+    public RunDevice getUsedInDevice() {
         return usedInDevice;
     }
 
-    public void setUsedInDevice(Device usedInDevice) {
+    public void setUsedInDevice(RunDevice usedInDevice) {
         this.usedInDevice = usedInDevice;
     }
 
