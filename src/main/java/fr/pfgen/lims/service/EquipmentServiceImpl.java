@@ -64,6 +64,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public void saveEquipment(Equipment equipment) {
 
+        // get the latest internal number in DB.
         Pattern p = Pattern.compile("-?\\d+");
         Integer newIn = 0;
         for (Equipment e : findAllEquipments()) {
@@ -75,13 +76,20 @@ public class EquipmentServiceImpl implements EquipmentService {
                 }
             }
         }
-        equipment.setInternalNumber("pf" + String.format("%04d", newIn + 1));
-        if (equipment.getItx().isEmpty()) equipment.setItx(null);
+        
+        // condition is always true (for the moment)
+        if (equipment.getInternalNumber()==null || equipment.getInternalNumber().isEmpty()){
+            equipment.setInternalNumber("PfG" + String.format("%04d", newIn + 1));
+        }
+        
+        // set ITX number to null instead of empty since field must be unique in DB.
+        if (equipment.getItx().trim().isEmpty()) equipment.setItx(null);
         equipmentRepository.save(equipment);
     }
 
     @Override
     public Equipment updateEquipment(Equipment equipment) {
+        if (equipment.getItx().trim().isEmpty()) equipment.setItx(null);
         return equipmentRepository.save(equipment);
     }
 
@@ -109,14 +117,11 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public void saveRunDevice(RunDevice device) {
         saveEquipment(device);
-        //equipmentRepository.save(device);
-        //runDeviceRepository.save(device);
     }
 
     @Override
     public RunDevice updateRunDevice(RunDevice device) {
-        return (RunDevice) equipmentRepository.save(device);
-        //return runDeviceRepository.save(device);
+        return (RunDevice) updateEquipment(device);
     }
 
     //methods for small equipments

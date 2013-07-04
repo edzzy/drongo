@@ -39,7 +39,6 @@ public class Project implements Serializable{
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
-    
     private Date registeredOn;
       
     @Temporal(TemporalType.DATE)

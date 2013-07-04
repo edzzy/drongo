@@ -70,7 +70,7 @@ PrimeFaces.locales['fr'] = {
     hourText: 'Heures',
     minuteText: 'Minutes',
     secondText: 'Secondes',
-    currentText: 'Maintenant',
+    currentText: 'Aujourd\'hui',
     ampm: false,
     month: 'Mois',
     week: 'Semaine',

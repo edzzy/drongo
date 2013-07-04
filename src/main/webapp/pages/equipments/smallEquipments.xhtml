@@ -19,12 +19,16 @@
                              filteredValue="#{smallEquipmentsBean.filteredEquipments}"
                              id="equipmentsTable"
                              emptyMessage="#{messages.label_emptyRecords}"
-                             sortMode="multiple">  
+                             sortMode="multiple"
+                             widgetVar="equipTable">  
 
                     <f:facet name="header">
-                        #{messages.label_equipments}
+                        <p:outputPanel style="text-align: right !important;">  
+                            <h:outputText value="#{messages.label_searchFields}:" />  
+                            <p:inputText id="globalFilter" onkeyup="equipTable.filter()" style="width:150px" />  
+                        </p:outputPanel> 
                     </f:facet>
-                    
+
                     <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
 
                     <p:column style="width: 5px">  
@@ -34,7 +38,7 @@
                     <p:column headerText="#{messages.equipment_internalNumber}"  sortBy="#{equipment.internalNumber}" filterBy="#{equipment.internalNumber}" id="internalNumber">  
                         <h:outputText value="#{equipment.internalNumber}"/>
                     </p:column>
-                    
+
                     <p:column headerText="#{messages.equipment_category}" 
                               sortBy="#{equipment.category.name}" 
                               filterBy="#{equipment.category.name}" 
@@ -51,7 +55,7 @@
                     <p:column headerText="#{messages.equipment_type}" sortBy="#{equipment.type}" filterBy="#{equipment.type}" id="type">  
                         <h:outputText value="#{equipment.type}" />
                     </p:column>  
-                    
+
                     <p:column headerText="#{messages.equipment_manufacturer}" sortBy="#{equipment.manufacturer}" filterBy="#{equipment.manufacturer}" id="manufacturer">
                         <h:outputText value="#{equipment.manufacturer}" /> 
                     </p:column>
@@ -63,7 +67,7 @@
                     <p:column headerText="#{messages.equipment_itx}" sortBy="#{equipment.itx}" filterBy="#{equipment.itx}" id="itx">  
                         <h:outputText value="#{equipment.itx}" />
                     </p:column>  
-                    
+
                     <p:column headerText="#{messages.equipment_serialNumber}" sortBy="#{equipment.serialNumber}" filterBy="#{equipment.serialNumber}" id="serial">  
                         <h:outputText value="#{equipment.serialNumber}" />
                     </p:column>
@@ -103,7 +107,7 @@
                     <p:rowExpansion>  
                         <h:panelGrid id="expansionPanel" columns="2" cellpadding="20" style="width:auto" styleClass="topAligned">  
 
-                            
+
                         </h:panelGrid>
                     </p:rowExpansion>
 
