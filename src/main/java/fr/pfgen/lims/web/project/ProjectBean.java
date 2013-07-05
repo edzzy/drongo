@@ -5,8 +5,8 @@
 package fr.pfgen.lims.web.project;
 
 
-import fr.pfgen.lims.domain.Client;
-import fr.pfgen.lims.domain.Project;
+import fr.pfgen.lims.domain.people.Client;
+import fr.pfgen.lims.domain.projects.Project;
 import fr.pfgen.lims.service.ProjectService;
 import fr.pfgen.lims.service.ClientService;
 import java.io.Serializable;

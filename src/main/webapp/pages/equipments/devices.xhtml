@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="equipmentsTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <h:form id="deviceListForm">
+                <p:growl id="deviceListMessages" showDetail="true" showSummary="true" life="3000"/>
+                <p:dataTable var="device" 
+                             value="#{devicesBean.deviceList}" 
+                             rowsPerPageTemplate="5,10,15" 
+                             rowKey="#{device.id}"
+                             paginator="true"
+                             rows="10"
+                             filteredValue="#{devicesBean.filteredDevices}"
+                             id="devicesTable"
+                             emptyMessage="#{messages.label_emptyRecords}"
+                             sortMode="multiple">  
+
+                    <f:facet name="header">
+                        #{messages.label_runDevice}
+                    </f:facet>
+                    
+                    <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
+
+                    <p:column style="width: 5px">  
+                        <p:rowToggler />  
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_internalNumber}"  sortBy="#{device.internalNumber}" filterBy="#{device.internalNumber}" id="internalNumber">  
+                        <h:outputText value="#{device.internalNumber}"/>
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_name}" sortBy="#{device.name}" filterBy="#{device.name}" id="name">  
+                        <h:outputText value="#{device.name}" />
+                    </p:column>  
+
+                    <p:column headerText="#{messages.equipment_type}" sortBy="#{device.type}" filterBy="#{device.type}" id="type">  
+                        <h:outputText value="#{device.type}" />
+                    </p:column>  
+                    
+                    <p:column headerText="#{messages.equipment_manufacturer}" sortBy="#{device.manufacturer}" filterBy="#{device.manufacturer}" id="manufacturer">
+                        <h:outputText value="#{device.manufacturer}" /> 
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_room}" sortBy="#{device.room}" filterBy="#{device.room}" id="room">  
+                        <h:outputText value="#{device.room}" />
+                    </p:column>  
+
+                    <p:column headerText="#{messages.equipment_itx}" sortBy="#{device.itx}" filterBy="#{device.itx}" id="itx">  
+                        <h:outputText value="#{device.itx}" />
+                    </p:column>  
+                    
+                    <p:column headerText="#{messages.equipment_serialNumber}" sortBy="#{device.serialNumber}" filterBy="#{device.serialNumber}" id="serial">  
+                        <h:outputText value="#{device.serialNumber}" />
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_acquisitionDate}" sortBy="#{device.acquisitionDate}" id="acquisition">
+                        <h:outputText value="#{device.acquisitionDate}">
+                            <f:convertDateTime dateStyle="long" type="date" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="width: 5px">
+                        <p:commandLink id="editButton" action="#{devicesBean.editDevice}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
+                            <f:setPropertyActionListener value="#{device}" target="#{devicesBean.selectedDevice}" />
+                        </p:commandLink>
+                        <p:tooltip for="editButton" value="#{messages.label_edit}" /> 
+                    </p:column>  
+
+                    <p:column style="width: 5px">
+                        <p:commandLink id="deleteButton" oncomplete="deleteDlg.show();" update=":deleteDialog" title="#{messages.label_delete}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-trash" />
+                            <f:setPropertyActionListener value="#{device}" target="#{devicesBean.selectedDevice}" />
+                        </p:commandLink>
+                        <p:tooltip for="deleteButton" value="#{messages.label_delete}" /> 
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>  
+                            <p:column colspan="11" footerText="#{devicesBean.deviceNumber} #{messages.label_runDevice}"  />
+                        </p:row>  
+                    </p:columnGroup>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="#{messages.equipment_newDevice}" icon="ui-icon-plus" action="#{devicesBean.createNewDevice}"/>
+                    </f:facet>
+
+                    <p:rowExpansion>  
+                        <h:panelGrid id="expansionPanel" columns="2" cellpadding="20" style="width:auto" styleClass="topAligned">  
+
+                            
+                        </h:panelGrid>
+                    </p:rowExpansion>
+
+                </p:dataTable>
+            </h:form>
+
+            <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{devicesBean.selectedDevice}" message="#{messages.label_confirm_deletion}"
+                             closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
+                <h:form id="deleteForm">
+                    <h:panelGroup layout="block" style="text-align: right">
+                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{devicesBean.deleteDevice}" update=":deviceListForm:deviceListMessages, :deviceListForm:devicesTable" oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_cancel}" actionListener="#{devicesBean.cancelDeletion}" update=":deviceListForm:deviceListMessages" oncomplete="deleteDlg.hide();" />
+                    </h:panelGroup>
+                </h:form>
+            </p:confirmDialog>
+
+        </ui:define>
+    </ui:composition>
+</html>

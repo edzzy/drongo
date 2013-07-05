@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:composition template="peopleTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+
+            <f:metadata>
+                <!--<f:viewParam id="client_id" name="clientid" value="#{clientBean.clientid}" />-->
+                <f:event type="preRenderView" listener="#{clientBean.initClient}" /> 
+            </f:metadata>
+
+            <o:form>
+                <p:growl id="clientCreateMessages" life="2500" showDetail="true" />
+
+                <p:wizard widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}" step="#{clientBean.wizStep}">
+
+                    <p:tab id="personalTab" title="#{messages.label_informations}">
+                        <p:panel id="panelPersonal" header="#{messages.label_PersonalDetails}">
+                            <p:focus context="panelPersonal"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="firstname" value="#{messages.persons_firstname}" />
+                                <p:inputText id="firstname" required="true" value="#{clientBean.client.firstname}" />
+                                <p:message for="firstname" />
+
+                                <p:outputLabel for="lastname" value="#{messages.persons_lastname}" />
+                                <p:inputText id="lastname" required="true" value="#{clientBean.client.lastname}" />
+                                <p:message for="lastname" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="contactTab" title="#{messages.label_contact}">
+                        <p:panel id="panelContact" header="#{messages.label_contactInformations}">
+                            <p:focus context="panelContact"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="email" value="#{messages.persons_email}" />
+                                <p:inputText id="email" required="true" value="#{clientBean.client.email}" validator="#{clientBean.validateEmail}">
+                                    <f:validator validatorId="emailFormatValidator" />
+                                </p:inputText>    
+                                <p:message for="email" />
+
+                                <p:outputLabel for="phone" value="#{messages.persons_phone}" />
+                                <p:inputMask id="phone" required="false" mask="99.99.99.99.99" value="#{clientBean.client.phone}"/>
+                                <p:message for="phone" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="typeTab" title="#{messages.clients_type}">
+                        <p:panel id="panelType" header="#{messages.clients_type}">
+
+                            <h:panelGrid columns="3" id="typeSelectPanel" >
+                                <p:outputLabel for="clientTypeSelect" value="#{messages.clients_type}" />
+                                <p:selectOneMenu id="clientTypeSelect" value="#{clientBean.client.type}" converter="#{clientTypeConverter}" required="true" style="width: 130px" >
+                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
+                                    <f:selectItems value="#{clientBean.clientTypeList}" />
+                                    <p:ajax listener="#{clientBean.onTypeChanged}" update="panelType"/>
+                                </p:selectOneMenu>
+                                <p:message for="clientTypeSelect" />
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="3" id="unitSelectPanel" rendered="#{clientBean.academique}">
+                                <p:outputLabel for="unitSelect" value="#{messages.label_researchUnit}" />
+                                <p:selectOneMenu id="unitSelect" value="#{clientBean.selectedUnit}" converter="#{researchUnitConverter}" style="width: 130px" >
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                    <f:selectItems value="#{clientBean.unitList}" />
+                                    <p:ajax listener="#{clientBean.onUnitChanged}" update="panelType" />
+                                </p:selectOneMenu>
+                                <p:message for="unitSelect" />
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="3" id="teamSelectPanel" rendered="#{clientBean.academique or clientBean.interne}">
+                                <p:outputLabel for="teamSelect" value="#{messages.label_researchTeam}" />
+                                <h:panelGrid columns="2">
+                                    <p:selectOneMenu id="teamSelect" value="#{clientBean.client.researchTeam}" converter="#{researchTeamConverter}" required="true" style="width: 130px" >
+                                        <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                        <f:selectItems value="#{clientBean.teamList}" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" action="#{clientBean.createNewResearchTeam}" >
+                                        <o:ignoreValidationFailed />
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <p:message for="teamSelect" />
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="3" id="companySelectPanel" rendered="#{clientBean.prive}">
+                                <p:outputLabel for="companySelect" value="#{messages.label_company}" />
+                                <h:panelGrid columns="2">
+                                    <p:selectOneMenu id="companySelect" value="#{clientBean.client.company}" converter="#{companyConverter}" required="true" style="width: 130px" >
+                                        <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                        <f:selectItems value="#{clientBean.companyList}" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" action="#{clientBean.createNewCompany}" >
+                                        <o:ignoreValidationFailed />
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <p:message for="companySelect" />
+                            </h:panelGrid>
+
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="adressTab" title="#{messages.label_address}" rendered="#{not clientBean.interne}">
+                        <p:panel id="panelAddress" header="#{messages.label_addressInformations}" >
+                            <p:focus context="panelAddress"/>
+                            <h:panelGrid columns="3" >
+                                <p:outputLabel for="shipping" value="#{messages.client_shippingAddress}" />
+                                <p:inputTextarea id="shipping" disabled="#{clientBean.interne}" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.client.shippingAddress}" converter="#{addressConverter}" />
+                                <p:message for="shipping" />
+
+                                <p:outputLabel for="billing" value="#{messages.client_billingAddress}" />
+                                <p:inputTextarea id="billing" disabled="#{clientBean.interne}" rows="4" cols="30" autoResize="false" maxlength="230" required="false" value="#{clientBean.client.billingAddress}" converter="#{addressConverter}" />
+                                <p:message for="billing" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="confirmTab" title="#{messages.label_confirmation}">
+                        <p:panel header="#{messages.label_confirmation}" >
+                            <p:focus context="submitButton"/>
+                            <h:panelGrid columns="2" cellpadding="20" styleClass="topAligned">
+                                <p:panelGrid columns="2" > 
+                                    <f:facet name="header">
+                                        #{messages.label_PersonalDetails}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.persons_firstname}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.firstname}" />
+
+                                    <h:outputText value="#{messages.persons_lastname}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.lastname}" />
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" > 
+                                    <f:facet name="header">
+                                        #{messages.clients_type}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.clients_type}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.type}" />
+
+                                    <h:outputText value="#{messages.label_researchUnit}: " rendered="#{not clientBean.prive}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.researchTeam.researchUnit}" rendered="#{not clientBean.prive}" />
+
+                                    <h:outputText value="#{messages.label_researchTeam}: " rendered="#{not clientBean.prive}"/>
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.researchTeam}" rendered="#{not clientBean.prive}"/>
+
+                                    <h:outputText value="#{messages.label_company}: " rendered="#{clientBean.prive}" />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.company}" rendered="#{clientBean.prive}"/>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        #{messages.label_contactInformations}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.persons_email}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.email}" />
+
+                                    <h:outputText value="#{messages.persons_phone}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{clientBean.client.phone}" />
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" rendered="#{clientBean.client.type.name ne 'interne'}">
+                                    <f:facet name="header">
+                                        #{messages.label_addressInformations}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.client_shippingAddress}: " />
+                                    <h:outputText styleClass="carRetLabel" value="#{clientBean.client.shippingAddress}" />
+
+                                    <h:outputText value="#{messages.client_billingAddress}: " />
+                                    <h:outputText styleClass="carRetLabel" value="#{clientBean.client.billingAddress}" />
+                                </p:panelGrid>
+                            </h:panelGrid>
+                            <f:facet name="footer"> 
+                                <p:commandButton id="submitButton" value="#{clientBean.saveOrEditLabel}" update="clientCreateMessages" action="#{clientBean.saveClient()}" icon="#{clientBean.plusOrPen}"/>
+                                <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{clientBean.cancelClient()}" />
+                            </f:facet>
+                        </p:panel>
+                    </p:tab>
+
+                </p:wizard>
+            </o:form>
+        </ui:define>
+    </ui:composition>
+</html>

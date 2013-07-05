@@ -12,95 +12,86 @@
 
                 <p:growl id="pfMemberListMessages" showDetail="true" life="3000"/> 
 
-                <p:dataTable var="pfMember" value="#{pfMemberBean.pfMemberList}" rowsPerPageTemplate="5,10,15" rowKey="#{pfMember.id}" paginator="true" rows="10" editable="true"  
-                             filteredValue="#{pfMemberBean.filteredPfMembers}" id="pfMembersTable" emptyMessage="#{messages.label_emptyRecords}">  
+                <p:dataTable var="pfMember" 
+                             value="#{pfMembersBean.pfMemberList}" 
+                             rowsPerPageTemplate="5,10,15" 
+                             rowKey="#{pfMember.id}" 
+                             paginator="true" 
+                             rows="10" 
+                             filteredValue="#{pfMembersBean.filteredPfMembers}" 
+                             id="pfMembersTable" 
+                             emptyMessage="#{messages.label_emptyRecords}"
+                             sortMode="multiple">  
 
                     <f:facet name="header">
                         #{messages.label_pfMember}
                     </f:facet>  
 
-                    <p:ajax event="rowEdit" listener="#{pfMemberBean.onEdit}" update=":pfMemberListForm:pfMemberListMessages" />  
-                    <p:ajax event="rowEditCancel" listener="#{pfMemberBean.onCancel}" update=":pfMemberListForm:pfMemberListMessages" />
-                    <p:ajax event="rowEditInit" listener="#{pfMemberBean.onEditInit}" update=":pfMemberListForm:pfMemberListMessages" />
-
                     <p:column headerText="#{messages.persons_lastname}"  sortBy="#{pfMember.lastname}" filterBy="#{pfMember.lastname}" id="lastname">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{pfMember.lastname}"/>  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputText value="#{pfMember.lastname}"/>  
-                            </f:facet>
-                        </p:cellEditor>
-                        <f:facet name="footer">  
-                            #{pfMemberBean.pfMemberNumber} #{messages.label_pfMember}
-                        </f:facet>
+                        <h:outputText value="#{pfMember.lastname}"/>
                     </p:column>
 
                     <p:column headerText="#{messages.persons_firstname}" sortBy="#{pfMember.firstname}" filterBy="#{pfMember.firstname}" id="firstname">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{pfMember.firstname}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputText value="#{pfMember.firstname}"/>  
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{pfMember.firstname}" />
                     </p:column>  
 
                     <p:column headerText="#{messages.persons_email}" sortBy="#{pfMember.email}" filterBy="#{pfMember.email}" id="email">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{pfMember.email}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputText value="#{pfMember.email}" style="width:80%" validator="#{clientBean.validateEmail}">
-                                    <f:attribute name="pfMemberID" value="#{pfMember.id}"/>
-                                    <f:validator validatorId="emailValidator" />
-                                </p:inputText>  
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{pfMember.email}" />
                     </p:column>  
 
                     <p:column headerText="#{messages.persons_phone}" sortBy="#{pfMember.phone}" filterBy="#{pfMember.phone}" id="phone">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{pfMember.phone}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputMask value="#{pfMember.phone}" mask="99.99.99.99.99"/>
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{pfMember.phone}" />
                     </p:column>  
+                    
+                    <p:column headerText="#{messages.pfMember_office}" sortBy="#{pfMember.office}" filterBy="#{pfMember.office}" id="office">
+                        <h:outputText value="#{pfMember.office}" />
+                    </p:column>
 
-                    <p:column headerText="#{messages.persons_registrationDate}" sortBy="#{pfMember.registeredOn}" id="registered">
-                        <h:outputText value="#{pfMember.registeredOn}">
+                    <p:column headerText="#{messages.pfMember_memberSince}" sortBy="#{pfMember.memberSince}" id="registered">
+                        <h:outputText value="#{pfMember.memberSince}">
                             <f:convertDateTime dateStyle="long" type="date" />
                         </h:outputText>
                     </p:column>
-
-                    <p:column headerText="#{messages.label_edit}">  
-                        <p:rowEditor />
+                    
+                    <p:column style="width: 5px">
+                        <p:commandLink id="editButton" action="#{pfMembersBean.editPfMember}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
+                            <f:setPropertyActionListener value="#{pfMember}" target="#{pfMembersBean.selectedPfMember}" />
+                        </p:commandLink>
+                        <p:tooltip for="editButton" value="#{messages.label_edit}" /> 
                     </p:column>  
 
+                    <p:column style="width: 5px">
+                        <p:commandLink id="deleteButton" oncomplete="deleteDlg.show();" update=":deleteDialog" title="#{messages.label_delete}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-trash" />
+                            <f:setPropertyActionListener value="#{pfMember}" target="#{pfMembersBean.selectedPfMember}" />
+                        </p:commandLink>
+                        <p:tooltip for="deleteButton" value="#{messages.label_delete}" /> 
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>  
+                            <p:column colspan="8" footerText="#{pfMembersBean.pfMemberNumber} #{messages.label_pfMember}"  />
+                        </p:row>  
+                    </p:columnGroup>
+
                     <f:facet name="footer">  
-                        <p:commandButton value="#{messages.label_newPfMember}" action="pfMemberCreate?faces-redirect=true" icon="ui-icon-plus" style="margin-right: 10px" />
+                        <p:commandButton value="#{messages.label_newPfMember}" icon="ui-icon-plus" action="#{pfMembersBean.createNewPfMember}"/>
                     </f:facet>
 
                 </p:dataTable>
-
-                <!--
-                <p:blockUI block="clientsTable" trigger="clientsTable">  
-                #{messages.loading}<br />  
-                <p:graphicImage value="/resources/images/loading-ring32.gif"/>  
-            </p:blockUI> 
-                -->
-            </h:form> 
-            <!--
-            <h:form id="clientCreateForm">
-                
             </h:form>
-            -->
+            
+            <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{pfMembersBean.selectedPfMember.firstname} #{pfMembersBean.selectedPfMember.lastname}" message="#{messages.label_confirm_deletion}"
+                             closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
+                <h:form id="deleteForm">
+                    <h:panelGroup layout="block" style="text-align: right">
+                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{pfMembersBean.deleteClient}" update=":pfMemberListForm:pfMemberListMessages, :pfMemberListForm:pfMembersTable" oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_cancel}" actionListener="#{pfMembersBean.cancelDeletion}" update=":pfMemberListForm:pfMemberListMessages" oncomplete="deleteDlg.hide();" />
+                    </h:panelGroup>
+                </h:form>
+            </p:confirmDialog>
+            
         </ui:define>
     </ui:composition>
 </html>

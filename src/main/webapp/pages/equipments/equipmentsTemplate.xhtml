@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/templates/e_layout.xhtml">
+        <ui:define name="dockIcon">
+            <p:graphicImage name="Primo_Icons/PNG/128x128/HomeServer.png" library="images" styleClass="iconCentered" />
+        </ui:define>
+        
+        <ui:define name="menu">
+            <h:form id="menuForm">
+                <p:menu>  
+                    <p:submenu label="#{messages.label_runDevice}">  
+                        <p:menuitem value="#{messages.label_list}" outcome="devices" icon="ui-icon-script" />
+                    </p:submenu>  
+                    <p:submenu label="#{messages.label_otherEquipments}">  
+                        <p:menuitem value="#{messages.label_list}" outcome="smallEquipments" icon="ui-icon-script" />
+                    </p:submenu>
+                </p:menu>  
+            </h:form>
+        </ui:define>
+
+        <ui:define name="help">
+            <h:outputText value="help for equipment"/>
+        </ui:define>
+    </ui:composition>
+</html>

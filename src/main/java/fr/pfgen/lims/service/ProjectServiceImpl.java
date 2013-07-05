@@ -4,7 +4,7 @@
  */
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.Project;
+import fr.pfgen.lims.domain.projects.Project;
 import fr.pfgen.lims.repository.ProjectRepository;
 import java.util.Date;
 import java.util.List;

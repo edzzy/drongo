@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="equipmentsTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <h:form id="equipmentCategoryForm">
+                <p:growl id="equipmentCategoryCreateMessages" life="2500" showDetail="true" globalOnly="true"/>
+                <p:panel id="equipmentCategoryPanel" header="#{messages.label_newF} #{messages.equipment_category}">
+                    <p:focus context="equipmentCategoryPanel"/>
+                    <h:panelGrid id="equipmentCategoryGrid" columns="3">
+                        <p:outputLabel for="name" value="#{messages.label_name}" />
+                        <p:inputText id="name" required="true" value="#{equipmentCategoryCreateBean.category.name}" validator="#{equipmentCategoryCreateBean.validateName}"/>
+                        <p:message for="name" />
+                    </h:panelGrid>
+                    <f:facet name="footer"> 
+                        <p:commandButton update="equipmentCategoryGrid,equipmentCategoryCreateMessages" value="#{messages.label_save}" action="#{equipmentCategoryCreateBean.saveNewCategory}" icon="ui-icon-disk"/>
+                        <p:commandButton value="#{messages.label_cancel}" action="#{equipmentCategoryCreateBean.cancelCategoryCreation}" immediate="true" icon="ui-icon-cancel"/>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

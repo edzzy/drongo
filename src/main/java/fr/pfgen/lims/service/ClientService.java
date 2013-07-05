@@ -1,6 +1,6 @@
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.Client;
+import fr.pfgen.lims.domain.people.Client;
 import java.util.List;
 
 public interface ClientService {
@@ -12,6 +12,8 @@ public interface ClientService {
     public abstract Client findClient(Long id);
 
     public abstract List<Client> findAllClients();
+    
+    public abstract List<Client> findAllActiveClients();
 
     public abstract List<Client> findClientEntries(int firstResult, int maxResults);
 
@@ -20,4 +22,5 @@ public interface ClientService {
     public abstract Client updateClient(Client client);
 
     public abstract Client findByEmail(String email);
+   
 }
