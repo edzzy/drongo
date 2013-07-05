@@ -1,6 +1,6 @@
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.AppAction;
+import fr.pfgen.lims.domain.people.AppAction;
 import java.util.List;
 
 public interface AppActionService {

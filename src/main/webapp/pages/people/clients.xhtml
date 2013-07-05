@@ -8,82 +8,52 @@
     <ui:composition template="peopleTemplate.xhtml">
         <ui:define name="content">
             <p:spacer height="50"/>
-            <h:form id="clientListForm">  
-
-                <p:growl id="clientListMessages" showDetail="true" life="3000"/> 
-
-                <p:dataTable var="client" value="#{clientBean.clientList}" rowsPerPageTemplate="5,10,15" rowKey="#{client.id}" paginator="true" rows="10" editable="true"  
-                             filteredValue="#{clientBean.filteredClients}" id="clientsTable" emptyMessage="#{messages.label_emptyRecords}">  
+            <h:form id="clientListForm">
+                <p:growl id="clientListMessages" showDetail="true" showSummary="true" life="3000"/>
+                <p:dataTable var="client" 
+                             value="#{clientsBean.clientList}" 
+                             rowsPerPageTemplate="5,10,15" 
+                             rowKey="#{client.id}" 
+                             paginator="true" 
+                             rows="10" 
+                             filteredValue="#{clientsBean.filteredClients}"  
+                             id="clientsTable" 
+                             emptyMessage="#{messages.label_emptyRecords}"
+                             sortMode="multiple">  
 
                     <f:facet name="header">
                         #{messages.label_client}
-                    </f:facet>  
+                    </f:facet>
+                    
+                    <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
 
-                    <p:ajax event="rowEdit" listener="#{clientBean.onEdit}" update=":clientListForm:clientListMessages" />  
-                    <p:ajax event="rowEditCancel" listener="#{clientBean.onCancel}" update=":clientListForm:clientListMessages" />
-                    <p:ajax event="rowEditInit" listener="#{clientBean.onEditInit}" update=":clientListForm:clientListMessages" />
+                    <p:column style="width: 5px">  
+                        <p:rowToggler />  
+                    </p:column>
 
                     <p:column headerText="#{messages.persons_lastname}"  sortBy="#{client.lastname}" filterBy="#{client.lastname}" id="lastname">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{client.lastname}"/>  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputText value="#{client.lastname}"/>  
-                            </f:facet>
-                        </p:cellEditor>
-                        <f:facet name="footer">  
-                            #{clientBean.clientNumber} #{messages.label_client}
-                        </f:facet>
+                        <h:outputText value="#{client.lastname}"/>
                     </p:column>
 
                     <p:column headerText="#{messages.persons_firstname}" sortBy="#{client.firstname}" filterBy="#{client.firstname}" id="firstname">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{client.firstname}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputText value="#{client.firstname}"/>  
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{client.firstname}" />
                     </p:column>  
 
                     <p:column headerText="#{messages.persons_email}" sortBy="#{client.email}" filterBy="#{client.email}" id="email">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{client.email}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputText value="#{client.email}" style="width:80%" validator="#{clientBean.validateEmail}">
-                                    <f:attribute name="clientID" value="#{client.id}"/>
-                                    <f:validator validatorId="emailValidator" />
-                                </p:inputText>  
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{client.email}" />
                     </p:column>  
 
                     <p:column headerText="#{messages.persons_phone}" sortBy="#{client.phone}" filterBy="#{client.phone}" id="phone">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{client.phone}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:inputMask value="#{client.phone}" mask="99.99.99.99.99"/>
-                            </f:facet>
-                        </p:cellEditor>
+                        <h:outputText value="#{client.phone}" />
                     </p:column>  
 
-                    <p:column headerText="#{messages.clients_type}" sortBy="#{client.type.name}" filterBy="#{client.type.name}" id="type">  
-                        <p:cellEditor>
-                            <f:facet name="output">  
-                                <h:outputText value="#{client.type}" />  
-                            </f:facet>  
-                            <f:facet name="input">  
-                                <p:selectOneMenu value="#{client.type}" converter="#{clientTypeConverter}" style="width: 130px" >  
-                                    <f:selectItems value="#{clientBean.clientTypeList}" /> 
-                                </p:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
+                    <p:column headerText="#{messages.clients_type}" 
+                              sortBy="#{client.type.name}" 
+                              filterBy="#{client.type.name}" 
+                              id="type"
+                              filterOptions="#{clientsBean.clientTypeOptions}"  
+                              filterMatchMode="exact">
+                        <h:outputText value="#{client.type}" /> 
                     </p:column>
 
                     <p:column headerText="#{messages.persons_registrationDate}" sortBy="#{client.registeredOn}" id="registered">
@@ -92,30 +62,78 @@
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="#{messages.label_edit}">  
-                        <p:rowEditor />
+                    <p:column style="width: 5px">
+                        <p:commandLink id="editButton" action="#{clientsBean.editClient}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
+                            <f:setPropertyActionListener value="#{client}" target="#{clientsBean.selectedClient}" />
+                        </p:commandLink>
+                        <p:tooltip for="editButton" value="#{messages.label_edit}" /> 
                     </p:column>  
 
-                    <f:facet name="footer">  
-                        <p:commandButton value="#{messages.label_newClient}" action="clientCreate?faces-redirect=true" icon="ui-icon-plus" style="margin-right: 10px">
-                           <!-- <p:ajax event="dialogReturn" listener="#{dialogBean.onDialogReturn}" update="growl" /> -->
-                        </p:commandButton>    
+                    <p:column style="width: 5px">
+                        <p:commandLink id="deleteButton" oncomplete="deleteDlg.show();" update=":deleteDialog" title="#{messages.label_delete}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-trash" />
+                            <f:setPropertyActionListener value="#{client}" target="#{clientsBean.selectedClient}" />
+                        </p:commandLink>
+                        <p:tooltip for="deleteButton" value="#{messages.label_delete}" /> 
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>  
+                            <p:column colspan="9" footerText="#{clientsBean.clientNumber} #{messages.label_client}"  />
+                        </p:row>  
+                    </p:columnGroup>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="#{messages.label_newClient}" icon="ui-icon-plus" action="#{clientsBean.createNewClient}"/>
                     </f:facet>
 
-                </p:dataTable>
+                    <p:rowExpansion>  
+                        <h:panelGrid id="expansionPanel" columns="2" cellpadding="20" style="width:auto" styleClass="topAligned">  
 
-                <!--
-                <p:blockUI block="clientsTable" trigger="clientsTable">  
-                #{messages.loading}<br />  
-                <p:graphicImage value="/resources/images/loading-ring32.gif"/>  
-            </p:blockUI> 
-                -->
-            </h:form> 
-            <!--
-            <h:form id="clientCreateForm">
-                
+                            <p:panelGrid columns="2" id="addressPanel" rendered="#{client.type.name ne 'interne'}">
+                                <f:facet name="header">
+                                    #{messages.label_addressInformations}
+                                </f:facet>
+                                <h:outputText value="#{messages.client_shippingAddress}: " />
+                                <h:outputText styleClass="carRetLabel" value="#{client.shippingAddress}" />
+
+                                <h:outputText value="#{messages.client_billingAddress}: " />
+                                <h:outputText styleClass="carRetLabel" value="#{client.billingAddress}" />
+                            </p:panelGrid> 
+
+                            <p:panelGrid columns="2" id="typePanel"> 
+                                <f:facet name="header">
+                                    #{messages.clients_type}
+                                </f:facet>
+                                <h:outputText value="#{messages.clients_type}: " />
+                                <h:outputText styleClass="outputLabel" value="#{client.type}" />
+
+                                <h:outputText value="#{messages.label_researchUnit}: " rendered="#{client.type.name ne 'privé'}" />
+                                <h:outputText styleClass="outputLabel" value="#{client.researchTeam.researchUnit}" rendered="#{client.type.name ne 'privé'}" />
+
+                                <h:outputText value="#{messages.label_researchTeam}: " rendered="#{client.type.name ne 'privé'}"/>
+                                <h:outputText styleClass="outputLabel" value="#{client.researchTeam}" rendered="#{client.type.name ne 'privé'}"/>
+
+                                <h:outputText value="#{messages.label_company}: " rendered="#{client.type.name eq 'privé'}" />
+                                <h:outputText styleClass="outputLabel" value="#{client.company}" rendered="#{client.type.name eq 'privé'}"/>
+                            </p:panelGrid>
+                        </h:panelGrid>
+                    </p:rowExpansion>
+
+                </p:dataTable>
             </h:form>
-            -->
+
+            <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{clientsBean.selectedClient.firstname} #{clientsBean.selectedClient.lastname}" message="#{messages.label_confirm_deletion}"
+                             closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
+                <h:form id="deleteForm">
+                    <h:panelGroup layout="block" style="text-align: right">
+                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{clientsBean.deleteClient}" update=":clientListForm:clientListMessages, :clientListForm:clientsTable" oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_cancel}" actionListener="#{clientsBean.cancelDeletion}" update=":clientListForm:clientListMessages" oncomplete="deleteDlg.hide();" />
+                    </h:panelGroup>
+                </h:form>
+            </p:confirmDialog>
+
         </ui:define>
     </ui:composition>
 </html>

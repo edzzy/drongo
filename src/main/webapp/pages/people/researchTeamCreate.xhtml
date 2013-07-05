@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:composition template="peopleTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <o:form id="researchTeamFrom">
+                <p:growl id="researchTeamCreateMessages" life="2500" showDetail="true" globalOnly="true"/>
+                <p:panel id="researchTeamPanel" header="#{messages.label_newF} #{messages.label_researchTeam}">
+                    <p:focus for="name"/>
+                    <h:panelGrid columns="3">
+                        <p:outputLabel for="unitSelect" value="#{messages.label_researchUnit}" />
+                        <h:panelGrid columns="2">
+                            <p:selectOneMenu id="unitSelect" value="#{researchTeamCreateBean.newResearchTeam.researchUnit}" converter="#{researchUnitConverter}" required="true" style="width: 130px" >
+                                <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                <f:selectItems value="#{researchTeamCreateBean.unitList}" />
+                            </p:selectOneMenu>
+                            <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" action="#{researchTeamCreateBean.createNewResearchUnit}" >
+                                <o:ignoreValidationFailed />
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:message for="unitSelect" />
+          
+                        <p:outputLabel for="name" value="#{messages.label_name}" />
+                        <p:inputText id="name" required="true" value="#{researchTeamCreateBean.newResearchTeam.name}" />
+                        <p:message for="name" />
+                    </h:panelGrid>
+                    <f:facet name="footer"> 
+                        <p:commandButton update="researchTeamPanel,researchTeamCreateMessages" value="#{messages.label_save}" action="#{researchTeamCreateBean.saveNewTeam}" icon="ui-icon-disk"/>
+                        <p:commandButton value="#{messages.label_cancel}" action="#{researchTeamCreateBean.cancelTeamCreation}" immediate="true" icon="ui-icon-cancel"/>
+                    </f:facet>
+                </p:panel>
+            </o:form>
+        </ui:define>
+    </ui:composition>
+</html>

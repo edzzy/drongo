@@ -1,6 +1,6 @@
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.ClientType;
+import fr.pfgen.lims.domain.people.ClientType;
 import java.util.List;
 
 public interface ClientTypeService {

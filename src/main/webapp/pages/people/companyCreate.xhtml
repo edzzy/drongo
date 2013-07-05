@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="peopleTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <h:form id="companyForm">
+                <p:growl id="companyCreateMessages" life="2500" showDetail="true" globalOnly="true"/>
+                <p:panel id="companyPanel" header="#{messages.label_newF} #{messages.label_company}">
+                    <p:focus context="companyPanel"/>
+                    <h:panelGrid id="companyGrid" columns="3">
+                        <p:outputLabel for="name" value="#{messages.label_name}" />
+                        <p:inputText id="name" required="true" value="#{companyCreateBean.company.name}" validator="#{companyCreateBean.validateName}"/>
+                        <p:message for="name" />
+                    </h:panelGrid>
+                    <f:facet name="footer"> 
+                        <p:commandButton update="companyGrid,companyCreateMessages" value="#{messages.label_save}" action="#{companyCreateBean.saveNewCompany}" icon="ui-icon-plus"/>
+                        <p:commandButton value="#{messages.label_cancel}" action="#{companyCreateBean.cancelCompanyCreation}" immediate="true" icon="ui-icon-cancel"/>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

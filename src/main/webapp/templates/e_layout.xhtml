@@ -11,13 +11,17 @@
             <ui:insert name="header">
                 <ui:include src="e_header.xhtml" />
             </ui:insert>
-            <h:outputStylesheet library="css" name="standard.css" />
+            <h:outputStylesheet library="css" name="standard.css"  />
+            <h:outputScript library="js" name="calendar.js" />
+            <h:outputScript library="js" name="standard.js" />
         </h:head>
         <h:body>
             <p:layout fullPage="true">
                 <p:layoutUnit position="north" size="70" style="border: none">
                     <p:layout fullPage="false">
-                        <p:layoutUnit position="west" size="150" style="border: none" />
+                        <p:layoutUnit position="west" size="150" style="border: none" >
+                            <ui:insert name="dockIcon">icon</ui:insert>
+                        </p:layoutUnit>
                         <p:layoutUnit position="center" style="border: none"/>
                         <p:layoutUnit position="east" size="200" style="border: none">
                             <h:form>
@@ -26,11 +30,6 @@
                                     <f:selectItems value="#{themeSwitcherBean.advancedThemes}" var="theme"
                                                    itemLabel="#{theme.name}" itemValue="#{theme}" />
                                     <p:ajax listener="#{themeSwitcherBean.saveTheme}" />
-                                    <!--
-                                    <p:column>
-                                       <h:graphicImage value="/resources/images/themes/#{t.image}" />
-                                    </p:column>
-                                    -->
                                     <p:column>
                                         #{t.name}
                                     </p:column>

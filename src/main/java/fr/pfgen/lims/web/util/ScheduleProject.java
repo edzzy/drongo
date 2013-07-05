@@ -4,7 +4,7 @@
  */
 package fr.pfgen.lims.web.util;
 
-import fr.pfgen.lims.domain.Project;
+import fr.pfgen.lims.domain.projects.Project;
 import fr.pfgen.lims.service.ProjectService;
 import fr.pfgen.lims.web.project.ProjectBean;
 
@@ -106,6 +106,7 @@ public class ScheduleProject implements Serializable {
      */
     private ScheduleModel eventModel;
     private ScheduleEvent event = new DefaultScheduleEvent();
+   
     @Autowired
     ProjectService projectService;
     private List<Project> projectList;

@@ -1,6 +1,6 @@
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.AppCredentials;
+import fr.pfgen.lims.domain.people.AppCredentials;
 import fr.pfgen.lims.repository.AppCredentialsRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ public class AppCredentialsServiceImpl implements AppCredentialsService {
     AppCredentialsRepository appCredentialsRepository;
 
     @Override
-    public long countAllAppCredentialses() {
+    public long countAllAppCredentials() {
         return appCredentialsRepository.count();
     }
 
@@ -30,7 +30,7 @@ public class AppCredentialsServiceImpl implements AppCredentialsService {
     }
 
     @Override
-    public List<AppCredentials> findAllAppCredentialses() {
+    public List<AppCredentials> findAllAppCredentials() {
         return appCredentialsRepository.findAll();
     }
 
@@ -47,5 +47,10 @@ public class AppCredentialsServiceImpl implements AppCredentialsService {
     @Override
     public AppCredentials updateAppCredentials(AppCredentials appCredentials) {
         return appCredentialsRepository.save(appCredentials);
+    }
+
+    @Override
+    public AppCredentials findAppCredentialsByLogin(String login) {
+        return appCredentialsRepository.findByLogin(login);
     }
 }

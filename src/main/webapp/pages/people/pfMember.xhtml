@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:composition template="peopleTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{pfMemberBean.initPfMember}" /> 
+            </f:metadata>
+
+            <o:form>
+                <p:growl id="pfMemberCreateMessages" life="2500" showDetail="true" />
+
+                <p:wizard widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}">
+
+                    <p:tab id="personalTab" title="#{messages.label_informations}">
+                        <p:panel id="panelPersonal" header="#{messages.label_PersonalDetails}">
+                            <p:focus context="panelPersonal"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="firstname" value="#{messages.persons_firstname}" />
+                                <p:inputText id="firstname" required="true" value="#{pfMemberBean.pfMember.firstname}" />
+                                <p:message for="firstname" />
+
+                                <p:outputLabel for="lastname" value="#{messages.persons_lastname}" />
+                                <p:inputText id="lastname" required="true" value="#{pfMemberBean.pfMember.lastname}" />
+                                <p:message for="lastname" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="contactTab" title="#{messages.label_contact}">
+                        <p:panel id="panelContact" header="#{messages.label_contactInformations}">
+                            <p:focus context="panelContact"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="email" value="#{messages.persons_email}" />
+                                <p:inputText id="email" required="true" value="#{pfMemberBean.pfMember.email}" validator="#{pfMemberBean.validateEmail}">
+                                    <f:validator validatorId="emailFormatValidator" />
+                                </p:inputText>    
+                                <p:message for="email" />
+
+                                <p:outputLabel for="phone" value="#{messages.persons_phone}" />
+                                <p:inputMask id="phone" required="false" mask="99.99.99.99.99" value="#{pfMemberBean.pfMember.phone}"/>
+                                <p:message for="phone" />
+
+                                <p:outputLabel for="office" value="#{messages.pfMember_office}" />
+                                <p:inputText id="office" required="false" value="#{pfMemberBean.pfMember.office}"/>
+                                <p:message for="office" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="crendentialsTab" title="#{messages.label_appCredentials}">
+                        <p:panel id="panelCredentials" header="#{messages.label_appCredentials}">
+                            <p:focus context="panelCredentials"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="login" value="#{messages.appCredentials_login}" />
+                                <p:inputText id="login" required="true" value="#{pfMemberBean.pfMember.appCredentials.login}" readonly="#{not pfMemberBean.isNewPfMember}"/>
+                                <p:message for="login" />
+
+                                <p:outputLabel for="pwd1" value="#{messages.appCredentials_password}" rendered="#{pfMemberBean.isNewPfMember}"/>
+                                <p:password id="pwd1" value="#{pfMemberBean.pfMember.appCredentials.password}" match="pwd2" redisplay="true" required="true" rendered="#{pfMemberBean.isNewPfMember}" >
+                                    <f:validateLength minimum="6" />
+                                </p:password>
+                                <p:message for="pwd1" />
+
+                                <p:outputLabel for="pwd2" value="#{messages.appCredentials_passCheck}" rendered="#{pfMemberBean.isNewPfMember}" />
+                                <p:password id="pwd2" value="#{pfMemberBean.pfMember.appCredentials.password}" required="true" rendered="#{pfMemberBean.isNewPfMember}" />
+                                <p:message for="pwd2" />
+                                <f:facet name="footer"> 
+                                    <p:commandButton icon="ui-icon-locked" actionListener="#{pfMemberBean.showPassFields}" update="panelCredentials" value="#{messages.label_change} #{messages.label_appCredentials}" rendered="#{not pfMemberBean.isNewPfMember}" disabled="#{not pfMemberBean.isAuthCredChange}"/>
+                                </f:facet>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="confirmTab" title="confirm">
+                        <p:panel header="#{messages.label_confirmation}" >
+                            <p:focus context="submitButton"/>
+                            <h:panelGrid columns="2" cellpadding="20" styleClass="topAligned">
+                                <p:panelGrid columns="2" > 
+                                    <f:facet name="header">
+                                        #{messages.label_PersonalDetails}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.persons_firstname}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{pfMemberBean.pfMember.firstname}" />
+
+                                    <h:outputText value="#{messages.persons_lastname}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{pfMemberBean.pfMember.lastname}" />
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        #{messages.label_contactInformations}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.persons_email}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{pfMemberBean.pfMember.email}" />
+
+                                    <h:outputText value="#{messages.persons_phone}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{pfMemberBean.pfMember.phone}" />
+                                    
+                                    <h:outputText value="#{messages.pfMember_office}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{pfMemberBean.pfMember.office}" />
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        #{messages.label_appCredentials}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.appCredentials_login}: " />
+                                    <h:outputText styleClass="carRetLabel" value="#{pfMemberBean.pfMember.appCredentials.login}" />
+                                </p:panelGrid>
+                            </h:panelGrid>
+                            <f:facet name="footer"> 
+                                <p:commandButton id="submitButton" value="#{pfMemberBean.saveOrEditLabel}" update="pfMemberCreateMessages" action="#{pfMemberBean.savePfMember()}" icon="#{pfMemberBean.plusOrPen}"/>
+                                <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{pfMemberBean.cancelPfMember()}" />
+                            </f:facet>
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+            </o:form>
+        </ui:define>
+    </ui:composition>
+</html>

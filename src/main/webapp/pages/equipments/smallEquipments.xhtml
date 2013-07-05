@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="equipmentsTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <h:form id="equipmentListForm">
+                <p:growl id="equipmentListMessages" showDetail="true" showSummary="true" life="3000"/>
+                <p:dataTable var="equipment" 
+                             value="#{smallEquipmentsBean.equipmentList}" 
+                             rowsPerPageTemplate="5,10,15" 
+                             rowKey="#{equipment.id}"
+                             paginator="true"
+                             rows="10"
+                             filteredValue="#{smallEquipmentsBean.filteredEquipments}"
+                             id="equipmentsTable"
+                             emptyMessage="#{messages.label_emptyRecords}"
+                             sortMode="multiple"
+                             widgetVar="equipTable">  
+
+                    <f:facet name="header">
+                        <p:outputPanel style="text-align: right !important;">  
+                            <h:outputText value="#{messages.label_searchFields}:" />  
+                            <p:inputText id="globalFilter" onkeyup="equipTable.filter()" style="width:150px" />  
+                        </p:outputPanel> 
+                    </f:facet>
+
+                    <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
+
+                    <p:column style="width: 5px">  
+                        <p:rowToggler />  
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_internalNumber}"  sortBy="#{equipment.internalNumber}" filterBy="#{equipment.internalNumber}" id="internalNumber">  
+                        <h:outputText value="#{equipment.internalNumber}"/>
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_category}" 
+                              sortBy="#{equipment.category.name}" 
+                              filterBy="#{equipment.category.name}" 
+                              id="category"
+                              filterOptions="#{smallEquipmentsBean.categoryOptions}"  
+                              filterMatchMode="exact">
+                        <h:outputText value="#{equipment.category}" /> 
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_name}" sortBy="#{equipment.name}" filterBy="#{equipment.name}" id="name">  
+                        <h:outputText value="#{equipment.name}" />
+                    </p:column>  
+
+                    <p:column headerText="#{messages.equipment_type}" sortBy="#{equipment.type}" filterBy="#{equipment.type}" id="type">  
+                        <h:outputText value="#{equipment.type}" />
+                    </p:column>  
+
+                    <p:column headerText="#{messages.equipment_manufacturer}" sortBy="#{equipment.manufacturer}" filterBy="#{equipment.manufacturer}" id="manufacturer">
+                        <h:outputText value="#{equipment.manufacturer}" /> 
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_room}" sortBy="#{equipment.room}" filterBy="#{equipment.room}" id="room">  
+                        <h:outputText value="#{equipment.room}" />
+                    </p:column>  
+
+                    <p:column headerText="#{messages.equipment_itx}" sortBy="#{equipment.itx}" filterBy="#{equipment.itx}" id="itx">  
+                        <h:outputText value="#{equipment.itx}" />
+                    </p:column>  
+
+                    <p:column headerText="#{messages.equipment_serialNumber}" sortBy="#{equipment.serialNumber}" filterBy="#{equipment.serialNumber}" id="serial">  
+                        <h:outputText value="#{equipment.serialNumber}" />
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_acquisitionDate}" sortBy="#{equipment.acquisitionDate}" id="acquisition">
+                        <h:outputText value="#{equipment.acquisitionDate}">
+                            <f:convertDateTime dateStyle="long" type="date" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column style="width: 5px">
+                        <p:commandLink id="editButton" action="#{smallEquipmentsBean.editEquipment}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
+                            <f:setPropertyActionListener value="#{equipment}" target="#{smallEquipmentsBean.selectedEquipment}" />
+                        </p:commandLink>
+                        <p:tooltip for="editButton" value="#{messages.label_edit}" /> 
+                    </p:column>  
+
+                    <p:column style="width: 5px">
+                        <p:commandLink id="deleteButton" oncomplete="deleteDlg.show();" update=":deleteDialog" title="#{messages.label_delete}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-trash" />
+                            <f:setPropertyActionListener value="#{equipment}" target="#{smallEquipmentsBean.selectedEquipment}" />
+                        </p:commandLink>
+                        <p:tooltip for="deleteButton" value="#{messages.label_delete}" /> 
+                    </p:column>
+
+                    <p:columnGroup type="footer">
+                        <p:row>  
+                            <p:column colspan="12" footerText="#{smallEquipmentsBean.equipmentNumber} #{messages.label_equipments}"  />
+                        </p:row>  
+                    </p:columnGroup>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="#{messages.equipment_newEquipment}" icon="ui-icon-plus" action="#{smallEquipmentsBean.createNewEquipment}"/>
+                    </f:facet>
+
+                    <p:rowExpansion>  
+                        <h:panelGrid id="expansionPanel" columns="2" cellpadding="20" style="width:auto" styleClass="topAligned">  
+
+
+                        </h:panelGrid>
+                    </p:rowExpansion>
+
+                </p:dataTable>
+            </h:form>
+
+            <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{smallEquipmentsBean.selectedEquipment}" message="#{messages.label_confirm_deletion}"
+                             closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
+                <h:form id="deleteForm">
+                    <h:panelGroup layout="block" style="text-align: right">
+                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{smallEquipmentsBean.deleteEquipment}" update=":equipmentListForm:equipmentListMessages, :equipmentListForm:equipmentsTable" oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_cancel}" actionListener="#{smallEquipmentsBean.cancelDeletion}" update=":equipmentListForm:equipmentListMessages" oncomplete="deleteDlg.hide();" />
+                    </h:panelGroup>
+                </h:form>
+            </p:confirmDialog>
+
+        </ui:define>
+    </ui:composition>
+</html>
+
