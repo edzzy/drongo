@@ -1,24 +1,20 @@
 package fr.pfgen.lims.domain.people;
 
-import java.io.Serializable;
+import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "app_credentials")
-public class AppCredentials implements Serializable {
+public class AppCredentials extends AbstractGenericEntity{
 
     @NotNull
     @Column(unique = true)
@@ -31,42 +27,14 @@ public class AppCredentials implements Serializable {
     @NotNull
     private String salt;
     
+    @Size(max = 30)
     private String appTheme;
     
+    @Size(max = 5)
     private String appLocale;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "appCredentials")
     private Set<AbstractPerson> persons = new HashSet<>();
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
-    
-    @Version
-    @Column(name = "version")
-    private Integer version;
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return this.version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    @Override
-    public String toString() {
-        return this.login;
-    }
 
     public String getLogin() {
         return this.login;
@@ -119,7 +87,7 @@ public class AppCredentials implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 83 * hash + Objects.hashCode(this.id);
+        hash = 67 * hash + Objects.hashCode(this.login);
         return hash;
     }
 
@@ -132,9 +100,14 @@ public class AppCredentials implements Serializable {
             return false;
         }
         final AppCredentials other = (AppCredentials) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.login, other.login)) {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return this.login;
     }
 }

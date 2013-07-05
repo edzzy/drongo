@@ -4,21 +4,16 @@
  */
 package fr.pfgen.lims.domain.people;
 
-import java.io.Serializable;
+import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -28,16 +23,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "research_teams", uniqueConstraints = @UniqueConstraint(columnNames = {"research_unit", "name"}))
-public class ResearchTeam implements Serializable{
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
-    
-    @Version
-    @Column(name = "version")
-    private Integer version;
+public class ResearchTeam extends AbstractGenericEntity{
     
     @NotNull
     @Size(min = 2, max = 50)
@@ -66,22 +52,6 @@ public class ResearchTeam implements Serializable{
         this.researchUnit = researchUnit;
     }
     
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
     public String getName() {
         return name;
     }
@@ -92,8 +62,9 @@ public class ResearchTeam implements Serializable{
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.name);
+        hash = 79 * hash + Objects.hashCode(this.researchUnit);
         return hash;
     }
 
@@ -106,7 +77,10 @@ public class ResearchTeam implements Serializable{
             return false;
         }
         final ResearchTeam other = (ResearchTeam) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.researchUnit, other.researchUnit)) {
             return false;
         }
         return true;

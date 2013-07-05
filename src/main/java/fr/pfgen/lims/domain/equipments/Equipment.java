@@ -4,21 +4,18 @@
  */
 package fr.pfgen.lims.domain.equipments;
 
-import java.io.Serializable;
+import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -28,41 +25,40 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "equipments")
-public abstract class Equipment implements Serializable{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
+public abstract class Equipment extends AbstractGenericEntity{
     
     @NotNull
+    @Size(min = 2, max = 50)
     private String name;
     
     @NotNull
+    @Size(max = 50)
     private String Manufacturer;
     
+    @Size(max = 50)
     private String type;
     
     @NotNull
     @Column(unique = true)
+    @Size(max = 50)
     private String serialNumber;
     
     @NotNull
     @Column(unique = true)
+    @Size(max = 7)
     private String internalNumber;
     
     @NotNull
+    @Size(max = 15)
     private String room;
     
     @Column(unique = true)
+    @Size(max = 7)
     private String itx;
     
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date acquisitionDate;
-    
-    @Version
-    @Column(name = "version")
-    private Integer version;
     
     public String getInternalNumber() {
         return internalNumber;
@@ -70,14 +66,6 @@ public abstract class Equipment implements Serializable{
 
     public void setInternalNumber(String internalNumber) {
         this.internalNumber = internalNumber;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getSerialNumber() {
@@ -94,14 +82,6 @@ public abstract class Equipment implements Serializable{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public String getRoom() {
@@ -147,7 +127,7 @@ public abstract class Equipment implements Serializable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 23 * hash + Objects.hashCode(this.serialNumber);
         return hash;
     }
 
@@ -160,7 +140,7 @@ public abstract class Equipment implements Serializable{
             return false;
         }
         final Equipment other = (Equipment) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.serialNumber, other.serialNumber)) {
             return false;
         }
         return true;

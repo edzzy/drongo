@@ -1,18 +1,14 @@
 package fr.pfgen.lims.domain.people;
 
-import java.io.Serializable;
+import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,21 +23,12 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "companies")
-public class Company implements Serializable{
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
+public class Company extends AbstractGenericEntity{
    
     @NotNull
     @Column(unique = true)
     @Size(min = 2, max = 30)
     private String name;
-    
-    @Version
-    @Column(name = "version")
-    private Integer version;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "company")
     private Set<Client> clients = new HashSet<>();
@@ -54,14 +41,6 @@ public class Company implements Serializable{
         this.clients = clients;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -70,18 +49,10 @@ public class Company implements Serializable{
         this.name = name;
     }
 
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 61 * hash + Objects.hashCode(this.id);
+        int hash = 5;
+        hash = 41 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -94,12 +65,12 @@ public class Company implements Serializable{
             return false;
         }
         final Company other = (Company) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return this.name;

@@ -1,24 +1,20 @@
 package fr.pfgen.lims.domain.people;
 
-import java.io.Serializable;
+import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "client_types")
-public class ClientType implements Serializable {
+public class ClientType extends AbstractGenericEntity{
 
     @NotNull
     @Size(min = 2, max = 30)
@@ -45,38 +41,9 @@ public class ClientType implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return name;
-    }
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
-    @Version
-    @Column(name = "version")
-    private Integer version;
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return this.version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    @Override
     public int hashCode() {
         int hash = 7;
-        hash = 11 * hash + Objects.hashCode(this.id);
+        hash = 67 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -89,9 +56,14 @@ public class ClientType implements Serializable {
             return false;
         }
         final ClientType other = (ClientType) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

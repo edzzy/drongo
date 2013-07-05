@@ -4,21 +4,18 @@
  */
 package fr.pfgen.lims.domain.equipments;
 
-import java.io.Serializable;
+import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -27,18 +24,11 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "reagent_batches")
-public class ReagentBatch implements Serializable{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
-    
-    @Version
-    @Column(name = "version")
-    private Integer version;
+public class ReagentBatch extends AbstractGenericEntity{
     
     @NotNull
     @Column(unique = true)
+    @Size(min = 1,max = 50)
     private String batchNumber;
     
     @NotNull
@@ -68,22 +58,6 @@ public class ReagentBatch implements Serializable{
 
     public void setBatchNumber(String batchNumber) {
         this.batchNumber = batchNumber;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public Date getExpiryDate() {
@@ -129,7 +103,7 @@ public class ReagentBatch implements Serializable{
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 31 * hash + Objects.hashCode(this.id);
+        hash = 83 * hash + Objects.hashCode(this.batchNumber);
         return hash;
     }
 
@@ -142,7 +116,7 @@ public class ReagentBatch implements Serializable{
             return false;
         }
         final ReagentBatch other = (ReagentBatch) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.batchNumber, other.batchNumber)) {
             return false;
         }
         return true;

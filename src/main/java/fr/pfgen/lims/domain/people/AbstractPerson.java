@@ -1,6 +1,6 @@
 package fr.pfgen.lims.domain.people;
 
-import java.io.Serializable;
+import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -8,9 +8,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
@@ -18,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,7 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "persons")
-public abstract class AbstractPerson implements Serializable {
+public abstract class AbstractPerson extends AbstractGenericEntity{
 
     @NotNull
     @Size(min = 2, max = 30)
@@ -113,38 +109,13 @@ public abstract class AbstractPerson implements Serializable {
 
     @Override
     public String toString() {
-        return this.firstname+" "+this.lastname;
-    }
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long id;
-    
-    @Version
-    @Column(name = "version")
-    private Integer version;
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getVersion() {
-        return this.version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
+        return this.getFirstname()+" "+this.getFirstname();
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 41 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + Objects.hashCode(this.email);
         return hash;
     }
 
@@ -157,7 +128,7 @@ public abstract class AbstractPerson implements Serializable {
             return false;
         }
         final AbstractPerson other = (AbstractPerson) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.email, other.email)) {
             return false;
         }
         return true;

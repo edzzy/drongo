@@ -6,11 +6,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "pf_members")
-public class PfMember extends AbstractPerson {
+public class PfMember extends AbstractPerson{
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -21,6 +22,7 @@ public class PfMember extends AbstractPerson {
     private boolean deleted = false;
     
     @NotNull
+    @Size(min = 2,max = 10)
     private String office;
 
     public String getOffice() {
@@ -39,16 +41,16 @@ public class PfMember extends AbstractPerson {
         this.deleted = deleted;
     }
 
-    @Override
-    public String toString() {
-        return this.getFirstname()+" "+this.getLastname();
-    }
-
     public Date getMemberSince() {
         return this.memberSince;
     }
 
     public void setMemberSince(Date memberSince) {
         this.memberSince = memberSince;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }
