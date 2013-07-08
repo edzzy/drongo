@@ -1,7 +1,9 @@
 package fr.pfgen.lims.domain.people;
 
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,6 +26,17 @@ public class PfMember extends AbstractPerson{
     @NotNull
     @Size(min = 2,max = 10)
     private String office;
+    
+    @OneToMany(mappedBy = "referent")
+    private Set<ActivityType> activityTypes;
+
+    public Set<ActivityType> getActivityTypes() {
+        return activityTypes;
+    }
+
+    public void setActivityTypes(Set<ActivityType> activityTypes) {
+        this.activityTypes = activityTypes;
+    }
 
     public String getOffice() {
         return office;

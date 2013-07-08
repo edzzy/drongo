@@ -113,6 +113,7 @@ public class ScheduleProject implements Serializable {
 
     @PostConstruct
     public void init() {
+        /*
         projectList = projectService.findAllProjects();
         eventModel = new DefaultScheduleModel();
             
@@ -121,7 +122,7 @@ public class ScheduleProject implements Serializable {
                 eventModel.addEvent(new DefaultScheduleEvent(project.getName(), project.getBegin_date(), project.getDue_date(),true));
             }
         }
-
+        * */
     }
 
     public ScheduleProject() {

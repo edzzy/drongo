@@ -27,8 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
     
     @Override
     public void saveProject(Project project){
-        project.setRegisteredOn(new Date());
-        project.setBegin_date(new Date());
+        project.setBeginDate(new Date());
        
         projectRepository.save(project);
     }

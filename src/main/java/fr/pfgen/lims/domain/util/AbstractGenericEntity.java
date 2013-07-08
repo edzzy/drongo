@@ -22,32 +22,30 @@ import javax.persistence.Version;
  * @author eric
  */
 @MappedSuperclass
-public abstract class AbstractGenericEntity implements Serializable{
+public abstract class AbstractGenericEntity implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-    
     @Version
     @Column(name = "version")
     private Integer version;
-    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created", nullable = false)
     private Date created;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated", nullable = false)
     private Date updated;
 
     @PrePersist
     protected void onCreate() {
-    updated = created = new Date();
+        updated = created = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
-    updated = new Date();
+        updated = new Date();
     }
 
     public Long getId() {

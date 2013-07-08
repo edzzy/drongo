@@ -66,11 +66,11 @@ public class CreateProjectBean implements Serializable{
     
     public String saveNewProject(){
     
-        
+        /*
         try{
             newProject.setName(newProject.getName());
-            newProject.setBegin_date(newProject.getBegin_date());
-            newProject.setDue_date(newProject.getDue_date());
+            newProject.setBegin_date(newProject.getBeginDate());
+            newProject.setDue_date(newProject.getEndDate());
             newProject.setResponsable(newProject.getResponsable());
             projectService.saveProject(newProject);
             FacesContext context = FacesContext.getCurrentInstance();
@@ -86,6 +86,8 @@ public class CreateProjectBean implements Serializable{
             context.addMessage(null, msg);
             return null;
         }
+        */
+        return null;
     }
     
     
