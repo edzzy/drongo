@@ -1,5 +1,7 @@
 package fr.pfgen.lims.domain.people;
 
+import fr.pfgen.lims.domain.projects.ActivityType;
+import fr.pfgen.lims.domain.runs.AbstractRun;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -29,6 +31,17 @@ public class PfMember extends AbstractPerson{
     
     @OneToMany(mappedBy = "referent")
     private Set<ActivityType> activityTypes;
+    
+    @OneToMany(mappedBy = "launchedBy")
+    private Set<AbstractRun> runs;
+
+    public Set<AbstractRun> getRuns() {
+        return runs;
+    }
+
+    public void setRuns(Set<AbstractRun> runs) {
+        this.runs = runs;
+    }
 
     public Set<ActivityType> getActivityTypes() {
         return activityTypes;

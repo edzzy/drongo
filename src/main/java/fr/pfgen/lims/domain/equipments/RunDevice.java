@@ -4,6 +4,7 @@
  */
 package fr.pfgen.lims.domain.equipments;
 
+import fr.pfgen.lims.domain.runs.AbstractRun;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -26,7 +27,7 @@ public class RunDevice extends Equipment{
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usedInDevice")
     private Set<Reagent> reagents;
-
+    
     public byte[] getImage() {
         return image;
     }

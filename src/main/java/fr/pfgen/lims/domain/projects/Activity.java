@@ -4,9 +4,9 @@
  */
 package fr.pfgen.lims.domain.projects;
 
-import fr.pfgen.lims.domain.people.ActivityType;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -95,5 +95,41 @@ public class Activity extends AbstractGenericEntity{
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.scheduledBeginDate);
+        hash = 23 * hash + Objects.hashCode(this.type);
+        hash = 23 * hash + Objects.hashCode(this.project);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Activity other = (Activity) obj;
+        if (!Objects.equals(this.scheduledBeginDate, other.scheduledBeginDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        if (!Objects.equals(this.project, other.project)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        //a revoir !!
+        return this.project.getName()+" - "+this.project.getResponsable().getFirstname()+" "+this.project.getResponsable().getLastname();
     }
 }
