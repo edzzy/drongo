@@ -30,4 +30,16 @@ public class FacesUtils {
         
         return bundle.getString(key);
     }
+    
+    public static void putObjectInSessionMap(String key, Object value){
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(key, value);
+    }
+    
+    public static Object getObjectInSessionMap(String key){
+        return FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(key);
+    }
+    
+    public static void removeObjectFromSessionMap(String key){
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(key);
+    }
 }

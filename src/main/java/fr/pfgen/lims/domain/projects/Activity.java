@@ -4,10 +4,16 @@
  */
 package fr.pfgen.lims.domain.projects;
 
+import fr.pfgen.lims.domain.runs.AbstractRun;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -21,8 +27,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "activities")
-public class Activity extends AbstractGenericEntity{
-    
+public class Activity extends AbstractGenericEntity {
+
     @NotNull
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
@@ -32,7 +38,7 @@ public class Activity extends AbstractGenericEntity{
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
     private Date scheduledDueDate;
-   
+    
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
     private Date beginDate;
@@ -40,14 +46,28 @@ public class Activity extends AbstractGenericEntity{
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
     private Date endDate;
-
+    
     @NotNull
     @ManyToOne
     private ActivityType type;
     
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "runs_in_activities",
+            joinColumns = { @JoinColumn(name = "run_id")},
+            inverseJoinColumns = { @JoinColumn(name = "activity_id")})
+    private Set<AbstractRun> runs;
+    
     @NotNull
     @ManyToOne
     private Project project;
+
+    public Set<AbstractRun> getRuns() {
+        return runs;
+    }
+
+    public void setRuns(Set<AbstractRun> runs) {
+        this.runs = runs;
+    }
 
     public Date getScheduledBeginDate() {
         return scheduledBeginDate;
@@ -130,6 +150,6 @@ public class Activity extends AbstractGenericEntity{
     @Override
     public String toString() {
         //a revoir !!
-        return this.project.getName()+" - "+this.project.getResponsable().getFirstname()+" "+this.project.getResponsable().getLastname();
+        return this.project.getName() + " - " + this.project.getMainClient().getFirstname() + " " + this.project.getMainClient().getLastname();
     }
 }

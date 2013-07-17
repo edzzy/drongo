@@ -6,7 +6,6 @@ package fr.pfgen.lims.service;
 
 import fr.pfgen.lims.domain.projects.Project;
 import fr.pfgen.lims.repository.ProjectRepository;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-
 public class ProjectServiceImpl implements ProjectService {
     
     @Autowired
@@ -27,8 +25,6 @@ public class ProjectServiceImpl implements ProjectService {
     
     @Override
     public void saveProject(Project project){
-        project.setBeginDate(new Date());
-       
         projectRepository.save(project);
     }
 
@@ -46,9 +42,4 @@ public class ProjectServiceImpl implements ProjectService {
     public Project findProject(Long id) {
         return projectRepository.findOne(id);
     }
-
-   
-    
-    
-    
 }

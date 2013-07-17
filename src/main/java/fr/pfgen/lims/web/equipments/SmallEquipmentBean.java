@@ -6,7 +6,6 @@ package fr.pfgen.lims.web.equipments;
 
 import fr.pfgen.lims.domain.equipments.Equipment;
 import fr.pfgen.lims.domain.equipments.EquipmentCategory;
-import fr.pfgen.lims.domain.equipments.RunDevice;
 import fr.pfgen.lims.domain.equipments.SmallEquipment;
 import fr.pfgen.lims.service.EquipmentService;
 import fr.pfgen.lims.web.util.FacesUtils;

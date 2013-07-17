@@ -4,13 +4,20 @@
  */
 package fr.pfgen.lims.domain.runs;
 
-import fr.pfgen.lims.domain.equipments.RunDevice;
 import fr.pfgen.lims.domain.people.PfMember;
+import fr.pfgen.lims.domain.projects.Activity;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
+import fr.pfgen.lims.domain.util.RunType;
 import java.util.Date;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -35,6 +42,41 @@ public class AbstractRun extends AbstractGenericEntity{
     @NotNull
     @ManyToOne
     private PfMember launchedBy;
+    
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private RunType runType;
+    
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "runs")
+    private Set<Activity> activities;
+    
+    @NotNull
+    private boolean finished = false;
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+
+    public Set<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(Set<Activity> activities) {
+        this.activities = activities;
+    }
+
+    public RunType getRunType() {
+        return runType;
+    }
+
+    public void setRunType(RunType runType) {
+        this.runType = runType;
+    }
    
     public Date getBeginDate() {
         return beginDate;

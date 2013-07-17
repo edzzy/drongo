@@ -4,23 +4,23 @@
  */
 package fr.pfgen.lims.web.project;
 
-
 import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.projects.Project;
-import fr.pfgen.lims.service.ProjectService;
 import fr.pfgen.lims.service.ClientService;
+import fr.pfgen.lims.service.ProjectService;
+import fr.pfgen.lims.web.util.FacesUtils;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import org.apache.commons.lang3.text.WordUtils;
-import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-import org.primefaces.context.RequestContext;
-import org.primefaces.event.RowEditEvent;
+import javax.faces.event.AjaxBehaviorEvent;
+import org.primefaces.event.FlowEvent;
+import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -32,20 +32,94 @@ import org.springframework.stereotype.Controller;
 @Controller
 @Scope("view")
 @ManagedBean
+public class ProjectBean implements Serializable {
 
-public class ProjectBean implements Serializable{
-     
-        
     @Autowired
     ProjectService projectService;
-    
     
     @Autowired
     ClientService clientService;
     
-    private List<Project> projectList;
-    private List<Project> filteredProjects; 
+    private Project project = new Project();
     private List<Client> clientList;
+    private List<Client> clientSource = new ArrayList<>();
+    private List<Client> clientTarget = new ArrayList<>();
+    private DualListModel<Client> allClients;
+
+    @PostConstruct
+    public void init() {
+        clientList = clientService.findAllActiveClients();
+        clientSource.addAll(clientList);
+        allClients = new DualListModel<>(clientSource, clientTarget);
+    }
+    
+    public void onMainClientSelect(AjaxBehaviorEvent event){
+        clientSource.clear();
+        clientSource.addAll(clientList);
+        clientSource.remove((Client) ((UIOutput) event.getSource()).getValue());
+    }
+    
+    public String createNewClient(){
+        FacesUtils.removeObjectFromSessionMap("client");
+        FacesUtils.putObjectInSessionMap("project", project);
+        return "client?faces-redirect=true&from=project";
+    }
+    
+    public String saveNewProject(){
+        try{
+            if (project.getId() == null){
+                projectService.saveProject(project);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newProject_added"), project.toString(), FacesMessage.SEVERITY_INFO);
+            }else{
+                projectService.updateProject(project);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), project.toString(), FacesMessage.SEVERITY_INFO);
+            }
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            return "projects?faces-redirect=true";
+        }catch(Exception e){
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            return null;
+        }
+    }
+    
+    public String onFlowProcess(FlowEvent event) {  
+        if (event.getOldStep().equalsIgnoreCase("clientsTab")){
+            project.setClients(new HashSet<>(allClients.getTarget()));
+        }
+        return event.getNewStep();
+    }  
+
+    public List<Client> getClientTarget() {
+        return clientTarget;
+    }
+
+    public void setClientTarget(List<Client> clientTarget) {
+        this.clientTarget = clientTarget;
+    }
+
+    public List<Client> getClientSource() {
+        return clientSource;
+    }
+
+    public void setClientSource(List<Client> clientSource) {
+        this.clientSource = clientSource;
+    }
+
+    public DualListModel<Client> getAllClients() {
+        return allClients;
+    }
+
+    public void setAllClients(DualListModel<Client> allClients) {
+        this.allClients = allClients;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
     public List<Client> getClientList() {
         return clientList;
@@ -54,88 +128,4 @@ public class ProjectBean implements Serializable{
     public void setClientList(List<Client> clientList) {
         this.clientList = clientList;
     }
-    
-
-    public ProjectService getProjectService() {
-        return projectService;
-    }
-
-    public void setProjectService(ProjectService projectService) {
-        this.projectService = projectService;
-    }
-
-    public List<Project> getProjectList() {
-        return projectList;
-    }
-
-    public void setProjectList(List<Project> projectList) {
-        this.projectList = projectList;
-    }
-
-    public List<Project> getFilteredProjects() {
-        return filteredProjects;
-    }
-
-    public void setFilteredProjects(List<Project> filteredProjects) {
-        this.filteredProjects = filteredProjects;
-    }
-    
-   @PostConstruct
-   public void init(){
-       projectList = projectService.findAllProjects();
-       clientList = clientService.findAllClients();
-      
-   }
-   
-   public void onEdit(RowEditEvent event){
-       Project projectToEdit = (Project) event.getObject();
-       FacesContext context = FacesContext.getCurrentInstance();
-       
-       try {
-           Project projectUpdated = projectService.updateProject(projectToEdit);
-           int index = projectList.indexOf(projectToEdit);
-           projectList.remove(index);
-           projectList.add(index,projectUpdated);
-           RequestContext rcontext = RequestContext.getCurrentInstance();
-           rcontext.update("projectTable");
-           
-           String text = context.getApplication().getResourceBundle(context, "messages").getString("edit_done");
-           FacesMessage msg = new FacesMessage(text, ((Project) event.getObject()).toString());
-           context.addMessage(null, msg);
-       } catch (Exception e) {
-           String text = context.getApplication().getResourceBundle(context, "messages").getString("edit_error");
-           FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, text, e.getMessage());
-           context.addMessage(null, msg);
-       }
-       
-   }
-    
-   public void onCancel(RowEditEvent event) {
-       FacesContext context = FacesContext.getCurrentInstance();
-       String text = context.getApplication().getResourceBundle(context, "messages").getString("edit_cancelled");
-       FacesMessage msg = new FacesMessage(text, ((Project) event.getObject()).toString());
-       
-       context.addMessage(null, msg);
-   
-   }
-   
-   public void onEditInit(RowEditEvent event){
-       Project projectToEdit = (Project) event.getObject();
-       Project projectIdDb = projectService.findProject(projectToEdit.getId());
-       
-       if(projectToEdit.getVersion() != projectIdDb.getVersion()){
-           int index = projectList.indexOf(projectToEdit);
-           projectList.remove(index);
-           projectList.add(index, projectIdDb);
-           RequestContext rcontext = RequestContext.getCurrentInstance();
-           rcontext.update("projectTable");
-           FacesContext context = FacesContext.getCurrentInstance();
-           String text = context.getApplication().getResourceBundle(context, "messages").getString("edit_rowchanged");
-           FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, text, projectToEdit.toString());
-           
-           context.addMessage(null, msg);
-       }
-   }
-    
-    
 }

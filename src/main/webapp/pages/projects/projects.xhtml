@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:of="http://omnifaces.org/functions">
+    <ui:composition template="projectTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <h:form id="projectsForm">
+                <p:growl id="projectListMessages" showDetail="true" showSummary="true" life="3000"/>
+                <pe:masterDetail id="masterDetail" level="#{projectsBean.currentLevel}">
+
+                    <pe:masterDetailLevel level="1" levelLabel="#{messages.label_project}">
+                        <p:dataTable id="projectsTable" 
+                                     value="#{projectsBean.projectList}" 
+                                     var="project"
+                                     rowsPerPageTemplate="5,10,15" 
+                                     rowKey="#{project.id}"
+                                     paginator="true"
+                                     rows="10"
+                                     filteredValue="#{projectsBean.filteredProjects}"
+                                     emptyMessage="#{messages.label_emptyRecords}"
+                                     sortMode="multiple">
+
+                            <p:column headerText="#{messages.project_name}" sortBy="#{project.name}" filterBy="#{project.name}">
+                                <p:commandLink value="#{project.name}">
+                                    <pe:selectDetailLevel contextValue="#{project}"/>
+                                </p:commandLink>
+                            </p:column>
+
+                            <p:column headerText="#{messages.project_mainClient}" sortBy="#{project.mainClient}" filterBy="#{project.mainClient}">
+                                <h:outputText value="#{project.mainClient}"/>
+                            </p:column>
+
+                            <p:column headerText="#{messages.project_signatureDate}" sortBy="#{project.signatureDate}">
+                                <h:outputText value="#{project.signatureDate}">
+                                    <f:convertDateTime dateStyle="long" type="date" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="#{messages.project_closed}" sortBy="#{project.closed}" filterBy="#{project.closed}">
+                                <p:graphicImage width="32" height="32" name="Primo_Icons/PNG/48x48/folder_private.png" library="images" styleClass="iconCentered" rendered="#{project.closed}"/>
+                                <p:graphicImage width="32" height="32" name="Primo_Icons/PNG/48x48/folder_open.png" library="images" styleClass="iconCentered" rendered="#{not project.closed}"/>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:button value="#{messages.project_newProject}" icon="ui-icon-plus" outcome="project?faces-redirect=true"/>
+                            </f:facet>
+                        </p:dataTable>
+                    </pe:masterDetailLevel>
+
+                    <pe:masterDetailLevel level="2" contextVar="project" levelLabel="#{messages.project_activityIn} #{project.name}">
+                        <p:dataTable id="activitiesTable" 
+                                     value="#{of:setToList(project.activities)}" 
+                                     var="activity"
+                                     rowsPerPageTemplate="5,10,15" 
+                                     rowKey="#{activity.id}"
+                                     paginator="true"
+                                     rows="10"
+                                     emptyMessage="#{messages.label_emptyRecords}"
+                                     sortMode="multiple">
+
+                            <p:column headerText="#{messages.project_activityName}">
+                                <p:commandLink value="#{activity.type.name}">
+                                    <pe:selectDetailLevel contextValue="#{activity}"/>
+                                </p:commandLink>
+                            </p:column>
+
+                        </p:dataTable>
+                    </pe:masterDetailLevel>
+
+                    <pe:masterDetailLevel level="3" contextVar="activity" levelLabel="#{messages.project_runsIn} #{activity.type.name}">
+                        <p:dataTable id="runsTable" 
+                                     value="#{of:setToList(activity.runs)}" 
+                                     var="run"
+                                     rowsPerPageTemplate="5,10,15" 
+                                     rowKey="#{run.id}"
+                                     paginator="true"
+                                     rows="10"
+                                     emptyMessage="#{messages.label_emptyRecords}"
+                                     sortMode="multiple">
+                            <p:column headerText="#{messages.project_runType}">
+                                <h:outputText value="#{messages.project_run.concat(run.runType)}"/>
+                            </p:column>
+
+                            <p:column headerText="#{messages.project_runLaunchedBy}">
+                                <h:outputText value="#{run.launchedBy}"/>
+                            </p:column>
+
+                            <p:column headerText="#{messages.project_runFinished}">
+                                <h:outputText value="#{run.beginDate}">
+                                    <f:convertDateTime dateStyle="long" type="date" />
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </pe:masterDetailLevel>
+
+                </pe:masterDetail> 
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

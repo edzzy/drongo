@@ -83,19 +83,20 @@ public class ClientBean implements Serializable {
 
     public void initClient() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-
-            client = (Client) sessionMap.get("client");
-            //sessionMap.remove("client");
-            wizStep = (String) sessionMap.get("wizStep");
-            sessionMap.remove("wizStep");
+            client = (Client) FacesUtils.getObjectInSessionMap("client");
+            
+            wizStep = (String) FacesUtils.getObjectInSessionMap("wizStep");
+            
+            FacesUtils.removeObjectFromSessionMap("wizStep");
+            
             if (wizStep == null) {
                 wizStep = "personalTab";
             }
 
             if (client == null) {
                 client = new Client();
-                sessionMap.put("client", client);
+                FacesUtils.putObjectInSessionMap("client", client);
+                wizStep = "personalTab";
             } else {
                 switchAccordingToType(client.getType());
                 if (client.getResearchTeam() != null) {
@@ -205,7 +206,6 @@ public class ClientBean implements Serializable {
 
     public String saveClient() {
         try {
-            FacesContext context = FacesContext.getCurrentInstance();
             if (client.getId() == null) {
                 clientService.saveClient(client);
                 FacesUtils.addMessage(null, FacesUtils.getI18nValue("newClient_added"), client.toString(), FacesMessage.SEVERITY_INFO);
@@ -214,7 +214,7 @@ public class ClientBean implements Serializable {
                 clientService.updateClient(client);
                 FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), client.toString(), FacesMessage.SEVERITY_INFO);
             }
-            context.getExternalContext().getFlash().setKeepMessages(true);
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
             return "clients?faces-redirect=true";
         } catch (Exception e) {
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
@@ -223,13 +223,12 @@ public class ClientBean implements Serializable {
     }
 
     public String cancelClient() {
-        FacesContext context = FacesContext.getCurrentInstance();
         if (client.getId() == null) {
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
         } else {
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), client.toString(), FacesMessage.SEVERITY_INFO);
         }
-        context.getExternalContext().getFlash().setKeepMessages(true);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         return "clients?faces-redirect=true";
     }
 

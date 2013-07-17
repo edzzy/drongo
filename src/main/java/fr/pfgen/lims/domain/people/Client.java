@@ -1,8 +1,11 @@
 package fr.pfgen.lims.domain.people;
 
+import fr.pfgen.lims.domain.projects.Project;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -27,7 +30,18 @@ public class Client extends AbstractPerson{
     
     @ManyToOne
     private Company company;
+    
+    @OneToMany(mappedBy = "mainClient")
+    private Set<Project> projectsInitiated;
 
+    public Set<Project> getProjectsInitiated() {
+        return projectsInitiated;
+    }
+
+    public void setProjectsInitiated(Set<Project> projectsInitiated) {
+        this.projectsInitiated = projectsInitiated;
+    }
+    
     public Company getCompany() {
         return company;
     }
@@ -78,6 +92,12 @@ public class Client extends AbstractPerson{
 
     @Override
     public String toString() {
-        return super.toString();
+        if (this.company != null){
+            return super.toString()+" ("+this.company+")";
+        }else if (this.researchTeam != null){
+            return super.toString()+" ("+this.researchTeam+")";
+        }else{
+            return super.toString();
+        }
     }
 }

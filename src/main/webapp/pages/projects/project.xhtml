@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:composition template="projectTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <o:form>
+                <p:growl id="projectCreateMessages" life="2500" showDetail="true"/> 
+
+                <p:wizard widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}" flowListener="#{projectBean.onFlowProcess}"> 
+                    <p:tab id="informationTab" title="#{messages.project_informations}">
+                        <p:panel id="panelInformation" header="#{messages.project_informations}" >
+                            <p:focus context="panelInformation"/> 
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="projectName" value="#{messages.project_name}" />
+                                <p:inputText id="projectName" required="true" value="#{projectBean.project.name}" />
+                                <p:message for="projectName" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="clientsTab" title="#{messages.label_client}">
+                        <p:panel id="panelClients" header="#{messages.project_clientsEngaged}" >
+                            <p:focus context="panelClients"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="mainClient" value="#{messages.project_mainClient}" />
+                                <h:panelGrid columns="2">
+                                    <p:selectOneMenu id="mainClient" required="true" value="#{projectBean.project.mainClient}" converter="#{clientConverter}" filter="true" filterMatchMode="contains">  
+                                        <f:selectItem itemLabel="Select One" noSelectionOption="true" />  
+                                        <f:selectItems value="#{projectBean.clientList}" />
+                                        <p:ajax listener="#{projectBean.onMainClientSelect}" update="panelClients"/>
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="#{messages.label_new}" icon="ui-icon-plus" action="#{projectBean.createNewClient}" >
+                                        <o:ignoreValidationFailed />
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <p:message for="mainClient" />
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="pojoPickList" value="#{messages.project_clientsParticipating}" />
+                                <p:pickList id="pojoPickList" 
+                                            value="#{projectBean.allClients}"
+                                            var="client" 
+                                            showCheckbox="true"  
+                                            showSourceFilter="true" 
+                                            showTargetFilter="true" 
+                                            filterMatchMode="contains"
+                                            itemLabel="#{client}" 
+                                            itemValue="#{client}"
+                                            addAllLabel="#{messages.label_addAll}"
+                                            addLabel="#{messages.label_add}"
+                                            removeAllLabel="#{messages.label_removeAll}"
+                                            removeLabel="#{messages.label_remove}"
+                                            >
+
+                                    <o:converter converterId="omnifaces.ListConverter" list="#{projectBean.clientSource}" />
+
+                                    <f:facet name="sourceCaption">#{messages.project_clientList}</f:facet>  
+                                    <f:facet name="targetCaption">#{messages.project_selectedClients}</f:facet>
+                                </p:pickList>
+                                <p:commandButton value="#{messages.label_new}" icon="ui-icon-plus" action="#{projectBean.createNewClient}" >
+                                    <o:ignoreValidationFailed />
+                                </p:commandButton>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="datesTab" title="#{messages.label_dates}">
+                        <p:panel id="panelDates" header="#{messages.label_dates}">
+                            <p:focus context="panelDates" />
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="signatureDate" value="#{messages.project_signatureDate}" />
+                                <p:calendar id="signatureDate" value="#{projectBean.project.signatureDate}" showOn="button"/>
+                                <p:message for="signatureDate" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    
+                    <p:tab id="activityTab" title="#{messages.project_activities}">
+                        <p:panel id="panelActivities" header="#{messages.project_activities}">
+                            
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="confirm" title="#{messages.label_confirmation}" >
+                        <p:panel id="submitPanel" header="#{messages.label_confirmation}">
+                            <p:focus context="submitPanel" /> 
+                            <f:facet name="footer">
+                                <p:commandButton id="submitButton" value="Submit" update="projectCreateMessages" action="#{projectBean.saveNewProject}" />
+                            </f:facet>
+                        </p:panel>
+                    </p:tab>
+
+                </p:wizard>
+            </o:form>  
+
+
+
+        </ui:define>
+    </ui:composition>
+</html>
+

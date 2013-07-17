@@ -16,7 +16,11 @@
             <h:outputScript library="js" name="standard.js" />
         </h:head>
         <h:body>
-            <p:layout fullPage="true">
+            <p:layout fullPage="true" 
+                      closeTitle="#{messages.label_close}" 
+                      expandTitle="#{messages.label_open}" 
+                      collapseTitle="#{messages.label_close}" 
+                      resizeTitle="#{messages.label_resize}" >
                 <p:layoutUnit position="north" size="70" style="border: none">
                     <p:layout fullPage="false">
                         <p:layoutUnit position="west" size="150" style="border: none" >

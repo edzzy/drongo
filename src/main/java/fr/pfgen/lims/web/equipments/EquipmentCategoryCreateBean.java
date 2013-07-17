@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.pfgen.lims.web.people;
+package fr.pfgen.lims.web.equipments;
 
-import fr.pfgen.lims.domain.equipments.Equipment;
 import fr.pfgen.lims.domain.equipments.EquipmentCategory;
 import fr.pfgen.lims.domain.equipments.SmallEquipment;
 import fr.pfgen.lims.service.EquipmentService;

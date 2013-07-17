@@ -15,8 +15,8 @@ import javax.validation.constraints.Size;
  * @author eric
  */
 @Entity
-@Table(name = "activity_steps")
-public class ActivityStep extends AbstractGenericEntity{
+@Table(name = "workflow_steps")
+public class WorkflowStep extends AbstractGenericEntity{
     
     @NotNull
     @Size(min = 1,max = 50)

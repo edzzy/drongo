@@ -7,7 +7,16 @@
       xmlns:p="http://primefaces.org/ui">
     <ui:composition template="projectTemplate.xhtml">
         <ui:define name="content">
-            <h1 align="center">Contenu Project</h1>
+            <p:spacer height="50"/>
+            <h:form>
+                <p:commandLink action="project?faces-redirect=true">
+                    <h:panelGrid columns="1" style="border: 1px solid;text-align: center;">
+                        <p:graphicImage name="Primo_Icons/PNG/128x128/folder_add.png" library="images"/>
+                        <h:outputText value="New Project" />
+                    </h:panelGrid>
+                </p:commandLink>
+               
+            </h:form>
         </ui:define>
     </ui:composition>
 </html>

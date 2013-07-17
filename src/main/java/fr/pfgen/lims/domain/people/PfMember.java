@@ -26,7 +26,7 @@ public class PfMember extends AbstractPerson{
     private boolean deleted = false;
     
     @NotNull
-    @Size(min = 2,max = 10)
+    @Size(max = 10)
     private String office;
     
     @OneToMany(mappedBy = "referent")

@@ -128,8 +128,8 @@ public class ClientsBean implements Serializable {
     }
     
     public String editClient(){
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("client");
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("client", selectedClient);
+        FacesUtils.removeObjectFromSessionMap("client");
+        FacesUtils.putObjectInSessionMap("client", selectedClient);
         return "client?faces-redirect=true";
     }
 
@@ -138,7 +138,7 @@ public class ClientsBean implements Serializable {
     }
     
     public String createNewClient(){
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("client");
+        FacesUtils.removeObjectFromSessionMap("client");
         return "client?faces-redirect=true";
     }
     

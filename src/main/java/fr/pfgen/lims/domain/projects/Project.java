@@ -45,9 +45,11 @@ public class Project extends AbstractGenericEntity{
     @DateTimeFormat(style = "M-")
     private Date endDate;
     
+    private Boolean closed = false;
+    
     @NotNull
     @ManyToOne
-    private Client responsable; 
+    private Client mainClient; 
 
     @ManyToMany
     private Set<Client> clients;
@@ -94,15 +96,14 @@ public class Project extends AbstractGenericEntity{
     public void setClients(Set<Client> clients) {
         this.clients = clients;
     }
-    
-    public Client getResponsable() {
-        return responsable;
+
+    public Client getMainClient() {
+        return mainClient;
     }
 
-    public void setResponsable(Client responsable) {
-        this.responsable = responsable;
+    public void setMainClient(Client mainClient) {
+        this.mainClient = mainClient;
     }
-    
     public String getName(){
         return this.name;
     }
@@ -111,11 +112,19 @@ public class Project extends AbstractGenericEntity{
         this.name = name;
     }
 
+    public Boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 17 * hash + Objects.hashCode(this.name);
-        hash = 17 * hash + Objects.hashCode(this.responsable);
+        hash = 17 * hash + Objects.hashCode(this.mainClient);
         return hash;
     }
 
@@ -131,7 +140,7 @@ public class Project extends AbstractGenericEntity{
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.responsable, other.responsable)) {
+        if (!Objects.equals(this.mainClient, other.mainClient)) {
             return false;
         }
         return true;
@@ -139,6 +148,6 @@ public class Project extends AbstractGenericEntity{
     
     @Override
     public String toString(){
-        return this.name + " - " + this.responsable;
+        return this.name + " - " + this.mainClient;
     }
 }
