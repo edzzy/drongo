@@ -17,11 +17,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "pf_members")
 public class PfMember extends AbstractPerson{
 
+    /**
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date memberSince;
-    
+    **/
     @NotNull
     private boolean deleted = false;
     
@@ -66,7 +67,7 @@ public class PfMember extends AbstractPerson{
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-
+/**
     public Date getMemberSince() {
         return this.memberSince;
     }
@@ -74,7 +75,7 @@ public class PfMember extends AbstractPerson{
     public void setMemberSince(Date memberSince) {
         this.memberSince = memberSince;
     }
-
+**/
     @Override
     public String toString() {
         return super.toString();

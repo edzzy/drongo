@@ -44,11 +44,11 @@ public class PfMemberServiceImpl implements PfMemberService {
 
     @Override
     public void savePfMember(PfMember pfMember) {
-        pfMember.setRegisteredOn(new Date());
+      //  pfMember.setRegisteredOn(new Date());
         pfMember.setFirstname(WordUtils.capitalizeFully(pfMember.getFirstname(), '-', ' '));
         pfMember.setLastname(WordUtils.capitalizeFully(pfMember.getLastname(), '-', ' '));
         pfMember.setEmail(pfMember.getEmail().toLowerCase());
-        pfMember.setMemberSince(new Date());
+     //   pfMember.setMemberSince(new Date());
         pfMember.getAppCredentials().setSalt("saltTest");
         pfMemberRepository.save(pfMember);
     }

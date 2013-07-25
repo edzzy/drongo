@@ -9,7 +9,7 @@
               
       <p:growl id="messages" showDetail="true" />
       <p:schedule value="#{scheduleProject.eventModel}" widgetVar="myschedule" >
-        <p:ajax event="dateSelect" listener="#{scheduleProject.onDateSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
+               <p:ajax event="dateSelect" listener="#{scheduleProject.onDateSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
         <p:ajax event="eventSelect" listener="#{scheduleProject.onEventSelect}" update="eventDetails" oncomplete="eventDialog.show()" />  
         <p:ajax event="eventMove" listener="#{scheduleProject.onEventMove}" update="messages" />  
         <p:ajax event="eventResize" listener="#{scheduleProject.onEventResize}" update="messages" />  

@@ -54,7 +54,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void saveClient(Client client) {
-        client.setRegisteredOn(new Date());
+       // client.setRegisteredOn(new Date());
         client.setFirstname(WordUtils.capitalizeFully(client.getFirstname(), '-', ' '));
         client.setLastname(WordUtils.capitalizeFully(client.getLastname(), '-', ' '));
         client.setEmail(client.getEmail().toLowerCase());

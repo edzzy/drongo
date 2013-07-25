@@ -45,6 +45,7 @@ public abstract class AbstractPerson extends AbstractGenericEntity{
     @DateTimeFormat(style = "M-")
     private Date registeredOn;
     
+    
     @ManyToOne(cascade = CascadeType.ALL)
     private AppCredentials appCredentials;
     

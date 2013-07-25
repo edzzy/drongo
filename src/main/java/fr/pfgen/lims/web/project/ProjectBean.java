@@ -62,7 +62,8 @@ public class ProjectBean implements Serializable {
     public String createNewClient(){
         FacesUtils.removeObjectFromSessionMap("client");
         FacesUtils.putObjectInSessionMap("project", project);
-        return "client?faces-redirect=true&from=project";
+        return "people/client.jsf";
+     
     }
     
     public String saveNewProject(){

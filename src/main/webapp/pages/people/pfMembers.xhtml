@@ -36,7 +36,10 @@
                     </p:column>  
 
                     <p:column headerText="#{messages.persons_email}" sortBy="#{pfMember.email}" filterBy="#{pfMember.email}" id="email">  
-                        <h:outputText value="#{pfMember.email}" />
+                        <h:outputLink value="mailto:#{pfMember.email}" >
+                            <!--<p:commandButton type="button" icon="ui-icon-mail-closed"  value="#{pfMember.email}" /> -->
+                            <h:outputText  value="#{pfMember.email}"  />
+                        </h:outputLink>
                     </p:column>  
 
                     <p:column headerText="#{messages.persons_phone}" sortBy="#{pfMember.phone}" filterBy="#{pfMember.phone}" id="phone">  
@@ -48,7 +51,7 @@
                     </p:column>
 
                     <p:column headerText="#{messages.pfMember_memberSince}" sortBy="#{pfMember.memberSince}" id="registered">
-                        <h:outputText value="#{pfMember.memberSince}">
+                        <h:outputText value="#{pfMember.registeredOn}">
                             <f:convertDateTime dateStyle="long" type="date" />
                         </h:outputText>
                     </p:column>

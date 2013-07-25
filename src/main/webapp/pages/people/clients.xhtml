@@ -40,7 +40,11 @@
                     </p:column>  
 
                     <p:column headerText="#{messages.persons_email}" sortBy="#{client.email}" filterBy="#{client.email}" id="email">  
-                        <h:outputText value="#{client.email}" />
+                        
+                        <h:outputLink value="mailto:#{client.email}" >
+                            <!--<p:commandButton type="button" icon="ui-icon-mail-closed"  value="#{pfMember.email}" /> -->
+                            
+                        </h:outputLink><h:outputText value="#{client.email}" />
                     </p:column>  
 
                     <p:column headerText="#{messages.persons_phone}" sortBy="#{client.phone}" filterBy="#{client.phone}" id="phone">  
