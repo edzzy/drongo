@@ -33,20 +33,7 @@ public class Project extends AbstractGenericEntity{
     @Size(min = 2, max = 30)
     private String name;
     
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date signatureDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date beginDate;
-
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date endDate;
-    
-    private Boolean closed = false;
-    
+       
     @NotNull
     @ManyToOne
     private Client mainClient; 
@@ -55,40 +42,9 @@ public class Project extends AbstractGenericEntity{
     private Set<Client> clients;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
-    private Set<Activity> activities;
+    private Set<Contract> contracts;
 
-    public Set<Activity> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(Set<Activity> activities) {
-        this.activities = activities;
-    }
-
-    public Date getSignatureDate() {
-        return signatureDate;
-    }
-
-    public void setSignatureDate(Date signatureDate) {
-        this.signatureDate = signatureDate;
-    }
-
-    public Date getBeginDate() {
-        return beginDate;
-    }
-
-    public void setBeginDate(Date beginDate) {
-        this.beginDate = beginDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
+    
     public Set<Client> getClients() {
         return clients;
     }
@@ -112,13 +68,7 @@ public class Project extends AbstractGenericEntity{
         this.name = name;
     }
 
-    public Boolean getClosed() {
-        return closed;
-    }
-
-    public void setClosed(Boolean closed) {
-        this.closed = closed;
-    }
+  
 
     @Override
     public int hashCode() {

@@ -4,7 +4,10 @@
  */
 package fr.pfgen.lims.service;
 
+import fr.pfgen.lims.domain.projects.Contract;
 import fr.pfgen.lims.domain.projects.Project;
+import fr.pfgen.lims.repository.ActivityRepository;
+import fr.pfgen.lims.repository.ContractRepository;
 import fr.pfgen.lims.repository.ProjectRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,13 @@ public class ProjectServiceImpl implements ProjectService {
     
     @Autowired
     ProjectRepository projectRepository;
+    
+    @Autowired
+    ContractRepository contractRepository;
+    
+    @Autowired
+    ActivityRepository activityRepository;
+    
     
     @Override
     public void saveProject(Project project){
@@ -42,4 +52,5 @@ public class ProjectServiceImpl implements ProjectService {
     public Project findProject(Long id) {
         return projectRepository.findOne(id);
     }
+
 }

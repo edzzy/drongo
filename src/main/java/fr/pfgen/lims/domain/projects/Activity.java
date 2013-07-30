@@ -59,7 +59,7 @@ public class Activity extends AbstractGenericEntity {
     
     @NotNull
     @ManyToOne
-    private Project project;
+    private Contract contract;
 
     public Set<AbstractRun> getRuns() {
         return runs;
@@ -109,20 +109,14 @@ public class Activity extends AbstractGenericEntity {
         this.type = type;
     }
 
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
+    
 
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 23 * hash + Objects.hashCode(this.scheduledBeginDate);
         hash = 23 * hash + Objects.hashCode(this.type);
-        hash = 23 * hash + Objects.hashCode(this.project);
+        hash = 23 * hash + Objects.hashCode(this.contract);
         return hash;
     }
 
@@ -141,7 +135,7 @@ public class Activity extends AbstractGenericEntity {
         if (!Objects.equals(this.type, other.type)) {
             return false;
         }
-        if (!Objects.equals(this.project, other.project)) {
+        if (!Objects.equals(this.contract, other.contract)) {
             return false;
         }
         return true;
@@ -150,6 +144,6 @@ public class Activity extends AbstractGenericEntity {
     @Override
     public String toString() {
         //a revoir !!
-        return this.project.getName() + " - " + this.project.getMainClient().getFirstname() + " " + this.project.getMainClient().getLastname();
+        return "TODO";
     }
 }

@@ -9,7 +9,7 @@ insert into research_teams (name,version,research_unit,created,updated) values (
 insert into research_teams (name,version,research_unit,created,updated) values ('équipe8',0,(select id from research_units where name='U306'),now(),now()),('équipe9',0,(select id from research_units where name='U306'),now(),now());
 
 
-# Membre de la plateforme
+
 insert into persons (firstname,lastname, email, created, updated,registered_on, version)
 values
 ('Édouard', 'Hirchaud', 'edouard.hirchaud@univ-nantes.fr',now(),now(),now(),0),
@@ -41,7 +41,7 @@ values
 ((select id from persons where email='richard.redon@inserm.fr'), false, '217')
 ;
 
-# Clients
+
 insert into persons (firstname,lastname, email, created, updated, registered_on,version)
 values
 ('Gilles', 'Toumaniantz', 'Gilles.toumaniantz@univ-nantes.fr',now(),now(),now(), 0);
@@ -63,3 +63,6 @@ values
 ('Analyse RNA Seq',0, (select id from persons where email='edouard.hirchaud@univ-nantes.fr'), now(),now()),
 ('Experimental RNA Seq',0,(select id from persons where email='audrey.donnart@univ-nantes.fr'), now(),now())
 ;
+
+insert int projects (name, created, updated, version, begin_date, closed, end_date, signature_date, main_client)
+value('P1', now(),now(),0, now(), '2013-10-10', 1, NULL,now(),(select id from persons where email='Gilles.toumaniantz@univ-nantes.fr'));
