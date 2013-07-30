@@ -6,7 +6,6 @@ package fr.pfgen.lims.domain.projects;
 
 import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -15,11 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -33,7 +29,6 @@ public class Project extends AbstractGenericEntity{
     @Size(min = 2, max = 30)
     private String name;
     
-       
     @NotNull
     @ManyToOne
     private Client mainClient; 
@@ -68,7 +63,13 @@ public class Project extends AbstractGenericEntity{
         this.name = name;
     }
 
-  
+    public Set<Contract> getContracts() {
+        return contracts;
+    }
+
+    public void setContracts(Set<Contract> contracts) {
+        this.contracts = contracts;
+    }
 
     @Override
     public int hashCode() {

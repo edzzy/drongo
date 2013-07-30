@@ -74,7 +74,7 @@
                     <p:tab id="contractTab" title="#{messages.project_contract}">
                         <p:panel id="panelContract" header="#{messages.project_contract}">
                             <p:focus context="panelContract" />
-                            <p:dataList value="#{projectBean.contracts}" type="ordered"/>
+                            <p:dataList value="#{projectBean.project.contracts}" type="ordered"/>
                             <p:commandButton value="#{messages.label_new}" icon="ui-icon-plus" action="#{projectBean.createNewContract}" >
                                 <o:ignoreValidationFailed />
                             </p:commandButton>
