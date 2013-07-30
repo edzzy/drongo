@@ -30,12 +30,12 @@
                             <h:panelGrid columns="3">
                                 <p:outputLabel for="mainClient" value="#{messages.project_mainClient}" />
                                 <h:panelGrid columns="2">
-                                    <p:selectOneMenu id="mainClient" required="true" value="#{projectBean.project.mainClient}" converter="#{clientConverter}" filter="true" filterMatchMode="contains">  
+                                    <p:selectOneMenu id="mainClient" required="true" value="#{projectBean.project.mainClient}" converter="#{clientConverter}" validator="#{projectBean.validateMainClient}" filter="true" filterMatchMode="contains">  
                                         <f:selectItem itemLabel="Select One" noSelectionOption="true" />  
                                         <f:selectItems value="#{projectBean.clientList}" />
                                         <p:ajax listener="#{projectBean.onMainClientSelect}" update="panelClients"/>
                                     </p:selectOneMenu>
-                                    <p:commandButton value="#{messages.label_new}" icon="ui-icon-plus" action="#{projectBean.createNewClient}" >
+                                    <p:commandButton value="#{messages.label_new}" icon="ui-icon-plus" action="#{projectBean.createNewClient}">
                                         <o:ignoreValidationFailed />
                                     </p:commandButton>
                                 </h:panelGrid>
@@ -59,7 +59,7 @@
                                             removeLabel="#{messages.label_remove}"
                                             >
 
-                                    <o:converter converterId="omnifaces.ListConverter" list="#{projectBean.clientSource}" />
+                                    <o:converter converterId="omnifaces.ListConverter" list="#{projectBean.clientSource}"/>
 
                                     <f:facet name="sourceCaption">#{messages.project_clientList}</f:facet>  
                                     <f:facet name="targetCaption">#{messages.project_selectedClients}</f:facet>
@@ -71,20 +71,19 @@
                         </p:panel>
                     </p:tab>
 
-                    <p:tab id="datesTab" title="#{messages.label_dates}">
-                        <p:panel id="panelDates" header="#{messages.label_dates}">
-                            <p:focus context="panelDates" />
-                            <h:panelGrid columns="3">
-                                <p:outputLabel for="signatureDate" value="#{messages.project_signatureDate}" />
-                                <p:calendar id="signatureDate" value="#{projectBean.project.signatureDate}" showOn="button"/>
-                                <p:message for="signatureDate" />
-                            </h:panelGrid>
+                    <p:tab id="contractTab" title="#{messages.project_contract}">
+                        <p:panel id="panelContract" header="#{messages.project_contract}">
+                            <p:focus context="panelContract" />
+                            <p:dataList value="#{projectBean.contracts}" type="ordered"/>
+                            <p:commandButton value="#{messages.label_new}" icon="ui-icon-plus" action="#{projectBean.createNewContract}" >
+                                <o:ignoreValidationFailed />
+                            </p:commandButton>
                         </p:panel>
                     </p:tab>
-                    
+
                     <p:tab id="activityTab" title="#{messages.project_activities}">
                         <p:panel id="panelActivities" header="#{messages.project_activities}">
-                            
+
                         </p:panel>
                     </p:tab>
 
@@ -98,10 +97,7 @@
                     </p:tab>
 
                 </p:wizard>
-            </o:form>  
-
-
-
+            </o:form>
         </ui:define>
     </ui:composition>
 </html>

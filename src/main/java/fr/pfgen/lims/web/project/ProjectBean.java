@@ -16,6 +16,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
@@ -53,6 +55,17 @@ public class ProjectBean implements Serializable {
         allClients = new DualListModel<>(clientSource, clientTarget);
     }
     
+    public void validateMainClient(FacesContext context, UIComponent component, Object value) {
+        Client c = (Client) value;
+
+        Project existingProject = projectService.findProjectByNameAndClient(project.getName(), c);
+
+        if ((existingProject != null && existingProject.getId() != project.getId())) {
+            ((UIInput) component).setValid(false);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("label_error"), "\"" + c.toString() + "\" " + FacesUtils.getI18nValue("project_nameClientExist"), FacesMessage.SEVERITY_ERROR);
+        }
+    }
+    
     public void onMainClientSelect(AjaxBehaviorEvent event){
         clientSource.clear();
         clientSource.addAll(clientList);
@@ -62,7 +75,13 @@ public class ProjectBean implements Serializable {
     public String createNewClient(){
         FacesUtils.removeObjectFromSessionMap("client");
         FacesUtils.putObjectInSessionMap("project", project);
-        return "client?faces-redirect=true&from=project";
+        return "/pages/people/client?faces-redirect=true";
+    }
+    
+    public String createNewContract(){
+        FacesUtils.removeObjectFromSessionMap("project");
+        FacesUtils.putObjectInSessionMap("project", project);
+        return "/pages/projects/contract?faces-redirect=true";
     }
     
     public String saveNewProject(){
