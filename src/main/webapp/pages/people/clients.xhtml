@@ -60,8 +60,8 @@
                         <h:outputText value="#{client.type}" /> 
                     </p:column>
 
-                    <p:column headerText="#{messages.persons_registrationDate}" sortBy="#{client.registeredOn}" id="registered">
-                        <h:outputText value="#{client.registeredOn}">
+                    <p:column headerText="#{messages.persons_registrationDate}" sortBy="#{client.created}" id="registered">
+                        <h:outputText value="#{client.created}">
                             <f:convertDateTime dateStyle="long" type="date" />
                         </h:outputText>
                     </p:column>

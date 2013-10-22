@@ -9,13 +9,14 @@ import fr.pfgen.lims.domain.people.ResearchTeam;
 import fr.pfgen.lims.domain.people.ResearchUnit;
 import fr.pfgen.lims.service.ResearchTeamService;
 import fr.pfgen.lims.web.util.FacesUtils;
+import fr.pfgen.lims.web.util.flows.FlowType;
+import fr.pfgen.lims.web.util.flows.ResearchTeamFlow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("request")
 @ManagedBean
-public class ResearchTeamCreateBean {
+public class ResearchTeamCreateBean extends ResearchTeamFlow{
 
     @Autowired
     private ResearchTeamService researchTeamService;
@@ -43,6 +44,7 @@ public class ResearchTeamCreateBean {
     }
 
     public String createNewResearchUnit() {
+        enterFlow(FlowType.RESEARCHUNIT);
         return "researchUnitCreate?faces-redirect=true";
     }
 
@@ -57,13 +59,13 @@ public class ResearchTeamCreateBean {
 
         try {
             researchTeamService.saveResearchTeam(newResearchTeam);
-            Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-            Client client = (Client) sessionMap.get("client");
 
+            Client client = ((Client) FacesUtils.getObjectInSessionMap("client"));
+            
             if (client != null) {
                 client.setResearchTeam(newResearchTeam);
-                sessionMap.put("wizStep", "typeTab");
-                return "client?faces-redirect=true";
+                FacesUtils.putObjectInSessionMap("wizStep", "typeTab");
+                return endFlowAndRedirect();
             } else {
                 //TODO redirect to company list when created !!!!
                 return null;
@@ -75,12 +77,11 @@ public class ResearchTeamCreateBean {
     }
 
     public String cancelTeamCreation() {
-        Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-        Client client = (Client) sessionMap.get("client");
+        Client client = ((Client) FacesUtils.getObjectInSessionMap("client"));
 
         if (client != null) {
-            sessionMap.put("wizStep", "typeTab");
-            return "client?faces-redirect=true";
+            FacesUtils.putObjectInSessionMap("wizStep", "typeTab");
+            return endFlowAndRedirect();
         }else{
             //TODO redirect to company list when created !!!!
             return null;

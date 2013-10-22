@@ -55,6 +55,7 @@ public class Project extends AbstractGenericEntity{
     public void setMainClient(Client mainClient) {
         this.mainClient = mainClient;
     }
+    
     public String getName(){
         return this.name;
     }
