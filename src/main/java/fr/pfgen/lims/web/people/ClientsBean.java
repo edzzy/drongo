@@ -12,26 +12,25 @@ import fr.pfgen.lims.service.ClientService;
 import fr.pfgen.lims.service.ClientTypeService;
 import fr.pfgen.lims.service.ResearchTeamService;
 import fr.pfgen.lims.web.util.FacesUtils;
+import fr.pfgen.lims.web.util.flows.GenericFlow;
+import fr.pfgen.lims.web.util.flows.FlowType;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author eric
  */
-@Controller
+@Component
 @Scope("view")
-@ManagedBean
-public class ClientsBean implements Serializable {
+public class ClientsBean extends GenericFlow implements Serializable {
 
     @Autowired
     ClientService clientService;
@@ -130,6 +129,7 @@ public class ClientsBean implements Serializable {
     public String editClient(){
         FacesUtils.removeObjectFromSessionMap("client");
         FacesUtils.putObjectInSessionMap("client", selectedClient);
+        enterFlow(FlowType.CLIENT);
         return "client?faces-redirect=true";
     }
 
@@ -139,6 +139,7 @@ public class ClientsBean implements Serializable {
     
     public String createNewClient(){
         FacesUtils.removeObjectFromSessionMap("client");
+        enterFlow(FlowType.CLIENT);
         return "client?faces-redirect=true";
     }
     

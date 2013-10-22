@@ -7,6 +7,7 @@ package fr.pfgen.lims.web.people;
 import fr.pfgen.lims.domain.people.ResearchUnit;
 import fr.pfgen.lims.service.ResearchTeamService;
 import fr.pfgen.lims.web.util.FacesUtils;
+import fr.pfgen.lims.web.util.flows.ResearchUnitFlow;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("request")
 @ManagedBean
-public class ResearchUnitCreateBean {
+public class ResearchUnitCreateBean extends ResearchUnitFlow{
     
     private ResearchUnit researchUnit = new ResearchUnit();
     
@@ -44,7 +45,7 @@ public class ResearchUnitCreateBean {
     public String saveNewResearchUnit() {
         try {
             researchTeamService.saveResearchUnit(researchUnit);
-            return "researchTeamCreate?faces-redirect=true";
+            return endFlowAndRedirect();
         } catch (Exception e) {
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
@@ -52,7 +53,7 @@ public class ResearchUnitCreateBean {
     }
 
     public String cancelResearchUnitCreation() {
-        return "researchTeamCreate?faces-redirect=true";
+        return endFlowAndRedirect();
     }
     
     public ResearchUnit getResearchUnit() {

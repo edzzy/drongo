@@ -8,7 +8,7 @@ import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.people.Company;
 import fr.pfgen.lims.service.CompanyService;
 import fr.pfgen.lims.web.util.FacesUtils;
-import java.util.Map;
+import fr.pfgen.lims.web.util.flows.CompanyFlow;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("request")
 @ManagedBean
-public class CompanyCreateBean {
+public class CompanyCreateBean extends CompanyFlow{
 
     private Company company = new Company();
     @Autowired
@@ -53,13 +53,12 @@ public class CompanyCreateBean {
     public String saveNewCompany() {
         try {
             companyService.saveCompany(company);
-            Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-            Client client = (Client) sessionMap.get("client");
+            Client client = ((Client) FacesUtils.getObjectInSessionMap("client"));
 
             if (client != null) {
                 client.setCompany(company);
-                sessionMap.put("wizStep", "typeTab");
-                return "client?faces-redirect=true";
+                FacesUtils.putObjectInSessionMap("wizStep", "typeTab");
+                return endFlowAndRedirect();
             } else {
                 //TODO redirect to company list when created !!!!
                 return null;
@@ -71,12 +70,11 @@ public class CompanyCreateBean {
     }
 
     public String cancelCompanyCreation() {
-        Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-        Client client = (Client) sessionMap.get("client");
+        Client client = ((Client) FacesUtils.getObjectInSessionMap("client"));
 
         if (client != null) {
-            sessionMap.put("wizStep", "typeTab");
-            return "client?faces-redirect=true";
+            FacesUtils.putObjectInSessionMap("wizStep", "typeTab");
+            return endFlowAndRedirect();
         }else{
             //TODO redirect to company list when created !!!!
             return null;

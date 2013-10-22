@@ -42,4 +42,8 @@ public class FacesUtils {
     public static void removeObjectFromSessionMap(String key){
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(key);
     }
+    
+    public static void keepMessageInFlash(){
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+    }
 }

@@ -1,7 +1,6 @@
 package fr.pfgen.lims.domain.people;
 
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -13,11 +12,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -39,12 +35,6 @@ public abstract class AbstractPerson extends AbstractGenericEntity{
     
     @Size(max = 16)
     private String phone;
-    
-    @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date registeredOn;
-    
     
     @ManyToOne(cascade = CascadeType.ALL)
     private AppCredentials appCredentials;
@@ -83,15 +73,7 @@ public abstract class AbstractPerson extends AbstractGenericEntity{
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    public Date getRegisteredOn() {
-        return this.registeredOn;
-    }
-
-    public void setRegisteredOn(Date registeredOn) {
-        this.registeredOn = registeredOn;
-    }
-
+    
     public AppCredentials getAppCredentials() {
         return this.appCredentials;
     }

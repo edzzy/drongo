@@ -16,13 +16,14 @@ import fr.pfgen.lims.service.CompanyService;
 import fr.pfgen.lims.service.PfMemberService;
 import fr.pfgen.lims.service.ResearchTeamService;
 import fr.pfgen.lims.web.util.FacesUtils;
+import fr.pfgen.lims.web.util.flows.ClientFlow;
+import fr.pfgen.lims.web.util.flows.FlowType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
@@ -30,20 +31,17 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author eric
  */
-@Controller
+@Component
 @Scope("view")
-@ManagedBean
-public class ClientBean implements Serializable {
+public class ClientBean extends ClientFlow implements Serializable {
 
-    /**
-     * Creates a new instance of CreateClientBean
-     */
+    
     private static final String internUnitName = "UMR 1087";
     private Client client;
     private List<ClientType> clientTypeList;
@@ -214,8 +212,9 @@ public class ClientBean implements Serializable {
                 clientService.updateClient(client);
                 FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), client.toString(), FacesMessage.SEVERITY_INFO);
             }
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            return "clients?faces-redirect=true";
+            FacesUtils.keepMessageInFlash();
+            return endFlowAndRedirect();
+            //return "clients?faces-redirect=true";
         } catch (Exception e) {
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
@@ -229,7 +228,9 @@ public class ClientBean implements Serializable {
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), client.toString(), FacesMessage.SEVERITY_INFO);
         }
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-        return "clients?faces-redirect=true";
+        
+        return endFlowAndRedirect();
+        //return "clients?faces-redirect=true";
     }
 
     public void validateEmail(FacesContext context, UIComponent component, Object value) {
@@ -307,10 +308,12 @@ public class ClientBean implements Serializable {
     }
 
     public String createNewCompany() {
+        enterFlow(FlowType.COMPANY);
         return "companyCreate?faces-redirect=true";
     }
     
     public String createNewResearchTeam(){
+        enterFlow(FlowType.RESEARCHTEAM);
         return "researchTeamCreate?faces-redirect=true";
     }
 
