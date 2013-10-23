@@ -51,7 +51,7 @@
                     </p:column>
 
                     <p:column style="width: 5px">
-                        <p:commandLink id="editButton" >
+                        <p:commandLink id="editButton" action="#{projectsBean.editProject}">
                             <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
                             <f:setPropertyActionListener value="#{project}" target="#{projectsBean.selectedProject}" />
                         </p:commandLink>

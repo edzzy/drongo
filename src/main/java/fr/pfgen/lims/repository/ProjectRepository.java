@@ -16,5 +16,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends JpaSpecificationExecutor<Project>, JpaRepository<Project, Long> {
     
-    public Project findOneByName(String value);
+    public Project findByName(String value);
 }

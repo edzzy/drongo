@@ -18,6 +18,7 @@ public interface ProjectService {
     public abstract Project updateProject(Project project);
     public abstract Project findProject(Long id);
     public abstract void deleteProject(Project project);
+    public abstract Project findProjectByName(String name);
 
 }
 

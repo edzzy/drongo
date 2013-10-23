@@ -7,6 +7,8 @@ package fr.pfgen.lims.web.project;
 import fr.pfgen.lims.domain.projects.Project;
 import fr.pfgen.lims.service.ProjectService;
 import fr.pfgen.lims.web.util.FacesUtils;
+import fr.pfgen.lims.web.util.flows.FlowType;
+import fr.pfgen.lims.web.util.flows.GenericFlow;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -22,7 +24,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("view")
-public class ProjectsBean implements Serializable{
+public class ProjectsBean extends GenericFlow implements Serializable{
     
     private List<Project> projectList;
     private List<Project> filteredProjects;
@@ -38,7 +40,9 @@ public class ProjectsBean implements Serializable{
     }
     
     public String createNewProject(){
-        return "project?faces-redirect=true";
+        FacesUtils.removeObjectFromSessionMap("project");
+        enterFlow(FlowType.PROJECT);
+        return "/pages/projects/project?faces-redirect=true";
     }
 
     public SelectItem[] getProjectClosedOptions() {
@@ -59,6 +63,13 @@ public class ProjectsBean implements Serializable{
         } catch (Exception e) {
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
+    }
+    
+    public String editProject(){
+        FacesUtils.removeObjectFromSessionMap("project");
+        FacesUtils.putObjectInSessionMap("project", selectedProject);
+        enterFlow(FlowType.PROJECT);
+        return "/pages/projects/project?faces-redirect=true";
     }
 
     public void cancelDeletion() {

@@ -4,24 +4,15 @@
  */
 package fr.pfgen.lims.web.project;
 
-import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.projects.Project;
-import fr.pfgen.lims.service.ClientService;
 import fr.pfgen.lims.service.ProjectService;
 import fr.pfgen.lims.web.util.FacesUtils;
+import fr.pfgen.lims.web.util.flows.ProjectFlow;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import org.primefaces.event.FlowEvent;
-import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -32,59 +23,35 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("view")
-public class ProjectBean implements Serializable {
+public class ProjectBean extends ProjectFlow implements Serializable {
 
     @Autowired
     ProjectService projectService;
     
-    @Autowired
-    ClientService clientService;
+    private Project project;
     
-    private Project project = new Project();
-    private List<Client> clientList;
-    private List<Client> clientSource = new ArrayList<>();
-    private List<Client> clientTarget = new ArrayList<>();
-    private DualListModel<Client> allClients;
-
-    @PostConstruct
-    public void init() {
-        clientList = clientService.findAllActiveClients();
-        clientSource.addAll(clientList);
-        allClients = new DualListModel<>(clientSource, clientTarget);
-    }
-    
-    public void validateMainClient(FacesContext context, UIComponent component, Object value) {
-        Client c = (Client) value;
-
-        /*
-        Project existingProject = projectService.findProjectByNameAndClient(project.getName(), c);
-
-        if ((existingProject != null && existingProject.getId() != project.getId())) {
-            ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("label_error"), "\"" + c.toString() + "\" " + FacesUtils.getI18nValue("project_nameClientExist"), FacesMessage.SEVERITY_ERROR);
+    public void initProject(){
+        if (!FacesContext.getCurrentInstance().isPostback()) {
+            project = (Project) FacesUtils.getObjectInSessionMap("project");
+            if (project==null){
+                project = new Project();
+                FacesUtils.putObjectInSessionMap("project", project);
+            }
         }
-        */
     }
     
-    public void onMainClientSelect(AjaxBehaviorEvent event){
-        clientSource.clear();
-        clientSource.addAll(clientList);
-        clientSource.remove((Client) ((UIOutput) event.getSource()).getValue());
+    public void validateName(FacesContext context, UIComponent component, Object value) {
+        String name = ((String) value).toLowerCase();
+
+        Project existingProject = projectService.findProjectByName(name);
+
+        if ((existingProject != null && existingProject.getId() != project.getId()) || (existingProject != null && existingProject.getId() != project.getId())) {
+            ((UIInput) component).setValid(false);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("label_error"), "\"" + name + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+        }
     }
     
-    public String createNewClient(){
-        FacesUtils.removeObjectFromSessionMap("client");
-        FacesUtils.putObjectInSessionMap("project", project);
-        return "/pages/people/client?faces-redirect=true";
-    }
-    
-    public String createNewContract(){
-        FacesUtils.removeObjectFromSessionMap("project");
-        FacesUtils.putObjectInSessionMap("project", project);
-        return "/pages/projects/contract?faces-redirect=true";
-    }
-    
-    public String saveNewProject(){
+    public String saveProject(){
         try{
             if (project.getId() == null){
                 projectService.saveProject(project);
@@ -93,43 +60,23 @@ public class ProjectBean implements Serializable {
                 projectService.updateProject(project);
                 FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), project.toString(), FacesMessage.SEVERITY_INFO);
             }
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            return "projects?faces-redirect=true";
+            FacesUtils.keepMessageInFlash();
+            return endFlowAndRedirect();
         }catch(Exception e){
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }
     
-    public String onFlowProcess(FlowEvent event) {  
-        if (event.getOldStep().equalsIgnoreCase("clientsTab")){
-            //project.setClients(new HashSet<>(allClients.getTarget()));
+    public String cancelProject(){
+        if (project.getId() == null) {
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
+        } else {
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), project.toString(), FacesMessage.SEVERITY_INFO);
         }
-        return event.getNewStep();
-    }  
-
-    public List<Client> getClientTarget() {
-        return clientTarget;
-    }
-
-    public void setClientTarget(List<Client> clientTarget) {
-        this.clientTarget = clientTarget;
-    }
-
-    public List<Client> getClientSource() {
-        return clientSource;
-    }
-
-    public void setClientSource(List<Client> clientSource) {
-        this.clientSource = clientSource;
-    }
-
-    public DualListModel<Client> getAllClients() {
-        return allClients;
-    }
-
-    public void setAllClients(DualListModel<Client> allClients) {
-        this.allClients = allClients;
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+        
+        return endFlowAndRedirect();
     }
 
     public Project getProject() {
@@ -138,13 +85,5 @@ public class ProjectBean implements Serializable {
 
     public void setProject(Project project) {
         this.project = project;
-    }
-
-    public List<Client> getClientList() {
-        return clientList;
-    }
-
-    public void setClientList(List<Client> clientList) {
-        this.clientList = clientList;
     }
 }
