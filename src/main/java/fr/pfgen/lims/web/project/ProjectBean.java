@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
@@ -25,15 +24,14 @@ import org.primefaces.event.FlowEvent;
 import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author edouard
  */
-@Controller
+@Component
 @Scope("view")
-@ManagedBean
 public class ProjectBean implements Serializable {
 
     @Autowired
@@ -58,12 +56,14 @@ public class ProjectBean implements Serializable {
     public void validateMainClient(FacesContext context, UIComponent component, Object value) {
         Client c = (Client) value;
 
+        /*
         Project existingProject = projectService.findProjectByNameAndClient(project.getName(), c);
 
         if ((existingProject != null && existingProject.getId() != project.getId())) {
             ((UIInput) component).setValid(false);
             FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("label_error"), "\"" + c.toString() + "\" " + FacesUtils.getI18nValue("project_nameClientExist"), FacesMessage.SEVERITY_ERROR);
         }
+        */
     }
     
     public void onMainClientSelect(AjaxBehaviorEvent event){
@@ -103,7 +103,7 @@ public class ProjectBean implements Serializable {
     
     public String onFlowProcess(FlowEvent event) {  
         if (event.getOldStep().equalsIgnoreCase("clientsTab")){
-            project.setClients(new HashSet<>(allClients.getTarget()));
+            //project.setClients(new HashSet<>(allClients.getTarget()));
         }
         return event.getNewStep();
     }  

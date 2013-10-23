@@ -4,7 +4,6 @@
  */
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.projects.Project;
 import fr.pfgen.lims.repository.ActivityRepository;
 import fr.pfgen.lims.repository.ContractRepository;
@@ -54,7 +53,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project findProjectByNameAndClient(String name, Client client) {
-        return projectRepository.findOneByNameAndMainClient(name, client);
+    public void deleteProject(Project project) {
+        projectRepository.delete(project);
     }
 }

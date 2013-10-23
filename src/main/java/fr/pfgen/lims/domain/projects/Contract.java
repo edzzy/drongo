@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 import java.util.Set;
@@ -52,7 +51,6 @@ public class Contract extends AbstractGenericEntity{
     @NotNull
     private ContractStatus status;
     
-    @NotNull
     @ManyToOne
     private Project project;
     
