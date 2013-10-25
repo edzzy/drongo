@@ -4,6 +4,7 @@
  */
 package fr.pfgen.lims.service;
 
+import fr.pfgen.lims.domain.projects.Contract;
 import fr.pfgen.lims.domain.projects.Project;
 import java.util.List;
 
@@ -19,6 +20,10 @@ public interface ProjectService {
     public abstract Project findProject(Long id);
     public abstract void deleteProject(Project project);
     public abstract Project findProjectByName(String name);
+    
+    public abstract void saveContract(Contract contract);
+    public abstract Contract updateContract(Contract contract);
+    public abstract List<Contract> findAllContracts();
 
 }
 

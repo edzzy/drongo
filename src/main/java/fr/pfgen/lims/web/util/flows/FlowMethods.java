@@ -12,5 +12,4 @@ public interface FlowMethods {
     
     public String endFlowAndRedirect();
     public void cleanFlow();
-    //public void enterFlow();
 }

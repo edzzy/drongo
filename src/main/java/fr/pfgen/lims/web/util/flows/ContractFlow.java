@@ -10,27 +10,20 @@ import fr.pfgen.lims.web.util.FacesUtils;
  *
  * @author eric
  */
-public abstract class ClientFlow extends GenericFlow implements FlowMethods {
+public class ContractFlow extends GenericFlow implements FlowMethods{
 
     @Override
     public final String endFlowAndRedirect() {
-        if (flowBean.getFlowAbove(FlowType.CLIENT) != null) {
-            switch (flowBean.getFlowAbove(FlowType.CLIENT)) {
+        if (flowBean.getFlowAbove(FlowType.CONTRACT) != null) {
+            switch (flowBean.getFlowAbove(FlowType.CONTRACT)) {
                 case PROJECT:
                     return redirectToProject();
-                case CONTRACT:
-                    return redirectToContract();
                 default:
                     return redirectToDefault();
             }
         } else {
             return redirectToDefault();
         }
-    }
-    
-    public String redirectToContract(){
-        cleanFlow();
-        return "/pages/projects/contract" + REDIRECT;
     }
     
     public String redirectToProject(){
@@ -40,12 +33,12 @@ public abstract class ClientFlow extends GenericFlow implements FlowMethods {
     
     public String redirectToDefault(){
         cleanFlow();
-        return "/pages/people/clients" + REDIRECT;
+        return "/pages/projects/contracts" + REDIRECT;
     }
 
     @Override
     public final void cleanFlow() {
-        flowBean.endFlow(FlowType.CLIENT);
-        FacesUtils.removeObjectFromSessionMap("client");
+        flowBean.endFlow(FlowType.CONTRACT);
+        FacesUtils.removeObjectFromSessionMap("contract");
     }
 }

@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("request")
-@ManagedBean
 public class CompanyCreateBean extends CompanyFlow{
 
     private Company company = new Company();

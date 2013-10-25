@@ -129,8 +129,7 @@ public class ClientsBean extends GenericFlow implements Serializable {
     public String editClient(){
         FacesUtils.removeObjectFromSessionMap("client");
         FacesUtils.putObjectInSessionMap("client", selectedClient);
-        enterFlow(FlowType.CLIENT);
-        return "client?faces-redirect=true";
+        return enterFlow(FlowType.CLIENT);
     }
 
     public void cancelDeletion() {
@@ -139,8 +138,7 @@ public class ClientsBean extends GenericFlow implements Serializable {
     
     public String createNewClient(){
         FacesUtils.removeObjectFromSessionMap("client");
-        enterFlow(FlowType.CLIENT);
-        return "client?faces-redirect=true";
+        return enterFlow(FlowType.CLIENT);
     }
     
     private SelectItem[] createFilterOptions(List<ClientType> data)  {  

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("request")
-@ManagedBean
 public class ResearchTeamCreateBean extends ResearchTeamFlow{
 
     @Autowired
@@ -44,8 +42,7 @@ public class ResearchTeamCreateBean extends ResearchTeamFlow{
     }
 
     public String createNewResearchUnit() {
-        enterFlow(FlowType.RESEARCHUNIT);
-        return "researchUnitCreate?faces-redirect=true";
+        return enterFlow(FlowType.RESEARCHUNIT);
     }
 
     public String saveNewTeam() {

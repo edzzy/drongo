@@ -4,35 +4,29 @@
  */
 package fr.pfgen.lims.web.people;
 
-import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.service.ClientService;
 import fr.pfgen.lims.service.PfMemberService;
 import fr.pfgen.lims.web.util.FacesUtils;
+import fr.pfgen.lims.web.util.flows.FlowType;
+import fr.pfgen.lims.web.util.flows.GenericFlow;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import org.primefaces.context.RequestContext;
-import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author eric
  */
-@Controller
+@Component
 @Scope("view")
-@ManagedBean
-public class PfMembersBean implements Serializable{
+public class PfMembersBean extends GenericFlow implements Serializable{
     
     @Autowired
     PfMemberService pfMemberService;
@@ -85,7 +79,7 @@ public class PfMembersBean implements Serializable{
         FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), selectedPfMember.toString(), FacesMessage.SEVERITY_INFO);
     }
     
-    public void deleteClient() {
+    public void deletePfMember() {
         try {
             pfMemberService.deletePfMember(selectedPfMember);
             pfMemberList.remove(selectedPfMember);
@@ -96,9 +90,9 @@ public class PfMembersBean implements Serializable{
     }
     
     public String editPfMember(){
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("pfMember");
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("pfMember", selectedPfMember);
-        return "pfMember?faces-redirect=true";
+        FacesUtils.removeObjectFromSessionMap("pfMember");
+        FacesUtils.putObjectInSessionMap("pfMember", selectedPfMember);
+        return enterFlow(FlowType.PFMEMBER);
     }
 
     public void cancelDeletion() {
@@ -107,6 +101,6 @@ public class PfMembersBean implements Serializable{
     
     public String createNewPfMember(){
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("pfMember");
-        return "pfMember?faces-redirect=true";
+        return enterFlow(FlowType.PFMEMBER);
     }
 }

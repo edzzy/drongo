@@ -41,8 +41,7 @@ public class ProjectsBean extends GenericFlow implements Serializable{
     
     public String createNewProject(){
         FacesUtils.removeObjectFromSessionMap("project");
-        enterFlow(FlowType.PROJECT);
-        return "/pages/projects/project?faces-redirect=true";
+        return enterFlow(FlowType.PROJECT);
     }
 
     public SelectItem[] getProjectClosedOptions() {
@@ -68,8 +67,7 @@ public class ProjectsBean extends GenericFlow implements Serializable{
     public String editProject(){
         FacesUtils.removeObjectFromSessionMap("project");
         FacesUtils.putObjectInSessionMap("project", selectedProject);
-        enterFlow(FlowType.PROJECT);
-        return "/pages/projects/project?faces-redirect=true";
+        return enterFlow(FlowType.PROJECT);
     }
 
     public void cancelDeletion() {

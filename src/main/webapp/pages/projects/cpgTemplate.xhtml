@@ -15,7 +15,7 @@
                 <p:menu>  
                     <p:submenu label="#{messages.label_project}">  
                         <p:menuitem value="#{messages.label_list}" outcome="projects.jsf" icon="ui-icon-script" />  
-                        <p:menuitem value="#{messages.label_create}" outcome="project.jsf" icon="ui-icon-plus"/>
+                        <p:menuitem value="#{messages.label_create}" action="#{projectsBean.createNewProject}" icon="ui-icon-plus"/>
                     </p:submenu>
                     
                     <p:submenu label="#{messages.label_contracts}">  

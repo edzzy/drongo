@@ -9,7 +9,6 @@ import fr.pfgen.lims.service.ResearchTeamService;
 import fr.pfgen.lims.web.util.FacesUtils;
 import fr.pfgen.lims.web.util.flows.ResearchUnitFlow;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("request")
-@ManagedBean
 public class ResearchUnitCreateBean extends ResearchUnitFlow{
     
     private ResearchUnit researchUnit = new ResearchUnit();

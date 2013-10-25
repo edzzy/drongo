@@ -45,7 +45,6 @@ public abstract class Equipment extends AbstractGenericEntity{
     
     @NotNull
     @Column(unique = true)
-    @Size(max = 7)
     private String internalNumber;
     
     @NotNull

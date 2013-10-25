@@ -308,13 +308,11 @@ public class ClientBean extends ClientFlow implements Serializable {
     }
 
     public String createNewCompany() {
-        enterFlow(FlowType.COMPANY);
-        return "companyCreate?faces-redirect=true";
+        return enterFlow(FlowType.COMPANY);
     }
     
     public String createNewResearchTeam(){
-        enterFlow(FlowType.RESEARCHTEAM);
-        return "researchTeamCreate?faces-redirect=true";
+        return enterFlow(FlowType.RESEARCHTEAM);
     }
 
     public String getSaveOrEditLabel() {
