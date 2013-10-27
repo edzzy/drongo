@@ -1,8 +1,9 @@
 package fr.pfgen.lims.service;
 
+import fr.pfgen.lims.domain.people.AppCredentials;
 import fr.pfgen.lims.domain.people.PfMember;
+import fr.pfgen.lims.repository.AppCredentialsRepository;
 import fr.pfgen.lims.repository.PfMemberRepository;
-import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class PfMemberServiceImpl implements PfMemberService {
 
     @Autowired
     PfMemberRepository pfMemberRepository;
+    
+    @Autowired
+    AppCredentialsRepository appCredentialsRepository;
 
     @Override
     public long countAllPfMembers() {
@@ -44,12 +48,19 @@ public class PfMemberServiceImpl implements PfMemberService {
 
     @Override
     public void savePfMember(PfMember pfMember) {
-      //  pfMember.setRegisteredOn(new Date());
         pfMember.setFirstname(WordUtils.capitalizeFully(pfMember.getFirstname(), '-', ' '));
         pfMember.setLastname(WordUtils.capitalizeFully(pfMember.getLastname(), '-', ' '));
         pfMember.setEmail(pfMember.getEmail().toLowerCase());
-     //   pfMember.setMemberSince(new Date());
-        pfMember.getAppCredentials().setSalt("saltTest");
+        if (pfMember.getAppCredentials() != null){
+            AppCredentials ac = appCredentialsRepository.findByLogin(pfMember.getAppCredentials().getLogin());
+            if (ac != null){
+                pfMember.setAppCredentials(ac);
+            }else{
+                pfMember.getAppCredentials().setSalt("saltTest");
+                pfMember.setAppCredentials(appCredentialsRepository.save(pfMember.getAppCredentials()));
+            }
+        }
+        
         pfMemberRepository.save(pfMember);
     }
 

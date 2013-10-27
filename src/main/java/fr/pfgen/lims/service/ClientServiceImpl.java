@@ -4,7 +4,6 @@ import fr.pfgen.lims.domain.people.Address;
 import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.repository.AddressRespository;
 import fr.pfgen.lims.repository.ClientRepository;
-import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
