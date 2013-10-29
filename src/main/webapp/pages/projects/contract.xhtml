@@ -72,6 +72,10 @@
                                 <p:outputLabel for="title" value="#{messages.contract_title}" />
                                 <p:inputText id="title" required="true" value="#{contractBean.contract.title}" />
                                 <p:message for="title" />
+                                
+                                <p:outputLabel for="keyword" value="#{messages.contract_keyword}" />
+                                <p:inputText id="keyword" required="true" value="#{contractBean.contract.keyword}" />
+                                <p:message for="keyword" />
 
                                 <p:outputLabel for="description" value="#{messages.contract_description}" />
                                 <p:editor id="description" required="true" value="#{clientBean.client.lastname}" />

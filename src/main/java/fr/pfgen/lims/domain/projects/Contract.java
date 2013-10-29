@@ -65,7 +65,7 @@ public class Contract extends AbstractGenericEntity{
     private Client mainClient;
     
     @NotNull
-    @Size(min = 3,max = 50)
+    @Size(min = 3,max = 100)
     private String title;
     
     @ManyToMany(mappedBy = "involvedInContracts")
@@ -81,7 +81,20 @@ public class Contract extends AbstractGenericEntity{
     @NotNull
     @ManyToOne
     private PfMember pilot;
-   
+    
+    @NotNull
+    @Size(min = 2,max = 20)
+    private String keyword;
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    
     public String getDescription() {
         return description;
     }

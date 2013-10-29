@@ -49,7 +49,7 @@ public class Activity extends AbstractGenericEntity {
     
     @NotNull
     @ManyToOne
-    private ActivityType type;
+    private Application application;
     
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "runs_in_activities",
@@ -101,22 +101,27 @@ public class Activity extends AbstractGenericEntity {
         this.endDate = endDate;
     }
 
-    public ActivityType getType() {
-        return type;
+    public Application getApplication() {
+        return application;
     }
 
-    public void setType(ActivityType type) {
-        this.type = type;
+    public void setApplication(Application application) {
+        this.application = application;
     }
 
-    
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 23 * hash + Objects.hashCode(this.scheduledBeginDate);
-        hash = 23 * hash + Objects.hashCode(this.type);
-        hash = 23 * hash + Objects.hashCode(this.contract);
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.application);
+        hash = 97 * hash + Objects.hashCode(this.contract);
         return hash;
     }
 
@@ -129,10 +134,7 @@ public class Activity extends AbstractGenericEntity {
             return false;
         }
         final Activity other = (Activity) obj;
-        if (!Objects.equals(this.scheduledBeginDate, other.scheduledBeginDate)) {
-            return false;
-        }
-        if (!Objects.equals(this.type, other.type)) {
+        if (!Objects.equals(this.application, other.application)) {
             return false;
         }
         if (!Objects.equals(this.contract, other.contract)) {
@@ -143,7 +145,6 @@ public class Activity extends AbstractGenericEntity {
 
     @Override
     public String toString() {
-        //a revoir !!
-        return "TODO";
+        return this.application.getName();
     }
 }

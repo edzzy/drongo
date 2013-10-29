@@ -53,7 +53,7 @@
                                 <p:message for="office" />
                                 
                                 <p:outputLabel for="memberSince" value="#{messages.pfMember_memberSince}" />
-                                <p:calendar id="memberSince" value="#{pfMemberBean.pfMember.memberSince}" showOn="button" required="true"/>  
+                                <p:calendar id="memberSince" value="#{pfMemberBean.pfMember.memberSince}" navigator="true" showOn="button" required="true"/>  
                                 <p:message for="memberSince" />
                             </h:panelGrid>
                         </p:panel>

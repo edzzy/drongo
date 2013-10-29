@@ -6,6 +6,7 @@ package fr.pfgen.lims.domain.projects;
 
 import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
+import fr.pfgen.lims.domain.util.ApplicationType;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
@@ -21,20 +22,56 @@ import javax.validation.constraints.Size;
  * @author eric
  */
 @Entity
-@Table(name = "activity_types")
-public class ActivityType extends AbstractGenericEntity{
+@Table(name = "applications")
+public class Application extends AbstractGenericEntity{
     
     @NotNull
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 100)
     @Column(unique = true)
     private String name;
     
-    @OneToMany(mappedBy = "type")
+    @NotNull
+    @Size(min = 3, max = 3)
+    @Column(unique = true)
+    private String code;
+    
+    @OneToMany(mappedBy = "application")
     private Set<Activity> activities;
     
     @NotNull
     @ManyToOne
     private PfMember referent;
+    
+    @NotNull
+    private ApplicationType applicationType;
+    
+    @NotNull
+    @OneToMany(mappedBy = "application")
+    private DefaultApplicationParams defaultParams;
+
+    public DefaultApplicationParams getDefaultParams() {
+        return defaultParams;
+    }
+
+    public void setDefaultParams(DefaultApplicationParams defaultParams) {
+        this.defaultParams = defaultParams;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public ApplicationType getApplicationType() {
+        return applicationType;
+    }
+
+    public void setApplicationType(ApplicationType applicationType) {
+        this.applicationType = applicationType;
+    }
 
     public String getName() {
         return name;
@@ -63,7 +100,7 @@ public class ActivityType extends AbstractGenericEntity{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.name);
+        hash = 37 * hash + Objects.hashCode(this.code);
         return hash;
     }
 
@@ -75,8 +112,8 @@ public class ActivityType extends AbstractGenericEntity{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ActivityType other = (ActivityType) obj;
-        if (!Objects.equals(this.name, other.name)) {
+        final Application other = (Application) obj;
+        if (!Objects.equals(this.code, other.code)) {
             return false;
         }
         return true;
@@ -84,6 +121,6 @@ public class ActivityType extends AbstractGenericEntity{
 
     @Override
     public String toString() {
-        return this.name;
+        return this.name+" ("+this.code+")";
     }
 }
