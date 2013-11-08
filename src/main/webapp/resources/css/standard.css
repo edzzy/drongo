@@ -88,6 +88,13 @@ a:visited {
     vertical-align: top;
 }
 */
+.center{
+    margin-left:auto;
+    margin-right:auto;
+    width:70%;
+    background-color:#b0e0e6;
+}
+
 .ui-dock-container-top{
     z-index: 30;
     position:relative;
