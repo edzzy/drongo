@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -31,7 +30,7 @@ public class ResearchTeam extends AbstractGenericEntity{
     private String name;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
     private ResearchUnit researchUnit;
     
     @OneToMany(mappedBy = "researchTeam", cascade = CascadeType.ALL)

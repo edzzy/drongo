@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:composition template="cpgTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{activityBean.initActivity}" /> 
+            </f:metadata>
+
+            <h:form>
+                <p:growl id="activityMessages" life="2500" showDetail="true" />
+
+                <p:layout style="min-width:400px;min-height:200px;" id="layout">  
+                    <p:layoutUnit position="west" resizable="false" size="50%">  
+                        <h2 style="text-align:center;">#{enums.applicationType_experimental}</h2>
+                        <h:panelGrid columns="3">
+                            <p:outputLabel for="mainClient" value="#{messages.project_mainClient}" />
+                            <h:panelGrid columns="2">
+                                <p:selectOneMenu id="mainClient" required="true" value="#{contractBean.contract.mainClient}" converter="#{clientConverter}">
+                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />  
+                                    <f:selectItems value="#{contractBean.clientList}" />
+                                    <p:ajax listener="#{contractBean.onMainClientSelect}" update="panelClients"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="#{messages.label_new}" icon="ui-icon-plus" action="#{contractBean.createNewClient}">
+                                    <o:ignoreValidationFailed />
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:message for="mainClient" />
+                        </h:panelGrid>
+
+                    </p:layoutUnit>  
+
+                    <p:layoutUnit position="center" resizable="false" size="50%">  
+                        <h2 style="text-align:center;">#{enums.applicationType_bioinformatics}</h2>
+                    </p:layoutUnit>  
+                </p:layout>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

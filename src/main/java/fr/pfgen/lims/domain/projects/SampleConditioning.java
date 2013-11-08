@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.pfgen.lims.domain.util;
+package fr.pfgen.lims.domain.projects;
 
 /**
  *
  * @author eric
  */
-public enum SampleType {
-    ADN,ARN,PCRPRODUCT,PLASMID,OTHER
+public enum SampleConditioning {
+    PLATE,STRIPWELLS,TUBES,OTHER
 }

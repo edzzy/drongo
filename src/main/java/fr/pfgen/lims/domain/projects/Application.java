@@ -6,13 +6,15 @@ package fr.pfgen.lims.domain.projects;
 
 import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
-import fr.pfgen.lims.domain.util.ApplicationType;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,30 +33,50 @@ public class Application extends AbstractGenericEntity{
     private String name;
     
     @NotNull
-    @Size(min = 3, max = 3)
+    @Size(min = 3, max = 5)
     @Column(unique = true)
     private String code;
     
+    @NotNull
+    private ApplicationType type;
+    
     @OneToMany(mappedBy = "application")
     private Set<Activity> activities;
+    
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    private ApplicationCategory category;
     
     @NotNull
     @ManyToOne
     private PfMember referent;
     
-    @NotNull
-    private ApplicationType applicationType;
-    
-    @NotNull
-    @OneToMany(mappedBy = "application")
-    private DefaultApplicationParams defaultParams;
+    @OneToOne(optional=false, cascade = CascadeType.ALL)
+    @JoinColumn(
+    	name="application_params_id", unique=true, nullable=false, updatable=true)
+    private ApplicationParams applicationParams;
 
-    public DefaultApplicationParams getDefaultParams() {
-        return defaultParams;
+    public ApplicationType getType() {
+        return type;
     }
 
-    public void setDefaultParams(DefaultApplicationParams defaultParams) {
-        this.defaultParams = defaultParams;
+    public void setType(ApplicationType type) {
+        this.type = type;
+    }
+
+    public ApplicationCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ApplicationCategory category) {
+        this.category = category;
+    }
+
+    public ApplicationParams getApplicationParams() {
+        return applicationParams;
+    }
+
+    public void setApplicationParams(ApplicationParams applicationParams) {
+        this.applicationParams = applicationParams;
     }
 
     public String getCode() {
@@ -64,15 +86,7 @@ public class Application extends AbstractGenericEntity{
     public void setCode(String code) {
         this.code = code;
     }
-
-    public ApplicationType getApplicationType() {
-        return applicationType;
-    }
-
-    public void setApplicationType(ApplicationType applicationType) {
-        this.applicationType = applicationType;
-    }
-
+    
     public String getName() {
         return name;
     }

@@ -9,5 +9,5 @@ package fr.pfgen.lims.domain.projects;
  * @author edouard
  */
 public enum  ContractStatus {
-    CLOSED,WAIT,ABORD,PROGRESS;
+    CLOSED,PENDING,ABORTED,ONGOING;
 }

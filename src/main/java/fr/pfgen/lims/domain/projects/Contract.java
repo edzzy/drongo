@@ -16,10 +16,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 /**
  *
@@ -32,26 +34,6 @@ public class Contract extends AbstractGenericEntity{
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
     private Date signatureDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date beginDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date endDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date dueDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date scheduleBeginDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date scheduleDueDate;
     
     @ManyToOne
     private Project project;
@@ -71,9 +53,9 @@ public class Contract extends AbstractGenericEntity{
     @ManyToMany(mappedBy = "involvedInContracts")
     private Set<Client> involvedClients;
     
-    @NotNull
-    private boolean signed = false;
-
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
+    private Set<Activity> activities;
+   
     @Lob
     @NotNull
     private String description;
@@ -85,6 +67,36 @@ public class Contract extends AbstractGenericEntity{
     @NotNull
     @Size(min = 2,max = 20)
     private String keyword;
+    
+    @Size(max = 50)
+    private String reminderKeywords;
+    
+    @NotNull
+    private ContractStatus status = ContractStatus.PENDING;
+
+    public Set<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(Set<Activity> activities) {
+        this.activities = activities;
+    }
+
+    public String getReminderKeywords() {
+        return reminderKeywords;
+    }
+
+    public ContractStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ContractStatus status) {
+        this.status = status;
+    }
+
+    public void setReminderKeywords(String reminderKeywords) {
+        this.reminderKeywords = reminderKeywords;
+    }
 
     public String getKeyword() {
         return keyword;
@@ -94,7 +106,6 @@ public class Contract extends AbstractGenericEntity{
         this.keyword = keyword;
     }
 
-    
     public String getDescription() {
         return description;
     }
@@ -120,27 +131,11 @@ public class Contract extends AbstractGenericEntity{
     }
 
     public boolean isSigned() {
-        return signed;
-    }
-
-    public void setSigned(boolean signed) {
-        this.signed = signed;
-    }
-
-    public Date getScheduleBeginDate() {
-        return scheduleBeginDate;
-    }
-
-    public void setScheduleBeginDate(Date scheduleBeginDate) {
-        this.scheduleBeginDate = scheduleBeginDate;
-    }
-
-    public Date getScheduleDueDate() {
-        return scheduleDueDate;
-    }
-
-    public void setScheduleDueDate(Date scheduleDueDate) {
-        this.scheduleDueDate = scheduleDueDate;
+        if (signatureDate == null){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     public String getContractNumber() {
@@ -173,30 +168,6 @@ public class Contract extends AbstractGenericEntity{
 
     public void setSignatureDate(Date signatureDate) {
         this.signatureDate = signatureDate;
-    }
-
-    public Date getBeginDate() {
-        return beginDate;
-    }
-
-    public void setBeginDate(Date beginDate) {
-        this.beginDate = beginDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
     }
 
     public Project getProject() {

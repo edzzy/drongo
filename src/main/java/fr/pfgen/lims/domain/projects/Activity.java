@@ -6,7 +6,6 @@ package fr.pfgen.lims.domain.projects;
 
 import fr.pfgen.lims.domain.runs.AbstractRun;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -15,11 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -28,24 +25,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Table(name = "activities")
 public class Activity extends AbstractGenericEntity {
-
-    @NotNull
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date scheduledBeginDate;
     
-    @NotNull
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date scheduledDueDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date beginDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date endDate;
+    @OneToOne(optional=false)
+    @JoinColumn(
+    	name="activity_params_id", unique=true, nullable=false, updatable=false)
+    private ActivityParams activityParams;
     
     @NotNull
     @ManyToOne
@@ -58,8 +42,16 @@ public class Activity extends AbstractGenericEntity {
     private Set<AbstractRun> runs;
     
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Contract contract;
+
+    public ActivityParams getActivityParams() {
+        return activityParams;
+    }
+
+    public void setActivityParams(ActivityParams activityParams) {
+        this.activityParams = activityParams;
+    }
 
     public Set<AbstractRun> getRuns() {
         return runs;
@@ -67,38 +59,6 @@ public class Activity extends AbstractGenericEntity {
 
     public void setRuns(Set<AbstractRun> runs) {
         this.runs = runs;
-    }
-
-    public Date getScheduledBeginDate() {
-        return scheduledBeginDate;
-    }
-
-    public void setScheduledBeginDate(Date scheduledBeginDate) {
-        this.scheduledBeginDate = scheduledBeginDate;
-    }
-
-    public Date getScheduledDueDate() {
-        return scheduledDueDate;
-    }
-
-    public void setScheduledDueDate(Date scheduledDueDate) {
-        this.scheduledDueDate = scheduledDueDate;
-    }
-
-    public Date getBeginDate() {
-        return beginDate;
-    }
-
-    public void setBeginDate(Date beginDate) {
-        this.beginDate = beginDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     public Application getApplication() {

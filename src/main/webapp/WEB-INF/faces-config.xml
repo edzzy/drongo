@@ -10,8 +10,12 @@
             <base-name>fr.pfgen.lims.web.i18n.messages</base-name>
             <var>messages</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>fr.pfgen.lims.web.i18n.enums</base-name>
+            <var>enums</var>
+        </resource-bundle>
         <locale-config>
-            <default-locale>en</default-locale>
+            <default-locale>fr</default-locale>
             <supported-locale>en</supported-locale>
             <supported-locale>fr</supported-locale>
             <supported-locale>de</supported-locale>

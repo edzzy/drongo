@@ -4,23 +4,20 @@
  */
 package fr.pfgen.lims.domain.projects;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author eric
  */
 @Entity
-@Table(name = "default_application_params")
-public class DefaultApplicationParams extends AbstractContractParam{
+@Table(name = "application_params")
+public class ApplicationParams extends AbstractActivityParams{
     
-    @NotNull
-    @Column(unique = true)
-    @ManyToOne
+    @OneToOne(optional = false, mappedBy = "applicationParams", cascade = CascadeType.ALL)
     private Application application;
 
     public Application getApplication() {

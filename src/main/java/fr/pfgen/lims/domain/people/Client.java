@@ -28,10 +28,10 @@ public class Client extends AbstractPerson{
     @NotNull
     private boolean deleted = false;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private ResearchTeam researchTeam;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Company company;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mainClient")

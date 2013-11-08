@@ -5,8 +5,10 @@
 package fr.pfgen.lims.web.project;
 
 import fr.pfgen.lims.domain.people.Client;
+import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.projects.Contract;
 import fr.pfgen.lims.service.ClientService;
+import fr.pfgen.lims.service.PfMemberService;
 import fr.pfgen.lims.service.ProjectService;
 import fr.pfgen.lims.web.util.FacesUtils;
 import fr.pfgen.lims.web.util.flows.ContractFlow;
@@ -39,18 +41,32 @@ public class ContractBean extends ContractFlow implements Serializable{
     @Autowired
     ClientService clientService;
     
+    @Autowired
+    PfMemberService pfMemberService;
+    
     private Contract contract = new Contract();
     private List<Client> clientList;
     private List<Client> clientSource = new ArrayList<>();
     private List<Client> clientTarget = new ArrayList<>();
     private DualListModel<Client> allClients;
+    private List<PfMember> pfMemberList;
+    private String wizStep;
     
     public void initContract(){
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            contract = (Contract) FacesUtils.getObjectInSessionMap("contract");
+            contract = (Contract) FacesUtils.getObjectInSessionMap("contract");     
+            wizStep = (String) FacesUtils.getObjectInSessionMap("wizStep");
+            
+            FacesUtils.removeObjectFromSessionMap("wizStep");
+            
+            if (wizStep == null) {
+                wizStep = "clientsTab";
+            }
+            
             if (contract==null){
                 contract = new Contract();
                 FacesUtils.putObjectInSessionMap("contract", contract);
+                wizStep = "clientsTab";
             }
         }
     }
@@ -58,6 +74,7 @@ public class ContractBean extends ContractFlow implements Serializable{
     @PostConstruct
     public void init() {
         clientList = clientService.findAllActiveClients();
+        pfMemberList = pfMemberService.findAllActivePfMembers();
         clientSource.addAll(clientList);
         allClients = new DualListModel<>(clientSource, clientTarget);
     }
@@ -138,5 +155,21 @@ public class ContractBean extends ContractFlow implements Serializable{
 
     public void setClientList(List<Client> clientList) {
         this.clientList = clientList;
+    }
+
+    public List<PfMember> getPfMemberList() {
+        return pfMemberList;
+    }
+
+    public void setPfMemberList(List<PfMember> pfMemberList) {
+        this.pfMemberList = pfMemberList;
+    }
+
+    public String getWizStep() {
+        return wizStep;
+    }
+
+    public void setWizStep(String wizStep) {
+        this.wizStep = wizStep;
     }
 }
