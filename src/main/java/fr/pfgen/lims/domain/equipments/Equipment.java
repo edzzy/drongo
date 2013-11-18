@@ -7,10 +7,13 @@ package fr.pfgen.lims.domain.equipments;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -59,6 +62,9 @@ public abstract class Equipment extends AbstractGenericEntity{
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date acquisitionDate;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipement")
+    private Set<Intervention> interventions;
     
     public String getInternalNumber() {
         return internalNumber;
