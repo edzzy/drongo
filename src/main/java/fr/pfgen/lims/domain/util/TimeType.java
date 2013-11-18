@@ -10,21 +10,25 @@ package fr.pfgen.lims.domain.util;
  */
 public enum TimeType {
 
-    YEAR("year", 365),
-    MONTH("month", 30),
-    WEEK("week", 7),
-    DAY("day", 1);
+    YEAR("timeType_year", 365),
+    MONTH("timeType_month", 30),
+    WEEK("timeType_week", 7),
+    DAY("timeType_day", 1);
     
-    private final String type;
+    private final String label;
     private final int nbDays;
 
-    private TimeType(String type, int nbDays) {
-        this.type = type;
+    private TimeType(String label, int nbDays) {
+        this.label = label;
         this.nbDays = nbDays;
     }
 
-    public String getType() {
-        return type;
+    public String getLabel() {
+        return label;
+    }
+    
+    public int nbDays(){
+        return nbDays;
     }
 
     public int toDays(int multiplier) {

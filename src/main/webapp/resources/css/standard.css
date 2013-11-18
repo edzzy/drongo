@@ -103,7 +103,7 @@ a:visited {
 }
 
 .ui-panelgrid tr, .ui-panelgrid td {
-    border:0 !important;
+    border:0;
 }
 
 a.ui-dock-item-top {
@@ -117,7 +117,11 @@ a.ui-dock-item-top {
 }
 
 .topAligned td{
-    vertical-align: top !important;
+    vertical-align: top;
+}
+
+.topAlign{
+    vertical-align: top;
 }
 
 .ui-layout-unit-content{
