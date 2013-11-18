@@ -4,17 +4,13 @@
  */
 package fr.pfgen.lims.domain.projects;
 
-import fr.pfgen.lims.domain.runs.AbstractRun;
+import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -26,39 +22,54 @@ import javax.validation.constraints.NotNull;
 @Table(name = "activities")
 public class Activity extends AbstractGenericEntity {
     
-    @OneToOne(optional=false)
-    @JoinColumn(
-    	name="activity_params_id", unique=true, nullable=false, updatable=false)
-    private ActivityParams activityParams;
-    
     @NotNull
     @ManyToOne
     private Application application;
-    
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "runs_in_activities",
-            joinColumns = { @JoinColumn(name = "run_id")},
-            inverseJoinColumns = { @JoinColumn(name = "activity_id")})
-    private Set<AbstractRun> runs;
+
+    @NotNull
+    private ApplicationType type;
     
     @NotNull
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    private Contract contract;
+    @ManyToOne
+    private PfMember referent;
+    
+    @OneToMany(mappedBy = "experimentalActivity")
+    private Set<ApplicationParams> experimentalParams;
+    
+    @OneToMany(mappedBy = "analysisActivity")
+    private Set<ApplicationParams> analysisParams;
 
-    public ActivityParams getActivityParams() {
-        return activityParams;
+    public Set<ApplicationParams> getExperimentalParams() {
+        return experimentalParams;
     }
 
-    public void setActivityParams(ActivityParams activityParams) {
-        this.activityParams = activityParams;
+    public void setExperimentalParams(Set<ApplicationParams> experimentalParams) {
+        this.experimentalParams = experimentalParams;
     }
 
-    public Set<AbstractRun> getRuns() {
-        return runs;
+    public Set<ApplicationParams> getAnalysisParams() {
+        return analysisParams;
     }
 
-    public void setRuns(Set<AbstractRun> runs) {
-        this.runs = runs;
+    public void setAnalysisParams(Set<ApplicationParams> analysisParams) {
+        this.analysisParams = analysisParams;
+    }
+
+
+    public PfMember getReferent() {
+        return referent;
+    }
+
+    public void setReferent(PfMember referent) {
+        this.referent = referent;
+    }
+
+    public ApplicationType getType() {
+        return type;
+    }
+
+    public void setType(ApplicationType type) {
+        this.type = type;
     }
 
     public Application getApplication() {
@@ -69,19 +80,11 @@ public class Activity extends AbstractGenericEntity {
         this.application = application;
     }
 
-    public Contract getContract() {
-        return contract;
-    }
-
-    public void setContract(Contract contract) {
-        this.contract = contract;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.application);
-        hash = 97 * hash + Objects.hashCode(this.contract);
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.application);
+        hash = 89 * hash + Objects.hashCode(this.type);
         return hash;
     }
 
@@ -97,14 +100,9 @@ public class Activity extends AbstractGenericEntity {
         if (!Objects.equals(this.application, other.application)) {
             return false;
         }
-        if (!Objects.equals(this.contract, other.contract)) {
+        if (this.type != other.type) {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return this.application.getName();
     }
 }

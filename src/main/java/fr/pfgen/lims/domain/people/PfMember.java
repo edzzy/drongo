@@ -54,6 +54,10 @@ public class PfMember extends AbstractPerson{
     public void setRuns(Set<AbstractRun> runs) {
         this.runs = runs;
     }
+    
+    public String getOffice() {
+        return office;
+    }
 
     public Set<Application> getReferentOfApplications() {
         return referentOfApplications;
@@ -61,9 +65,6 @@ public class PfMember extends AbstractPerson{
 
     public void setReferentOfApplications(Set<Application> referentOfApplications) {
         this.referentOfApplications = referentOfApplications;
-    }
-    public String getOffice() {
-        return office;
     }
 
     public void setOffice(String office) {

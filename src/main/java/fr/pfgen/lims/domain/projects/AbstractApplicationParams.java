@@ -17,38 +17,20 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "abstract_activity_params")
-public abstract class AbstractActivityParams extends AbstractGenericEntity{
-    
-    //Echantillons
-    private Integer nbSamples;
+@Table(name = "abstract_application_params")
+public abstract class AbstractApplicationParams extends AbstractGenericEntity{
     
     @Size(max = 50)
     private String sampleType;
     
-    @Size(max = 50)
-    private String sampleConditioning;
-    
-    private Integer sampleTemperature;
-    
     private Integer daysToDestructionSamples;
     
-    //planification
     private Integer daysToAccomplish;
-    
-    //Rendu et sauvegarde
+
     @Size(max = 50)
     private String resultsSentBy;
     
     private Integer daysOfBackupResults;
-
-    public Integer getNbSamples() {
-        return nbSamples;
-    }
-
-    public void setNbSamples(Integer nbSamples) {
-        this.nbSamples = nbSamples;
-    }
 
     public String getSampleType() {
         return sampleType;
@@ -56,22 +38,6 @@ public abstract class AbstractActivityParams extends AbstractGenericEntity{
 
     public void setSampleType(String sampleType) {
         this.sampleType = sampleType;
-    }
-
-    public String getSampleConditioning() {
-        return sampleConditioning;
-    }
-
-    public void setSampleConditioning(String sampleConditioning) {
-        this.sampleConditioning = sampleConditioning;
-    }
-
-    public Integer getSampleTemperature() {
-        return sampleTemperature;
-    }
-
-    public void setSampleTemperature(Integer sampleTemperature) {
-        this.sampleTemperature = sampleTemperature;
     }
 
     public Integer getDaysToDestructionSamples() {

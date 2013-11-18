@@ -73,7 +73,7 @@ public class ActivityBean extends ActivityFlow implements Serializable {
     
     public void onInfoAppChanged(AjaxBehaviorEvent event){
         Application app = (Application) ((UIOutput) event.getSource()).getValue();
-        switchValuesAccordingToApplication(app, ApplicationType.BIOINFORMATICS);
+        switchValuesAccordingToApplication(app, ApplicationType.ANALYSIS);
     }
 
     public boolean isInfoChecked() {
@@ -121,10 +121,10 @@ public class ActivityBean extends ActivityFlow implements Serializable {
         ActivityParams actParams = appParamsToActParams(app);
         switch(appType){
             case EXPERIMENTAL:
-                expActivity.setActivityParams(actParams);
+                //expActivity.setActivityParams(actParams);
                 break;
-            case BIOINFORMATICS:
-                infoActivity.setActivityParams(actParams);
+            case ANALYSIS:
+                //infoActivity.setActivityParams(actParams);
                 break;
             default:
                 
@@ -133,6 +133,7 @@ public class ActivityBean extends ActivityFlow implements Serializable {
     }
     
     private ActivityParams appParamsToActParams(Application app){
+        /*
         ActivityParams actParams = new ActivityParams();
         
         actParams.setNbSamples(app.getApplicationParams().getNbSamples());
@@ -148,10 +149,13 @@ public class ActivityBean extends ActivityFlow implements Serializable {
         
         actParams.setDaysOfBackupResults(app.getApplicationParams().getDaysOfBackupResults());
         
-        return actParams;        
+        return actParams;
+        */
+        return null;
     }
     
     private void populateApplicationLists(){
+        /*
         List<Application> expAppList = applicationService.findAllExperimentalApplications();
         List<Application> infoAppList = applicationService.findAllBioinformaticsApplications();
 
@@ -182,6 +186,7 @@ public class ActivityBean extends ActivityFlow implements Serializable {
             group.setSelectItems(items);
             availableInfoItems.add(group);
         }
+        */ 
     }
     
     private Map<ApplicationCategory, List<Application>> getAppCat2AppList(List<Application> appList){

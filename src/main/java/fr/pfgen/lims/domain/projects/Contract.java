@@ -16,12 +16,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 /**
  *
@@ -34,9 +32,6 @@ public class Contract extends AbstractGenericEntity{
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
     private Date signatureDate;
-    
-    @ManyToOne
-    private Project project;
     
     @NotNull
     @Column(unique = true)
@@ -53,9 +48,6 @@ public class Contract extends AbstractGenericEntity{
     @ManyToMany(mappedBy = "involvedInContracts")
     private Set<Client> involvedClients;
     
-    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
-    private Set<Activity> activities;
-   
     @Lob
     @NotNull
     private String description;
@@ -73,14 +65,6 @@ public class Contract extends AbstractGenericEntity{
     
     @NotNull
     private ContractStatus status = ContractStatus.PENDING;
-
-    public Set<Activity> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(Set<Activity> activities) {
-        this.activities = activities;
-    }
 
     public String getReminderKeywords() {
         return reminderKeywords;
@@ -168,14 +152,6 @@ public class Contract extends AbstractGenericEntity{
 
     public void setSignatureDate(Date signatureDate) {
         this.signatureDate = signatureDate;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 
     @Override

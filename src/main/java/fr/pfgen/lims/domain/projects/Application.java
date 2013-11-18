@@ -11,10 +11,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -37,10 +35,7 @@ public class Application extends AbstractGenericEntity{
     @Column(unique = true)
     private String code;
     
-    @NotNull
-    private ApplicationType type;
-    
-    @OneToMany(mappedBy = "application")
+    @OneToMany(mappedBy = "application",cascade = CascadeType.ALL)
     private Set<Activity> activities;
     
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
@@ -49,19 +44,6 @@ public class Application extends AbstractGenericEntity{
     @NotNull
     @ManyToOne
     private PfMember referent;
-    
-    @OneToOne(optional=false, cascade = CascadeType.ALL)
-    @JoinColumn(
-    	name="application_params_id", unique=true, nullable=false, updatable=true)
-    private ApplicationParams applicationParams;
-
-    public ApplicationType getType() {
-        return type;
-    }
-
-    public void setType(ApplicationType type) {
-        this.type = type;
-    }
 
     public ApplicationCategory getCategory() {
         return category;
@@ -70,15 +52,7 @@ public class Application extends AbstractGenericEntity{
     public void setCategory(ApplicationCategory category) {
         this.category = category;
     }
-
-    public ApplicationParams getApplicationParams() {
-        return applicationParams;
-    }
-
-    public void setApplicationParams(ApplicationParams applicationParams) {
-        this.applicationParams = applicationParams;
-    }
-
+    
     public String getCode() {
         return code;
     }

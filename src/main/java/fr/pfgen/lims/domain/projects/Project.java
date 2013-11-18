@@ -6,12 +6,9 @@ package fr.pfgen.lims.domain.projects;
 
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Objects;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,9 +31,6 @@ public class Project extends AbstractGenericEntity{
     
     @NotNull
     private boolean closed = false;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
-    private Set<Contract> contracts;
 
     public boolean isClosed() {
         return closed;
@@ -61,15 +55,7 @@ public class Project extends AbstractGenericEntity{
     public void setName(String name){
         this.name = name;
     }
-
-    public Set<Contract> getContracts() {
-        return contracts;
-    }
-
-    public void setContracts(Set<Contract> contracts) {
-        this.contracts = contracts;
-    }
-
+    
     @Override
     public int hashCode() {
         int hash = 3;

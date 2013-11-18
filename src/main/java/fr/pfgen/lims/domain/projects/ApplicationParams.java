@@ -4,9 +4,8 @@
  */
 package fr.pfgen.lims.domain.projects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -15,16 +14,27 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "application_params")
-public class ApplicationParams extends AbstractActivityParams{
+public class ApplicationParams extends AbstractApplicationParams{
     
-    @OneToOne(optional = false, mappedBy = "applicationParams", cascade = CascadeType.ALL)
-    private Application application;
+    @ManyToOne
+    private Activity experimentalActivity;
+    
+    @ManyToOne
+    private Activity analysisActivity; 
 
-    public Application getApplication() {
-        return application;
+    public Activity getExperimentalActivity() {
+        return experimentalActivity;
     }
 
-    public void setApplication(Application application) {
-        this.application = application;
+    public void setExperimentalActivity(Activity experimentalActivity) {
+        this.experimentalActivity = experimentalActivity;
     }
+
+    public Activity getAnalysisActivity() {
+        return analysisActivity;
+    }
+
+    public void setAnalysisActivity(Activity analysisActivity) {
+        this.analysisActivity = analysisActivity;
+    }      
 }

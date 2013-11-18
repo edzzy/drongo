@@ -7,7 +7,6 @@ package fr.pfgen.lims.domain.projects;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;

@@ -18,9 +18,11 @@ public interface ApplicationService {
     
     public abstract void saveApplicationCategory(ApplicationCategory applicationCategory);
     
-    public abstract List<Application> findAllBioinformaticsApplications();
-    
-    public abstract List<Application> findAllExperimentalApplications();
-    
     public abstract List<ApplicationCategory> findAllApplicationCategories();
+    
+    public abstract List<Application> findAllApplications();
+    
+    public abstract boolean expActivityExistsForApplication(Application app);
+    
+    public abstract boolean anaActivityExistsForApplication(Application app);
 }

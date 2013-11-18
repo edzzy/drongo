@@ -6,7 +6,10 @@ package fr.pfgen.lims.web.project;
 
 import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.people.PfMember;
+import fr.pfgen.lims.domain.projects.Application;
+import fr.pfgen.lims.domain.projects.ApplicationCategory;
 import fr.pfgen.lims.domain.projects.Contract;
+import fr.pfgen.lims.service.ApplicationService;
 import fr.pfgen.lims.service.ClientService;
 import fr.pfgen.lims.service.PfMemberService;
 import fr.pfgen.lims.service.ProjectService;
@@ -15,13 +18,17 @@ import fr.pfgen.lims.web.util.flows.ContractFlow;
 import fr.pfgen.lims.web.util.flows.FlowType;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +41,16 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("view")
-public class ContractBean extends ContractFlow implements Serializable{
+public class ContractBean extends ContractFlow implements Serializable {
+
     @Autowired
     ProjectService projectService;
-    
     @Autowired
     ClientService clientService;
-    
     @Autowired
     PfMemberService pfMemberService;
-    
+    @Autowired
+    ApplicationService applicationService;
     private Contract contract = new Contract();
     private List<Client> clientList;
     private List<Client> clientSource = new ArrayList<>();
@@ -51,19 +58,25 @@ public class ContractBean extends ContractFlow implements Serializable{
     private DualListModel<Client> allClients;
     private List<PfMember> pfMemberList;
     private String wizStep;
-    
-    public void initContract(){
+    private List<SelectItem> availableApplications;
+    private Application selectedApplication;
+    private boolean expActExistForApp;
+    private boolean anaActExistForApp;
+    private boolean expChecked;
+    private boolean anaChecked;
+
+    public void initContract() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            contract = (Contract) FacesUtils.getObjectInSessionMap("contract");     
+            contract = (Contract) FacesUtils.getObjectInSessionMap("contract");
             wizStep = (String) FacesUtils.getObjectInSessionMap("wizStep");
-            
+
             FacesUtils.removeObjectFromSessionMap("wizStep");
-            
+
             if (wizStep == null) {
                 wizStep = "clientsTab";
             }
-            
-            if (contract==null){
+
+            if (contract == null) {
                 contract = new Contract();
                 FacesUtils.putObjectInSessionMap("contract", contract);
                 wizStep = "clientsTab";
@@ -73,49 +86,104 @@ public class ContractBean extends ContractFlow implements Serializable{
 
     @PostConstruct
     public void init() {
+        populateApplicationLists();
         clientList = clientService.findAllActiveClients();
         pfMemberList = pfMemberService.findAllActivePfMembers();
         clientSource.addAll(clientList);
         allClients = new DualListModel<>(clientSource, clientTarget);
     }
-    
-    public void onMainClientSelect(AjaxBehaviorEvent event){
+
+    public void onMainClientSelect(AjaxBehaviorEvent event) {
         clientSource.clear();
         clientSource.addAll(clientList);
         clientSource.remove((Client) ((UIOutput) event.getSource()).getValue());
     }
-    
-    public String createNewClient(){
+
+    public String createNewClient() {
         return enterFlow(FlowType.CLIENT);
     }
-    
-    public String createNewProject(){
+
+    public String createNewProject() {
         return enterFlow(FlowType.PROJECT);
     }
-    
-    public String saveNewContract(){
-        try{
-            if (contract.getId() == null){
+
+    public String saveNewContract() {
+        try {
+            if (contract.getId() == null) {
                 projectService.saveContract(contract);
                 FacesUtils.addMessage(null, FacesUtils.getI18nValue("newContract_added"), contract.toString(), FacesMessage.SEVERITY_INFO);
-            }else{
+            } else {
                 projectService.updateContract(contract);
                 FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), contract.toString(), FacesMessage.SEVERITY_INFO);
             }
             FacesUtils.keepMessageInFlash();
             return endFlowAndRedirect();
-        }catch(Exception e){
+        } catch (Exception e) {
             FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }
-    
-    public String onFlowProcess(FlowEvent event) {  
-        if (event.getOldStep().equalsIgnoreCase("clientsTab")){
+
+    public String onFlowProcess(FlowEvent event) {
+        if (event.getOldStep().equalsIgnoreCase("clientsTab")) {
             contract.setInvolvedClients(new HashSet<>(allClients.getTarget()));
         }
         return event.getNewStep();
-    }  
+    }
+
+    public void onAppChanged(AjaxBehaviorEvent event) {
+        Application app = (Application) ((UIOutput) event.getSource()).getValue();
+        expActExistForApp = applicationService.expActivityExistsForApplication(app);
+        anaActExistForApp = applicationService.anaActivityExistsForApplication(app);
+    }
+
+    public boolean isExpActExistForApp() {
+        return expActExistForApp;
+    }
+
+    public void setExpActExistForApp(boolean expActExistForApp) {
+        this.expActExistForApp = expActExistForApp;
+    }
+
+    public boolean isAnaActExistForApp() {
+        return anaActExistForApp;
+    }
+
+    public void setAnaActExistForApp(boolean anaActExistForApp) {
+        this.anaActExistForApp = anaActExistForApp;
+    }
+
+    public boolean isExpChecked() {
+        return expChecked;
+    }
+
+    public void setExpChecked(boolean expChecked) {
+        this.expChecked = expChecked;
+    }
+
+    public boolean isAnaChecked() {
+        return anaChecked;
+    }
+
+    public void setAnaChecked(boolean anaChecked) {
+        this.anaChecked = anaChecked;
+    }
+
+    public Application getSelectedApplication() {
+        return selectedApplication;
+    }
+
+    public void setSelectedApplication(Application selectedApplication) {
+        this.selectedApplication = selectedApplication;
+    }
+
+    public List<SelectItem> getAvailableApplications() {
+        return availableApplications;
+    }
+
+    public void setAvailableApplications(List<SelectItem> availableApplications) {
+        this.availableApplications = availableApplications;
+    }
 
     public List<Client> getClientTarget() {
         return clientTarget;
@@ -171,5 +239,52 @@ public class ContractBean extends ContractFlow implements Serializable{
 
     public void setWizStep(String wizStep) {
         this.wizStep = wizStep;
+    }
+
+    private void populateApplicationLists() {
+        List<Application> appList = applicationService.findAllApplications();
+
+
+        Map<ApplicationCategory, List<Application>> expMap = getAppCat2AppList(appList);
+
+        availableApplications = new ArrayList<>();
+        for (ApplicationCategory appCat : expMap.keySet()) {
+            SelectItemGroup group = new SelectItemGroup(appCat.getName());
+            SelectItem[] items = new SelectItem[expMap.get(appCat).size()];
+            for (int i = 0; i < expMap.get(appCat).size(); i++) {
+                SelectItem item = new SelectItem(expMap.get(appCat).get(i));
+                items[i] = item;
+            }
+            group.setSelectItems(items);
+            availableApplications.add(group);
+        }
+    }
+
+    private Map<ApplicationCategory, List<Application>> getAppCat2AppList(List<Application> appList) {
+        Map<ApplicationCategory, List<Application>> map = new HashMap<>();
+
+        ApplicationCategory otherCat = new ApplicationCategory();
+        otherCat.setName(FacesUtils.getI18nValue("label_other"));
+        for (Application app : appList) {
+            if (app.getCategory() == null) {
+                if (map.containsKey(otherCat)) {
+                    map.get(otherCat).add(app);
+                } else {
+                    List<Application> newList = new ArrayList<>();
+                    newList.add(app);
+                    map.put(otherCat, newList);
+                }
+            } else {
+                if (map.containsKey(app.getCategory())) {
+                    map.get(app.getCategory()).add(app);
+                } else {
+                    List<Application> newList = new ArrayList<>();
+                    newList.add(app);
+                    map.put(app.getCategory(), newList);
+                }
+            }
+        }
+
+        return map;
     }
 }

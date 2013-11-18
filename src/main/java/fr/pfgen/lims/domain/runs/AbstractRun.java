@@ -48,9 +48,6 @@ public class AbstractRun extends AbstractGenericEntity{
     @Column(length = 30)
     private RunType runType;
     
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "runs")
-    private Set<Activity> activities;
-    
     @NotNull
     private boolean finished = false;
 
@@ -60,14 +57,6 @@ public class AbstractRun extends AbstractGenericEntity{
 
     public void setFinished(boolean finished) {
         this.finished = finished;
-    }
-
-    public Set<Activity> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(Set<Activity> activities) {
-        this.activities = activities;
     }
 
     public RunType getRunType() {

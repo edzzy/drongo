@@ -19,7 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "activity_params")
-public class ActivityParams extends AbstractActivityParams{
+public class ActivityParams extends AbstractApplicationParams{
     
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
@@ -41,18 +41,6 @@ public class ActivityParams extends AbstractActivityParams{
     @DateTimeFormat(style = "M-")
     private Date endDate;
     
-    @OneToOne(optional = false, mappedBy = "activityParams", cascade = CascadeType.ALL)
-    private Activity activity;
-
-    public Activity getActivity() {
-        return activity;
-    }
-
-    public void setActivity(Activity activity) {
-        this.activity = activity;
-    }
-    
-
     public Date getScheduledBeginDate() {
         return scheduledBeginDate;
     }

@@ -10,7 +10,7 @@ package fr.pfgen.lims.domain.projects;
  */
 public enum ApplicationType {
     EXPERIMENTAL ("applicationType_experimental"),
-    BIOINFORMATICS ("applicationType_bioinformatics");
+    ANALYSIS ("applicationType_analysis");
     
     private final String label;
     

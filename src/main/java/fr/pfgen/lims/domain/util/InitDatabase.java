@@ -4,19 +4,16 @@
  */
 package fr.pfgen.lims.domain.util;
 
-import fr.pfgen.lims.domain.projects.SampleType;
-import fr.pfgen.lims.domain.projects.SampleConditioning;
-import fr.pfgen.lims.domain.projects.ResultsSentByType;
-import fr.pfgen.lims.domain.projects.ApplicationType;
 import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.people.ClientType;
 import fr.pfgen.lims.domain.people.Company;
 import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.people.ResearchTeam;
 import fr.pfgen.lims.domain.people.ResearchUnit;
+import fr.pfgen.lims.domain.projects.Activity;
 import fr.pfgen.lims.domain.projects.Application;
 import fr.pfgen.lims.domain.projects.ApplicationCategory;
-import fr.pfgen.lims.domain.projects.ApplicationParams;
+import fr.pfgen.lims.domain.projects.ApplicationType;
 import fr.pfgen.lims.service.ApplicationService;
 import fr.pfgen.lims.service.ClientService;
 import fr.pfgen.lims.service.ClientTypeService;
@@ -24,7 +21,9 @@ import fr.pfgen.lims.service.CompanyService;
 import fr.pfgen.lims.service.PfMemberService;
 import fr.pfgen.lims.service.ResearchTeamService;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.joda.time.DateTime;
@@ -207,8 +206,8 @@ public class InitDatabase implements ServletContextListener{
         
         PfMember p4 = new PfMember();
         p4.setFirstname("Marine");
-        p4.setLastname("Marine");
-        p4.setEmail("Marine.Marine@univ-nantes.fr");
+        p4.setLastname("Cornec");
+        p4.setEmail("Marine.Cornec@univ-nantes.fr");
         p4.setMemberSince(new DateTime(2010, 3, 25, 0, 0).toDate());
         p4.setOffice("221");
         pfMemberList.add(p4);
@@ -226,17 +225,98 @@ public class InitDatabase implements ServletContextListener{
         ApplicationCategory ac2 = new ApplicationCategory();
         ac2.setName("Expression");
         appCatList.add(ac2);
-        ApplicationCategory ac3 = new ApplicationCategory();
-        ac3.setName("Analyse NGS");
-        appCatList.add(ac3);
-        ApplicationCategory ac4 = new ApplicationCategory();
-        ac4.setName("Analyse Expressions");
-        appCatList.add(ac4);
         
         for (ApplicationCategory applicationCategory : appCatList) {
             applicationService.saveApplicationCategory(applicationCategory);
         }
         
+        //Applications
+        List<Application> appList = new ArrayList<>();
+        
+        Application ap = new Application();
+        ap.setName("Whole genome");
+        ap.setReferent(p3);
+        ap.setCategory(ac1);
+        ap.setCode("WGE");
+        Activity x = new Activity();
+        x.setReferent(p3);
+        x.setType(ApplicationType.EXPERIMENTAL);
+        Activity y = new Activity();
+        y.setReferent(p1);
+        y.setType(ApplicationType.ANALYSIS);
+        Set<Activity> s = new HashSet<>();
+        s.add(x);s.add(y);
+        ap.setActivities(s);
+        appList.add(ap);
+        
+        ap = new Application();
+        ap.setName("Whole exome");
+        ap.setReferent(p3);
+        ap.setCategory(ac1);
+        ap.setCode("WEX");
+        x = new Activity();
+        x.setReferent(p3);
+        x.setType(ApplicationType.EXPERIMENTAL);
+        y = new Activity();
+        y.setReferent(p1);
+        y.setType(ApplicationType.ANALYSIS);
+        s = new HashSet<>();
+        s.add(x);s.add(y);
+        ap.setActivities(s);
+        appList.add(ap);
+        
+        ap = new Application();
+        ap.setName("MiRNA");
+        ap.setReferent(p4);
+        ap.setCategory(ac2);
+        ap.setCode("MRN");
+        x = new Activity();
+        x.setReferent(p4);
+        x.setType(ApplicationType.EXPERIMENTAL);
+        y = new Activity();
+        y.setReferent(p2);
+        y.setType(ApplicationType.ANALYSIS);
+        s = new HashSet<>();
+        s.add(x);s.add(y);
+        ap.setActivities(s);
+        appList.add(ap);
+        
+        ap = new Application();
+        ap.setName("Exon Chip");
+        ap.setReferent(p4);
+        ap.setCategory(ac2);
+        ap.setCode("ECH");
+        x = new Activity();
+        x.setReferent(p4);
+        x.setType(ApplicationType.EXPERIMENTAL);
+        y = new Activity();
+        y.setReferent(p2);
+        y.setType(ApplicationType.ANALYSIS);
+        s = new HashSet<>();
+        s.add(x);s.add(y);
+        ap.setActivities(s);
+        appList.add(ap);
+        
+        ap = new Application();
+        ap.setName("qPCR");
+        ap.setReferent(p3);
+        ap.setCode("QPC");
+        x = new Activity();
+        x.setReferent(p3);
+        x.setType(ApplicationType.EXPERIMENTAL);
+        s = new HashSet<>();
+        s.add(x);
+        ap.setActivities(s);
+        appList.add(ap);
+        
+        for (Application app: appList) {
+            applicationService.saveApplication(app);
+        }
+        
+        
+        
+        
+        /*
         List<Application> appList = new ArrayList<>();
         
         ApplicationParams ap1 = new ApplicationParams();
@@ -371,5 +451,6 @@ public class InitDatabase implements ServletContextListener{
         for (Application app : appList) {
             applicationService.saveApplication(app);
         }
+        */ 
     }
 }
