@@ -49,6 +49,12 @@ public class DevicesBean implements Serializable{
         return "device?faces-redirect=true";
     }
     
+    public String showDevice(){
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("device");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("device", selectedDevice);
+        return "deviceShow?faces-redirect=true";
+    }
+    
     public void deleteDevice() {
         /*
         try {

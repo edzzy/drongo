@@ -64,7 +64,12 @@
                             <f:convertDateTime dateStyle="long" type="date" />
                         </h:outputText>
                     </p:column>
-
+                    <p:column>
+                         <p:commandLink id="showButton" action="#{devicesBean.showDevice}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-search" />
+                            <f:setPropertyActionListener value="#{device}" target="#{devicesBean.selectedDevice}" />
+                        </p:commandLink>
+                    </p:column>
                     <p:column style="width: 5px">
                         <p:commandLink id="editButton" action="#{devicesBean.editDevice}">
                             <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
