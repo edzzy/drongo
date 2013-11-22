@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui">
 <f:view locale="#{localeBean.locale}" contentType="text/html">
   <h:head>
-    <title>#{applicationBean.appName}</title>
+    <title>#{mainApplicationBean.appName}</title>
     <h:outputStylesheet library="css" name="standard.css" />
   </h:head>
   <h:body>
@@ -24,7 +24,7 @@
           <p:panel id="data" toggleable="true" toggleSpeed="250">
             <f:facet name="header">
               <h:outputFormat value="#{messages.label_welcome_titlepane}">
-                <f:param value="#{applicationBean.appName}" />
+                <f:param value="#{mainApplicationBean.appName}" />
               </h:outputFormat>
             </f:facet>
             <h:outputText value="#{messages.label_session_expired}" />

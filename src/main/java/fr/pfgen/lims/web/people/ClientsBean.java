@@ -113,16 +113,16 @@ public class ClientsBean extends GenericFlow implements Serializable {
     }
 
     public void cancelModify() {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
+        FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_cancelled"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
     }
 
     public void deleteClient() {
         try {
             clientService.deleteClient(selectedClient);
             clientList.remove(selectedClient);
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteDone"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_deleteDone"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
     }
     
@@ -133,7 +133,7 @@ public class ClientsBean extends GenericFlow implements Serializable {
     }
 
     public void cancelDeletion() {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteCanceled"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
+        FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_deleteCanceled"), selectedClient.toString(), FacesMessage.SEVERITY_INFO);
     }
     
     public String createNewClient(){
@@ -144,7 +144,7 @@ public class ClientsBean extends GenericFlow implements Serializable {
     private SelectItem[] createFilterOptions(List<ClientType> data)  {  
         SelectItem[] options = new SelectItem[data.size() + 1];  
   
-        options[0] = new SelectItem("", FacesUtils.getI18nValue("label_select"));  
+        options[0] = new SelectItem("", FacesUtils.getI18nValueInMessages("label_select"));  
         for(int i = 0; i < data.size(); i++) { 
             options[i + 1] = new SelectItem(data.get(i).getName(), data.get(i).getName());  
         }  

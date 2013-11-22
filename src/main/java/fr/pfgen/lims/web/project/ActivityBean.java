@@ -8,7 +8,7 @@ import fr.pfgen.lims.domain.projects.Activity;
 import fr.pfgen.lims.domain.projects.ActivityParams;
 import fr.pfgen.lims.domain.projects.Application;
 import fr.pfgen.lims.domain.projects.ApplicationCategory;
-import fr.pfgen.lims.domain.projects.ApplicationType;
+import fr.pfgen.lims.domain.projects.ActivityType;
 import fr.pfgen.lims.service.ApplicationService;
 import fr.pfgen.lims.web.util.FacesUtils;
 import fr.pfgen.lims.web.util.flows.ActivityFlow;
@@ -68,12 +68,12 @@ public class ActivityBean extends ActivityFlow implements Serializable {
     
     public void onExpAppChanged(AjaxBehaviorEvent event) {
         Application app = (Application) ((UIOutput) event.getSource()).getValue();
-        switchValuesAccordingToApplication(app, ApplicationType.EXPERIMENTAL);
+        switchValuesAccordingToApplication(app, ActivityType.EXPERIMENTAL);
     }
     
     public void onInfoAppChanged(AjaxBehaviorEvent event){
         Application app = (Application) ((UIOutput) event.getSource()).getValue();
-        switchValuesAccordingToApplication(app, ApplicationType.ANALYSIS);
+        switchValuesAccordingToApplication(app, ActivityType.ANALYSIS);
     }
 
     public boolean isInfoChecked() {
@@ -116,7 +116,7 @@ public class ActivityBean extends ActivityFlow implements Serializable {
         this.infoActivity = infoActivity;
     }
     
-    private void switchValuesAccordingToApplication(Application app, ApplicationType appType){
+    private void switchValuesAccordingToApplication(Application app, ActivityType appType){
         //ActivityParams activityParams = new ActivityParams();
         ActivityParams actParams = appParamsToActParams(app);
         switch(appType){

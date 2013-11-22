@@ -4,6 +4,8 @@
  */
 package fr.pfgen.lims.service;
 
+import fr.pfgen.lims.domain.projects.Activity;
+import fr.pfgen.lims.domain.projects.ActivityStep;
 import fr.pfgen.lims.domain.projects.Application;
 import fr.pfgen.lims.domain.projects.ApplicationCategory;
 import java.util.List;
@@ -22,7 +24,7 @@ public interface ApplicationService {
     
     public abstract List<Application> findAllApplications();
     
-    public abstract boolean expActivityExistsForApplication(Application app);
+    public abstract List<Activity> findActivitiesForApplication(Application app);
     
-    public abstract boolean anaActivityExistsForApplication(Application app);
+    public abstract List<ActivityStep> findActivityStepsForActivity(Activity act);
 }

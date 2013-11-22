@@ -96,54 +96,39 @@
                         <p:panel id="panelApplication" header="#{messages.label_application}">
                             <p:focus context="panelApplication"/>
                             <h:panelGrid columns="3">
-                                <p:outputLabel for="pilot" value="#{messages.contract_pilot}" />
-                                <p:selectOneMenu id="pilot" value="#{contractBean.contract.pilot}" required="true" converter="#{pfMemberConverter}">
-                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
-                                    <f:selectItems value="#{contractBean.pfMemberList}" />
-                                </p:selectOneMenu>
-                                <p:message for="pilot" />
-
-                                <p:outputLabel for="application" value="#{messages.label_application}" />
+                                <p:outputLabel for="application" value="#{messages.label_application}:" />
                                 <p:selectOneMenu id="application" value="#{contractBean.selectedApplication}" required="true" converter="#{applicationConverter}">
                                     <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
                                     <f:selectItems value="#{contractBean.availableApplications}" />
-                                    <p:ajax listener="#{contractBean.onAppChanged}" update="expOrAnaActivitiesPanelGrid"/>
+                                    <p:ajax listener="#{contractBean.onAppChanged}" update="expOrAnaActivitiesPanelGrid,activityStepsPanelGrid"/>
                                 </p:selectOneMenu>
                                 <p:message for="application" />
                             </h:panelGrid>
 
-                            <h:panelGrid id="expOrAnaActivitiesPanelGrid" columns="4" style="margin-bottom:10px" cellpadding="5">
-                                <h:outputText value="#{enums.applicationType_experimental}" rendered="#{contractBean.expActExistForApp}"/>  
-                                <p:selectBooleanCheckbox value="#{contractBean.expChecked}" rendered="#{contractBean.expActExistForApp}">
-                                    <p:ajax update="activityPanelGrid"/>  
-                                </p:selectBooleanCheckbox>  
-
-                                <h:outputText value="#{enums.applicationType_analysis}" rendered="#{contractBean.anaActExistForApp}"/>  
-                                <p:selectBooleanCheckbox value="#{contractBean.anaChecked}" rendered="#{contractBean.anaActExistForApp}">  
-                                    <p:ajax update="activityPanelGrid"/>  
-                                </p:selectBooleanCheckbox>  
+                            <h:panelGrid id="expOrAnaActivitiesPanelGrid" columns="2" style="margin-bottom: 10px;margin-top: 10px;" >
+                                <h:panelGrid columns="2" rendered="#{not empty contractBean.activityList}" >
+                                    <h:outputText value="#{messages.label_activities}:" />
+                                    <p:selectOneRadio id="expOrAnaRadio" value="#{contractBean.selectedActivity}" layout="pageDirection" converter="#{activityConverter}" >  
+                                        <f:selectItems value="#{contractBean.activityList}" var="activity" itemLabel="#{enums[activity.type.label]}" itemValue="#{entity}"/>  
+                                        <p:ajax listener="#{contractBean.onActChanged}" update="activityStepsPanelGrid" />
+                                    </p:selectOneRadio>
+                                </h:panelGrid>
+                                <h:outputText value="#{messages.activity_noActForApp}" rendered="#{empty contractBean.activityList and contractBean.selectedApplication != null}"/>
                             </h:panelGrid>
 
-                            <h:panelGrid id="activityPanelGrid" width="100%" >
-                                <p:panelGrid id="mainPanelGrid" columns="2" columnClasses="topAlign,topAlign" rendered="#{contractBean.expChecked or contractBean.anaChecked}">
-                                    <f:facet name="header">
-                                        #{messages.label_activities}
-                                    </f:facet>
-                                    <p:fieldset id="expFieldSet" legend="#{enums.applicationType_experimental}" style="width: max-content" rendered="#{contractBean.expChecked}">  
-                                        
-                                        
-                                    </p:fieldset>  
-
-                                    <p:fieldset id="infoFieldSet" legend="#{enums.applicationType_analysis}" style="width: max-content" rendered="#{contractBean.anaChecked}">  
-                                        
-                                    </p:fieldset>
-                                </p:panelGrid>
+                            <h:panelGrid width="100%" id="activityStepsPanelGrid">
+                                <p:dataList value="#{contractBean.activitySteps}" var="activityStep" type="ordered" rendered="#{not empty contractBean.activitySteps}">  
+                                    <h:outputText id="stepNameID" value="#{activityStep.step.name}" >
+                                        <p:tooltip for="stepNameID" value="#{activityStep.step.description}" />
+                                    </h:outputText>                           
+                                </p:dataList>
                             </h:panelGrid>
                         </p:panel>
                     </p:tab>
 
+                    <p:tab id="planningTab" title="#{messages.label_planning}">
 
-
+                    </p:tab>
 
                 </p:wizard>
             </o:form>

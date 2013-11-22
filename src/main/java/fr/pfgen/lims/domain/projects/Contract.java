@@ -5,7 +5,6 @@
 package fr.pfgen.lims.domain.projects;
 
 import fr.pfgen.lims.domain.people.Client;
-import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -53,10 +52,6 @@ public class Contract extends AbstractGenericEntity{
     private String description;
     
     @NotNull
-    @ManyToOne
-    private PfMember pilot;
-    
-    @NotNull
     @Size(min = 2,max = 20)
     private String keyword;
     
@@ -65,6 +60,17 @@ public class Contract extends AbstractGenericEntity{
     
     @NotNull
     private ContractStatus status = ContractStatus.PENDING;
+    
+    @ManyToOne
+    private Activity activity;
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 
     public String getReminderKeywords() {
         return reminderKeywords;
@@ -92,14 +98,6 @@ public class Contract extends AbstractGenericEntity{
 
     public String getDescription() {
         return description;
-    }
-
-    public PfMember getPilot() {
-        return pilot;
-    }
-
-    public void setPilot(PfMember pilot) {
-        this.pilot = pilot;
     }
 
     public void setDescription(String description) {

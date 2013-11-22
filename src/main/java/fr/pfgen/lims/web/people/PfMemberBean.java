@@ -56,25 +56,25 @@ public class PfMemberBean extends PfMemberFlow implements Serializable{
         try {
             if (pfMember.getId() == null) {
                 pfMemberService.savePfMember(pfMember);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newPfMember_added"), pfMember.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("newPfMember_added"), pfMember.toString(), FacesMessage.SEVERITY_INFO);
 
             } else {
                 pfMemberService.updatePfMember(pfMember);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), pfMember.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_done"), pfMember.toString(), FacesMessage.SEVERITY_INFO);
             }
             FacesUtils.keepMessageInFlash();
             return endFlowAndRedirect();
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }
 
     public String cancelPfMember() {
         if (pfMember.getId() == null) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
         } else {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), pfMember.toString(), FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_cancelled"), pfMember.toString(), FacesMessage.SEVERITY_INFO);
         }
         FacesUtils.keepMessageInFlash();
         return endFlowAndRedirect();
@@ -96,15 +96,15 @@ public class PfMemberBean extends PfMemberFlow implements Serializable{
 
         if ((existingClient != null && existingClient.getId() != pfMember.getId()) || (existingPfMember != null && existingPfMember.getId() != pfMember.getId())) {
             ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\"" + email + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValueInMessages("edit_error"), "\"" + email + "\" " + FacesUtils.getI18nValueInMessages("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
     }
 
     public String getSaveOrEditLabel() {
         if (pfMember.getId() != null) {
-            return FacesUtils.getI18nValue("label_edit");
+            return FacesUtils.getI18nValueInMessages("label_edit");
         } else {
-            return FacesUtils.getI18nValue("label_save");
+            return FacesUtils.getI18nValueInMessages("label_save");
         }
     }
 

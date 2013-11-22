@@ -8,9 +8,14 @@ import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -27,34 +32,46 @@ public class Activity extends AbstractGenericEntity {
     private Application application;
 
     @NotNull
-    private ApplicationType type;
+    @Enumerated(EnumType.STRING)
+    private ActivityType type;
     
     @NotNull
     @ManyToOne
     private PfMember referent;
     
-    @OneToMany(mappedBy = "experimentalActivity")
-    private Set<ApplicationParams> experimentalParams;
+    @OneToMany(mappedBy = "activity")
+    private Set<Contract> contracts;
     
-    @OneToMany(mappedBy = "analysisActivity")
-    private Set<ApplicationParams> analysisParams;
+    @OneToOne(optional=false, cascade = CascadeType.ALL)
+    @JoinColumn(name="activity_params_id", unique=true, nullable=false, updatable=true)
+    private ActivityParams activityParams;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "activity")
+    private Set<ActivityStep> steps;
 
-    public Set<ApplicationParams> getExperimentalParams() {
-        return experimentalParams;
+    public Set<ActivityStep> getSteps() {
+        return steps;
     }
 
-    public void setExperimentalParams(Set<ApplicationParams> experimentalParams) {
-        this.experimentalParams = experimentalParams;
+    public void setSteps(Set<ActivityStep> steps) {
+        this.steps = steps;
     }
 
-    public Set<ApplicationParams> getAnalysisParams() {
-        return analysisParams;
+    public Set<Contract> getContracts() {
+        return contracts;
     }
 
-    public void setAnalysisParams(Set<ApplicationParams> analysisParams) {
-        this.analysisParams = analysisParams;
+    public void setContracts(Set<Contract> contracts) {
+        this.contracts = contracts;
     }
 
+    public ActivityParams getActivityParams() {
+        return activityParams;
+    }
+
+    public void setActivityParams(ActivityParams activityParams) {
+        this.activityParams = activityParams;
+    }
 
     public PfMember getReferent() {
         return referent;
@@ -64,11 +81,11 @@ public class Activity extends AbstractGenericEntity {
         this.referent = referent;
     }
 
-    public ApplicationType getType() {
+    public ActivityType getType() {
         return type;
     }
 
-    public void setType(ApplicationType type) {
+    public void setType(ActivityType type) {
         this.type = type;
     }
 

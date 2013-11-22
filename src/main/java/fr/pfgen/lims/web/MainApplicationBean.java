@@ -3,13 +3,8 @@ package fr.pfgen.lims.web;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import org.primefaces.component.menuitem.MenuItem;
-import org.primefaces.component.submenu.Submenu;
 import org.primefaces.model.DefaultMenuModel;
 import org.primefaces.model.MenuModel;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -17,7 +12,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 @Configurable
 @ManagedBean
 @RequestScoped
-public class ApplicationBean {
+public class MainApplicationBean {
 
     private String appName;
     private MenuModel menuModel;

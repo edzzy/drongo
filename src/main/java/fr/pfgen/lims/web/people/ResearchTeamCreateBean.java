@@ -49,7 +49,7 @@ public class ResearchTeamCreateBean extends ResearchTeamFlow{
 
         for (ResearchTeam team : unit2teams.get(newResearchTeam.getResearchUnit())) {
             if (team.getName().equalsIgnoreCase(newResearchTeam.getName())) {
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), "\"" + newResearchTeam.getName() + "\" " + FacesUtils.getI18nValue("label_alreadyExistsInUnit"), FacesMessage.SEVERITY_ERROR);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), "\"" + newResearchTeam.getName() + "\" " + FacesUtils.getI18nValueInMessages("label_alreadyExistsInUnit"), FacesMessage.SEVERITY_ERROR);
                 return null;
             }
         }
@@ -68,7 +68,7 @@ public class ResearchTeamCreateBean extends ResearchTeamFlow{
                 return null;
             }
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }

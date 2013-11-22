@@ -47,9 +47,9 @@ public class ProjectsBean extends GenericFlow implements Serializable{
     public SelectItem[] getProjectClosedOptions() {
         SelectItem[] options = new SelectItem[3];
         
-        options[0] = new SelectItem("", FacesUtils.getI18nValue("label_select"));
-        options[1] = new SelectItem("false", FacesUtils.getI18nValue("label_opened"));
-        options[2] = new SelectItem("true", FacesUtils.getI18nValue("label_closed"));
+        options[0] = new SelectItem("", FacesUtils.getI18nValueInMessages("label_select"));
+        options[1] = new SelectItem("false", FacesUtils.getI18nValueInMessages("label_opened"));
+        options[2] = new SelectItem("true", FacesUtils.getI18nValueInMessages("label_closed"));
          
         return options;
     }
@@ -58,9 +58,9 @@ public class ProjectsBean extends GenericFlow implements Serializable{
         try {
             projectService.deleteProject(selectedProject);
             projectList.remove(selectedProject);
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteDone"), selectedProject.toString(), FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_deleteDone"), selectedProject.toString(), FacesMessage.SEVERITY_INFO);
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
     }
     
@@ -71,7 +71,7 @@ public class ProjectsBean extends GenericFlow implements Serializable{
     }
 
     public void cancelDeletion() {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteCanceled"), selectedProject.toString(), FacesMessage.SEVERITY_INFO);
+        FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_deleteCanceled"), selectedProject.toString(), FacesMessage.SEVERITY_INFO);
     }
     
     public Project getSelectedProject() {

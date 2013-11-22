@@ -8,13 +8,14 @@ package fr.pfgen.lims.domain.projects;
  *
  * @author eric
  */
-public enum ApplicationType {
+public enum ActivityType {
     EXPERIMENTAL ("applicationType_experimental"),
-    ANALYSIS ("applicationType_analysis");
+    ANALYSIS ("applicationType_analysis"),
+    BOTH ("applicationType_expAndAna");
     
     private final String label;
     
-    private ApplicationType(String label){
+    private ActivityType(String label){
         this.label = label;
     }
     

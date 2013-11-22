@@ -206,26 +206,26 @@ public class ClientBean extends ClientFlow implements Serializable {
         try {
             if (client.getId() == null) {
                 clientService.saveClient(client);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newClient_added"), client.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("newClient_added"), client.toString(), FacesMessage.SEVERITY_INFO);
 
             } else {
                 clientService.updateClient(client);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), client.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_done"), client.toString(), FacesMessage.SEVERITY_INFO);
             }
             FacesUtils.keepMessageInFlash();
             return endFlowAndRedirect();
             //return "clients?faces-redirect=true";
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }
 
     public String cancelClient() {
         if (client.getId() == null) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
         } else {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), client.toString(), FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_cancelled"), client.toString(), FacesMessage.SEVERITY_INFO);
         }
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         
@@ -241,7 +241,7 @@ public class ClientBean extends ClientFlow implements Serializable {
 
         if ((existingClient != null && existingClient.getId() != client.getId()) || (existingPfMember != null && existingPfMember.getId() != client.getId())) {
             ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\"" + email + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValueInMessages("edit_error"), "\"" + email + "\" " + FacesUtils.getI18nValueInMessages("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
     }
 
@@ -317,9 +317,9 @@ public class ClientBean extends ClientFlow implements Serializable {
 
     public String getSaveOrEditLabel() {
         if (client.getId() != null) {
-            return FacesUtils.getI18nValue("label_edit");
+            return FacesUtils.getI18nValueInMessages("label_edit");
         } else {
-            return FacesUtils.getI18nValue("label_save");
+            return FacesUtils.getI18nValueInMessages("label_save");
         }
     }
 

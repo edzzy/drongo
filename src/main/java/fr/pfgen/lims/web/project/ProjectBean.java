@@ -47,7 +47,7 @@ public class ProjectBean extends ProjectFlow implements Serializable {
 
         if ((existingProject != null && existingProject.getId() != project.getId()) || (existingProject != null && existingProject.getId() != project.getId())) {
             ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("label_error"), "\"" + name + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValueInMessages("label_error"), "\"" + name + "\" " + FacesUtils.getI18nValueInMessages("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
     }
     
@@ -55,24 +55,24 @@ public class ProjectBean extends ProjectFlow implements Serializable {
         try{
             if (project.getId() == null){
                 projectService.saveProject(project);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newProject_added"), project.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("newProject_added"), project.toString(), FacesMessage.SEVERITY_INFO);
             }else{
                 projectService.updateProject(project);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), project.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_done"), project.toString(), FacesMessage.SEVERITY_INFO);
             }
             FacesUtils.keepMessageInFlash();
             return endFlowAndRedirect();
         }catch(Exception e){
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }
     
     public String cancelProject(){
         if (project.getId() == null) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
         } else {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), project.toString(), FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_cancelled"), project.toString(), FacesMessage.SEVERITY_INFO);
         }
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         

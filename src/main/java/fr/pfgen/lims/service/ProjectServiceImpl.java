@@ -91,7 +91,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Contract updateContract(Contract contract) {
         if (contract.isSigned()){
-            throw new RuntimeException(FacesUtils.getI18nValue("contract_alreadySigned"));
+            throw new RuntimeException(FacesUtils.getI18nValueInMessages("contract_alreadySigned"));
         }
         return contractRepository.save(contract);
     }

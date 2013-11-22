@@ -17,8 +17,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "abstract_application_params")
-public abstract class AbstractApplicationParams extends AbstractGenericEntity{
+@Table(name = "abstract_activity_params")
+public abstract class AbstractActivityParams extends AbstractGenericEntity{
     
     @Size(max = 50)
     private String sampleType;

@@ -4,12 +4,15 @@
  */
 package fr.pfgen.lims.service;
 
+import fr.pfgen.lims.domain.projects.Activity;
+import fr.pfgen.lims.domain.projects.ActivityStep;
 import fr.pfgen.lims.domain.projects.Application;
 import fr.pfgen.lims.domain.projects.ApplicationCategory;
-import fr.pfgen.lims.domain.projects.ApplicationType;
 import fr.pfgen.lims.repository.ActivityRepository;
+import fr.pfgen.lims.repository.ActivityStepRepository;
 import fr.pfgen.lims.repository.ApplicationCategoryRepository;
 import fr.pfgen.lims.repository.ApplicationRepository;
+import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +28,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Autowired
     ApplicationRepository applicationRepository;
-    
     @Autowired
     ApplicationCategoryRepository applicationCategoryRepository;
-    
     @Autowired
     ActivityRepository activityRepository;
-
+    @Autowired
+    ActivityStepRepository activityStepRepository;
+    
     @Override
     public void saveApplication(Application application) {
         applicationRepository.save(application);
@@ -53,19 +56,28 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public boolean expActivityExistsForApplication(Application app) {
-        if (activityRepository.findByApplicationAndType(app, ApplicationType.EXPERIMENTAL)!=null){
-            return true;
-        }
-        return false;
-        
+    public List<Activity> findActivitiesForApplication(Application app) {
+        return activityRepository.findByApplication(app);
     }
 
     @Override
-    public boolean anaActivityExistsForApplication(Application app) {
-        if (activityRepository.findByApplicationAndType(app, ApplicationType.ANALYSIS)!=null){
-            return true;
+    public List<ActivityStep> findActivityStepsForActivity(Activity act) {
+        List<ActivityStep> steps = activityStepRepository.findByActivity(act);
+        
+        LinkedList<ActivityStep> orderedSteps = new LinkedList<>();
+        
+        for (ActivityStep step : steps) {
+            if (step.getParentActivityStep() == null){
+                orderedSteps.addFirst(step);
+            }else{
+                if (orderedSteps.contains(step.getParentActivityStep())){
+                    orderedSteps.add(orderedSteps.indexOf(step.getParentActivityStep()) + 1, step);
+                }else{
+                    orderedSteps.addLast(step);
+                }
+            }
         }
-        return false;
+        
+        return orderedSteps;
     }
 }

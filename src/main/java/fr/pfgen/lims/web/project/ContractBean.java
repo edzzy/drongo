@@ -6,6 +6,8 @@ package fr.pfgen.lims.web.project;
 
 import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.people.PfMember;
+import fr.pfgen.lims.domain.projects.Activity;
+import fr.pfgen.lims.domain.projects.ActivityStep;
 import fr.pfgen.lims.domain.projects.Application;
 import fr.pfgen.lims.domain.projects.ApplicationCategory;
 import fr.pfgen.lims.domain.projects.Contract;
@@ -18,6 +20,8 @@ import fr.pfgen.lims.web.util.flows.ContractFlow;
 import fr.pfgen.lims.web.util.flows.FlowType;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -60,10 +64,9 @@ public class ContractBean extends ContractFlow implements Serializable {
     private String wizStep;
     private List<SelectItem> availableApplications;
     private Application selectedApplication;
-    private boolean expActExistForApp;
-    private boolean anaActExistForApp;
-    private boolean expChecked;
-    private boolean anaChecked;
+    private Activity selectedActivity;
+    private List<Activity> activityList;
+    private List<ActivityStep> activitySteps;
 
     public void initContract() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -80,6 +83,12 @@ public class ContractBean extends ContractFlow implements Serializable {
                 contract = new Contract();
                 FacesUtils.putObjectInSessionMap("contract", contract);
                 wizStep = "clientsTab";
+            }
+
+            if (contract.getMainClient() != null) {
+                clientSource.clear();
+                clientSource.addAll(clientList);
+                clientSource.remove(contract.getMainClient());
             }
         }
     }
@@ -111,15 +120,15 @@ public class ContractBean extends ContractFlow implements Serializable {
         try {
             if (contract.getId() == null) {
                 projectService.saveContract(contract);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newContract_added"), contract.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("newContract_added"), contract.toString(), FacesMessage.SEVERITY_INFO);
             } else {
                 projectService.updateContract(contract);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), contract.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_done"), contract.toString(), FacesMessage.SEVERITY_INFO);
             }
             FacesUtils.keepMessageInFlash();
             return endFlowAndRedirect();
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }
@@ -132,41 +141,45 @@ public class ContractBean extends ContractFlow implements Serializable {
     }
 
     public void onAppChanged(AjaxBehaviorEvent event) {
-        Application app = (Application) ((UIOutput) event.getSource()).getValue();
-        expActExistForApp = applicationService.expActivityExistsForApplication(app);
-        anaActExistForApp = applicationService.anaActivityExistsForApplication(app);
+        activityList = applicationService.findActivitiesForApplication(selectedApplication);
+        Collections.sort(activityList, new Comparator<Activity>() {
+            @Override
+            public int compare(Activity a1, Activity a2) {
+                return a1.getType().compareTo(a2.getType());
+            }
+        });
+        System.out.println("actList: "+activityList);
+        selectedActivity = null;
+        activitySteps = null;
     }
 
-    public boolean isExpActExistForApp() {
-        return expActExistForApp;
+    public void onActChanged(AjaxBehaviorEvent event) {
+        //Activity act = (Activity) ((UIOutput) event.getSource()).getValue();
+        activitySteps = applicationService.findActivityStepsForActivity(selectedActivity);
     }
 
-    public void setExpActExistForApp(boolean expActExistForApp) {
-        this.expActExistForApp = expActExistForApp;
+    public Activity getSelectedActivity() {
+        return selectedActivity;
     }
 
-    public boolean isAnaActExistForApp() {
-        return anaActExistForApp;
+    public void setSelectedActivity(Activity selectedActivity) {
+        this.selectedActivity = selectedActivity;
     }
 
-    public void setAnaActExistForApp(boolean anaActExistForApp) {
-        this.anaActExistForApp = anaActExistForApp;
+    public List<ActivityStep> getActivitySteps() {
+        return activitySteps;
     }
 
-    public boolean isExpChecked() {
-        return expChecked;
+    public void setActivitySteps(List<ActivityStep> activitySteps) {
+        this.activitySteps = activitySteps;
     }
 
-    public void setExpChecked(boolean expChecked) {
-        this.expChecked = expChecked;
+    public List<Activity> getActivityList() {
+        return activityList;
     }
 
-    public boolean isAnaChecked() {
-        return anaChecked;
-    }
-
-    public void setAnaChecked(boolean anaChecked) {
-        this.anaChecked = anaChecked;
+    public void setActivityList(List<Activity> activityList) {
+        this.activityList = activityList;
     }
 
     public Application getSelectedApplication() {
@@ -264,7 +277,7 @@ public class ContractBean extends ContractFlow implements Serializable {
         Map<ApplicationCategory, List<Application>> map = new HashMap<>();
 
         ApplicationCategory otherCat = new ApplicationCategory();
-        otherCat.setName(FacesUtils.getI18nValue("label_other"));
+        otherCat.setName(FacesUtils.getI18nValueInMessages("label_other"));
         for (Application app : appList) {
             if (app.getCategory() == null) {
                 if (map.containsKey(otherCat)) {

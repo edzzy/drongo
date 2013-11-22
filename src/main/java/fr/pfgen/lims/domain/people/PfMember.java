@@ -1,6 +1,5 @@
 package fr.pfgen.lims.domain.people;
 
-import fr.pfgen.lims.domain.projects.Application;
 import fr.pfgen.lims.domain.projects.Contract;
 import fr.pfgen.lims.domain.runs.AbstractRun;
 import java.util.Date;
@@ -30,22 +29,8 @@ public class PfMember extends AbstractPerson{
     @Size(max = 10)
     private String office;
     
-    @OneToMany(mappedBy = "pilot")
-    private Set<Contract> pilotOfContracts;
-    
-    @OneToMany(mappedBy = "referent")
-    private Set<Application> referentOfApplications;
-    
     @OneToMany(mappedBy = "launchedBy")
     private Set<AbstractRun> runs;
-
-    public Set<Contract> getPilotOfContracts() {
-        return pilotOfContracts;
-    }
-
-    public void setPilotOfContracts(Set<Contract> pilotOfContracts) {
-        this.pilotOfContracts = pilotOfContracts;
-    }
 
     public Set<AbstractRun> getRuns() {
         return runs;
@@ -57,14 +42,6 @@ public class PfMember extends AbstractPerson{
     
     public String getOffice() {
         return office;
-    }
-
-    public Set<Application> getReferentOfApplications() {
-        return referentOfApplications;
-    }
-
-    public void setReferentOfApplications(Set<Application> referentOfApplications) {
-        this.referentOfApplications = referentOfApplications;
     }
 
     public void setOffice(String office) {

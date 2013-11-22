@@ -76,16 +76,16 @@ public class PfMembersBean extends GenericFlow implements Serializable{
     }
     
     public void cancelModify() {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), selectedPfMember.toString(), FacesMessage.SEVERITY_INFO);
+        FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_cancelled"), selectedPfMember.toString(), FacesMessage.SEVERITY_INFO);
     }
     
     public void deletePfMember() {
         try {
             pfMemberService.deletePfMember(selectedPfMember);
             pfMemberList.remove(selectedPfMember);
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteDone"), selectedPfMember.toString(), FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_deleteDone"), selectedPfMember.toString(), FacesMessage.SEVERITY_INFO);
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
         }
     }
     
@@ -96,7 +96,7 @@ public class PfMembersBean extends GenericFlow implements Serializable{
     }
 
     public void cancelDeletion() {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteCanceled"), selectedPfMember.toString(), FacesMessage.SEVERITY_INFO);
+        FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_deleteCanceled"), selectedPfMember.toString(), FacesMessage.SEVERITY_INFO);
     }
     
     public String createNewPfMember(){

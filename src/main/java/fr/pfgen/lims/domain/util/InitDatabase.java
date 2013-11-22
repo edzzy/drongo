@@ -11,9 +11,10 @@ import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.people.ResearchTeam;
 import fr.pfgen.lims.domain.people.ResearchUnit;
 import fr.pfgen.lims.domain.projects.Activity;
+import fr.pfgen.lims.domain.projects.ActivityParams;
 import fr.pfgen.lims.domain.projects.Application;
 import fr.pfgen.lims.domain.projects.ApplicationCategory;
-import fr.pfgen.lims.domain.projects.ApplicationType;
+import fr.pfgen.lims.domain.projects.ActivityType;
 import fr.pfgen.lims.service.ApplicationService;
 import fr.pfgen.lims.service.ClientService;
 import fr.pfgen.lims.service.ClientTypeService;
@@ -230,36 +231,48 @@ public class InitDatabase implements ServletContextListener{
             applicationService.saveApplicationCategory(applicationCategory);
         }
         
+        
         //Applications
         List<Application> appList = new ArrayList<>();
         
         Application ap = new Application();
         ap.setName("Whole genome");
-        ap.setReferent(p3);
         ap.setCategory(ac1);
         ap.setCode("WGE");
         Activity x = new Activity();
         x.setReferent(p3);
-        x.setType(ApplicationType.EXPERIMENTAL);
+        x.setType(ActivityType.EXPERIMENTAL);
+        x.setApplication(ap);
+        x.setActivityParams(new ActivityParams());
         Activity y = new Activity();
         y.setReferent(p1);
-        y.setType(ApplicationType.ANALYSIS);
+        y.setType(ActivityType.ANALYSIS);
+        y.setApplication(ap);
+        y.setActivityParams(new ActivityParams());
+        Activity z = new Activity();
+        z.setReferent(p3);
+        z.setType(ActivityType.BOTH);
+        z.setApplication(ap);
+        z.setActivityParams(new ActivityParams());
         Set<Activity> s = new HashSet<>();
-        s.add(x);s.add(y);
+        s.add(x);s.add(y);s.add(z);
         ap.setActivities(s);
         appList.add(ap);
         
         ap = new Application();
         ap.setName("Whole exome");
-        ap.setReferent(p3);
         ap.setCategory(ac1);
         ap.setCode("WEX");
         x = new Activity();
         x.setReferent(p3);
-        x.setType(ApplicationType.EXPERIMENTAL);
+        x.setType(ActivityType.EXPERIMENTAL);
+        x.setApplication(ap);
+        x.setActivityParams(new ActivityParams());
         y = new Activity();
         y.setReferent(p1);
-        y.setType(ApplicationType.ANALYSIS);
+        y.setType(ActivityType.ANALYSIS);
+        y.setApplication(ap);
+        y.setActivityParams(new ActivityParams());
         s = new HashSet<>();
         s.add(x);s.add(y);
         ap.setActivities(s);
@@ -267,15 +280,18 @@ public class InitDatabase implements ServletContextListener{
         
         ap = new Application();
         ap.setName("MiRNA");
-        ap.setReferent(p4);
         ap.setCategory(ac2);
         ap.setCode("MRN");
         x = new Activity();
         x.setReferent(p4);
-        x.setType(ApplicationType.EXPERIMENTAL);
+        x.setType(ActivityType.EXPERIMENTAL);
+        x.setApplication(ap);
+        x.setActivityParams(new ActivityParams());
         y = new Activity();
         y.setReferent(p2);
-        y.setType(ApplicationType.ANALYSIS);
+        y.setType(ActivityType.ANALYSIS);
+        y.setApplication(ap);
+        y.setActivityParams(new ActivityParams());
         s = new HashSet<>();
         s.add(x);s.add(y);
         ap.setActivities(s);
@@ -283,15 +299,18 @@ public class InitDatabase implements ServletContextListener{
         
         ap = new Application();
         ap.setName("Exon Chip");
-        ap.setReferent(p4);
         ap.setCategory(ac2);
         ap.setCode("ECH");
         x = new Activity();
         x.setReferent(p4);
-        x.setType(ApplicationType.EXPERIMENTAL);
+        x.setType(ActivityType.EXPERIMENTAL);
+        x.setApplication(ap);
+        x.setActivityParams(new ActivityParams());
         y = new Activity();
         y.setReferent(p2);
-        y.setType(ApplicationType.ANALYSIS);
+        y.setType(ActivityType.ANALYSIS);
+        y.setApplication(ap);
+        y.setActivityParams(new ActivityParams());
         s = new HashSet<>();
         s.add(x);s.add(y);
         ap.setActivities(s);
@@ -299,21 +318,13 @@ public class InitDatabase implements ServletContextListener{
         
         ap = new Application();
         ap.setName("qPCR");
-        ap.setReferent(p3);
         ap.setCode("QPC");
-        x = new Activity();
-        x.setReferent(p3);
-        x.setType(ApplicationType.EXPERIMENTAL);
-        s = new HashSet<>();
-        s.add(x);
-        ap.setActivities(s);
         appList.add(ap);
         
         for (Application app: appList) {
             applicationService.saveApplication(app);
         }
-        
-        
+     
         
         
         /*

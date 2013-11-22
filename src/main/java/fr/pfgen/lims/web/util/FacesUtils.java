@@ -24,9 +24,16 @@ public class FacesUtils {
         context.addMessage(key, msg);
     }
     
-    public static String getI18nValue(String key){
+    public static String getI18nValueInMessages(String key){
         FacesContext context = FacesContext.getCurrentInstance();
         ResourceBundle bundle = context.getApplication().getResourceBundle(context, "messages");
+        
+        return bundle.getString(key);
+    }
+    
+    public static String getI18nValueInEnums(String key){
+        FacesContext context = FacesContext.getCurrentInstance();
+        ResourceBundle bundle = context.getApplication().getResourceBundle(context, "enums");
         
         return bundle.getString(key);
     }

@@ -4,7 +4,6 @@
  */
 package fr.pfgen.lims.domain.projects;
 
-import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Objects;
 import java.util.Set;
@@ -40,10 +39,6 @@ public class Application extends AbstractGenericEntity{
     
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private ApplicationCategory category;
-    
-    @NotNull
-    @ManyToOne
-    private PfMember referent;
 
     public ApplicationCategory getCategory() {
         return category;
@@ -75,14 +70,6 @@ public class Application extends AbstractGenericEntity{
 
     public void setActivities(Set<Activity> activities) {
         this.activities = activities;
-    }
-
-    public PfMember getReferent() {
-        return referent;
-    }
-
-    public void setReferent(PfMember referent) {
-        this.referent = referent;
     }
 
     @Override

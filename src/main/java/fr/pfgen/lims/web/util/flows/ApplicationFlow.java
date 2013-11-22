@@ -10,14 +10,14 @@ import fr.pfgen.lims.web.util.FacesUtils;
  *
  * @author eric
  */
-public class ActivityFlow extends GenericFlow implements FlowMethods{
-    
+public class ApplicationFlow extends GenericFlow implements FlowMethods{
+
     @Override
     public final String endFlowAndRedirect() {
-        if (flowBean.getFlowAbove(FlowType.ACTIVITY) != null) {
-            switch (flowBean.getFlowAbove(FlowType.ACTIVITY)) {
-                case APPLICATION:
-                    return redirectToApplication();
+        if (flowBean.getFlowAbove(FlowType.APPLICATION) != null) {
+            switch (flowBean.getFlowAbove(FlowType.APPLICATION)) {
+                case CONTRACT:
+                    return redirectToContract();
                 default:
                     return redirectToDefault();
             }
@@ -26,19 +26,20 @@ public class ActivityFlow extends GenericFlow implements FlowMethods{
         }
     }
     
-    public String redirectToApplication(){
+    public String redirectToContract(){
         cleanFlow();
-        return "/pages/projects/application" + REDIRECT;
+        return "/pages/projects/contract" + REDIRECT;
     }
     
     public String redirectToDefault(){
         cleanFlow();
-        return "/pages/projects/activities" + REDIRECT;
+        return "/pages/projects/applications" + REDIRECT;
     }
 
     @Override
     public final void cleanFlow() {
-        flowBean.endFlow(FlowType.ACTIVITY);
-        FacesUtils.removeObjectFromSessionMap("activity");
+        flowBean.endFlow(FlowType.APPLICATION);
+        FacesUtils.removeObjectFromSessionMap("application");
     }
+    
 }
