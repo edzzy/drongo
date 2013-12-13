@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:composition template="cpgTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{applicationCategoryBean.initApplicationCategory}" /> 
+            </f:metadata>
+
+            <h:form>
+                <p:growl id="applicationMessages" life="2500" showDetail="true" />
+
+                <p:panel id="applicationPanel" header="#{messages.label_applicationCategory}">
+                    <h:panelGrid columns="3" >
+                        <p:outputLabel for="name" value="#{messages.application_name}:" />
+                        <p:inputText id="name" required="true" value="#{applicationCategoryBean.appCat.name}" validator="#{applicationCategoryBean.validateName}"/>
+                        <p:message for="name" />
+                    </h:panelGrid>
+                    <f:facet name="footer" >
+                        <p:commandButton value="#{messages.label_save}" icon="ui-icon-disk" action="#{applicationCategoryBean.saveApplicationCategory}" />
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

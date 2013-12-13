@@ -109,7 +109,7 @@
                                 <h:panelGrid columns="2" rendered="#{not empty contractBean.activityList}" >
                                     <h:outputText value="#{messages.label_activities}:" />
                                     <p:selectOneRadio id="expOrAnaRadio" value="#{contractBean.selectedActivity}" layout="pageDirection" converter="#{activityConverter}" >  
-                                        <f:selectItems value="#{contractBean.activityList}" var="activity" itemLabel="#{enums[activity.type.label]}" itemValue="#{entity}"/>  
+                                        <f:selectItems value="#{contractBean.activityList}" var="activity" itemLabel="#{enums[activity.type.label]}" itemValue="#{activity}"/>  
                                         <p:ajax listener="#{contractBean.onActChanged}" update="activityStepsPanelGrid" />
                                     </p:selectOneRadio>
                                 </h:panelGrid>

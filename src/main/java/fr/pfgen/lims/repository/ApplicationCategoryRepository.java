@@ -16,4 +16,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApplicationCategoryRepository extends JpaSpecificationExecutor<ApplicationCategory>, JpaRepository<ApplicationCategory, Long>{
     
+    public ApplicationCategory findByName(String name);
 }

@@ -17,4 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApplicationRepository extends JpaSpecificationExecutor<Application>, JpaRepository<Application, Long>{
    
+    public Application findByCode(String code);
+    
+    public Application findByName(String name);
 }

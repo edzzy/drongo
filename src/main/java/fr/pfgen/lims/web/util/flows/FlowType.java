@@ -17,7 +17,9 @@ public enum FlowType {
     PFMEMBER ("/pages/people/pfMember"),
     CONTRACT ("/pages/projects/contract"),
     ACTIVITY ("/pages/projects/activity"),
-    APPLICATION ("/pages/projects/application");
+    APPLICATION ("/pages/projects/application"),
+    APPLICATIONCATEGORY ("/pages/projects/applicationCategory"),
+    STEP ("/pages/projects/step");
     
     private final String path;
 

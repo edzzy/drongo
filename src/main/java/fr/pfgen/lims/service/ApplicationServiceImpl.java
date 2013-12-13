@@ -8,10 +8,14 @@ import fr.pfgen.lims.domain.projects.Activity;
 import fr.pfgen.lims.domain.projects.ActivityStep;
 import fr.pfgen.lims.domain.projects.Application;
 import fr.pfgen.lims.domain.projects.ApplicationCategory;
+import fr.pfgen.lims.domain.projects.Step;
 import fr.pfgen.lims.repository.ActivityRepository;
 import fr.pfgen.lims.repository.ActivityStepRepository;
 import fr.pfgen.lims.repository.ApplicationCategoryRepository;
 import fr.pfgen.lims.repository.ApplicationRepository;
+import fr.pfgen.lims.repository.StepRepository;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     ActivityRepository activityRepository;
     @Autowired
     ActivityStepRepository activityStepRepository;
+    @Autowired
+    StepRepository stepRepository;
     
     @Override
     public void saveApplication(Application application) {
@@ -79,5 +85,38 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
         
         return orderedSteps;
+    }
+
+    @Override
+    public Application findApplicationByCode(String code) {
+        return applicationRepository.findByCode(code);
+    }
+
+    @Override
+    public Application findApplicationByName(String name) {
+        return applicationRepository.findByName(name);
+    }
+
+    @Override
+    public ApplicationCategory findApplicationCategoryByName(String name) {
+        return applicationCategoryRepository.findByName(name);
+    }
+
+    @Override
+    public List<Step> findAllSteps() {
+        List<Step> stepList = stepRepository.findAll();
+        Collections.sort(stepList, new Comparator<Step>() {
+
+            @Override
+            public int compare(Step o1, Step o2) {
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
+        return stepList;
+    }
+
+    @Override
+    public void saveStep(Step step) {
+        stepRepository.save(step);
     }
 }

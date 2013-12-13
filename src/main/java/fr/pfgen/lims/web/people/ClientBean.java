@@ -214,7 +214,6 @@ public class ClientBean extends ClientFlow implements Serializable {
             }
             FacesUtils.keepMessageInFlash();
             return endFlowAndRedirect();
-            //return "clients?faces-redirect=true";
         } catch (Exception e) {
             FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
@@ -230,7 +229,6 @@ public class ClientBean extends ClientFlow implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
         
         return endFlowAndRedirect();
-        //return "clients?faces-redirect=true";
     }
 
     public void validateEmail(FacesContext context, UIComponent component, Object value) {

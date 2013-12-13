@@ -11,84 +11,60 @@
             <p:spacer height="50"/>
 
             <f:metadata>
-                <f:event type="preRenderView" listener="#{mainApplicationBean.initApplication}" /> 
+                <f:event type="preRenderView" listener="#{applicationBean.initApplication}" /> 
             </f:metadata>
 
-            <h:form>
-                <p:growl id="applicationMessages" life="2500" showDetail="true" />
+            <o:form>
+                <p:growl id="applicationMessages" life="2500" showDetail="true" globalOnly="true"/>
 
-                <h:panelGrid columns="3" >
-                    <p:outputLabel for="name" value="#{messages.application_name}" />
-                    <p:selectOneMenu value="#{application.selectedPlayer}" converter="#{applicationConverter}" editable="true" 
-                                     effect="fade" style="width:160px"  filter="true" filterMatchMode="startsWith">  
-                        <f:selectItem itemLabel="Select One" itemValue="" />  
-                        <f:selectItems value="#{autoCompleteBean.players}" var="player" itemLabel="#{player.name}" itemValue="#{player}"/> 
+                <p:panel id="applicationPanel" header="#{messages.label_application}">
+                    <h:panelGrid columns="3" >
+                        <p:outputLabel for="name" value="#{messages.application_name}:" />
+                        <p:inputText id="name" required="true" value="#{applicationBean.application.name}" validator="#{applicationBean.validateName}"/>
+                        <p:message for="name" />
 
-                    </p:selectOneMenu>    
-                </h:panelGrid>
+                        <p:outputLabel for="code" value="#{messages.application_code}:" />
+                        <p:inputText id="code" value="#{applicationBean.application.code}" required="true" validator="#{applicationBean.validateCode}" />
+                        <p:message for="code" />
 
-                <h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="5">
-                    <h:outputText value="#{enums.applicationType_experimental}" />  
-                    <p:selectBooleanCheckbox value="#{activityBean.expChecked}" >
-                        <p:ajax update="ppp"/>  
-                    </p:selectBooleanCheckbox>  
+                        <p:outputLabel for="category" value="#{messages.application_category}:" />
+                        <h:panelGrid columns="2">
+                            <p:selectOneMenu id="category" value="#{applicationBean.application.category}" converter="#{applicationCategoryConverter}" >
+                                <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />  
+                                <f:selectItems value="#{applicationBean.applicationCategoryList}" />
+                            </p:selectOneMenu>
+                            <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" action="#{applicationBean.createNewApplicationCategory}" immediate="true">
+                                <o:ignoreValidationFailed />
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:message for="category" />
+                    </h:panelGrid>
 
-                    <h:outputText value="#{enums.applicationType_bioinformatics}" />  
-                    <p:selectBooleanCheckbox value="#{activityBean.infoChecked}">  
-                        <p:ajax update="ppp"/>  
-                    </p:selectBooleanCheckbox>  
-                </h:panelGrid> 
-
-                <h:panelGrid id="ppp" width="100%" >
-                    <p:panelGrid id="mainPanelGrid" columns="2" columnClasses="topAlign,topAlign" rendered="#{activityBean.expChecked or activityBean.infoChecked}">
-                        <f:facet name="header">
-                            #{messages.label_activities}
-                        </f:facet>
-                        <p:fieldset id="expFieldSet" legend="#{enums.applicationType_experimental}" style="width: max-content" rendered="#{activityBean.expChecked}">  
-                            <h:panelGrid columns="3">
-                                <p:outputLabel for="expApplication" value="#{messages.label_application}" style="margin-bottom:20px"/>
-                                <p:selectOneMenu id="expApplication" required="true" value="#{activityBean.expActivity.application}" converter="#{applicationConverter}">
-                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />  
-                                    <f:selectItems value="#{activityBean.availableExpItems}" />
-                                    <p:ajax listener="#{activityBean.onExpAppChanged}" update="mainPanelGrid"/>
-                                </p:selectOneMenu>
-                                <p:message for="expApplication" />
-                            </h:panelGrid>    
-                            <p:spacer height="20"/>
-                            <h:panelGrid columns="3">    
-                                <p:outputLabel for="nbSamples" value="#{messages.activity_nbSamples}" />
-                                <p:spinner id="nbSamples" min="1" max="9999" value="#{activityBean.expActivity.activityParams.nbSamples}" size="4">
-                                    <p:tooltip for="nbSamples" value="#{messages.tooltip_activityNbSamples}" showEffect="fade" hideEffect="fade" />
-                                </p:spinner> 
-                                <p:message for="nbSamples" />
+                    <h:panelGrid columns="2" >
+                        <p:outputLabel value="#{messages.label_activities}:" />
+                        <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" ajax="false" action="#{applicationBean.createNewActivity}" disabled="#{applicationBean.application.activities.size() == 3}">
+                            
+                        </p:commandButton>
+                    </h:panelGrid> 
+                    
+                    <h:panelGrid columns="1" rendered="#{not empty applicationBean.application.activities}">
+                        <p:dataList value="#{applicationBean.application.activities}" var="activity" >  
+                            #{enums[activity.type.label]}
+                            <p:dataList value="#{activity.steps}" var="activityStep" type="ordered">
+                                #{activityStep.step.name}
+                            </p:dataList>
+                        </p:dataList>
+                    </h:panelGrid>
+                    <h:outputText value="(#{messages.activity_noActForApp})" rendered="#{empty applicationBean.application.activities}"/>
 
 
-                                <p:outputLabel for="nbSamples" value="#{messages.activity_nbSamples}" />  
 
-                            </h:panelGrid>  
-                        </p:fieldset>  
+                    <f:facet name="footer">
+                        <p:commandButton value="#{messages.label_save}" icon="ui-icon-disk" action="#{applicationBean.saveApplication}" />
+                    </f:facet>
+                </p:panel>
 
-                        <p:fieldset id="infoFieldSet" legend="#{enums.applicationType_bioinformatics}" style="width: max-content" rendered="#{activityBean.infoChecked}">  
-                            <h:panelGrid columns="3">
-                                <p:outputLabel for="infoApplication" value="#{messages.label_application}" style="margin-bottom:20px"/>
-                                <p:selectOneMenu id="infoApplication" required="true" value="#{activityBean.infoActivity.application}" converter="#{applicationConverter}">
-                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />  
-                                    <f:selectItems value="#{activityBean.availableInfoItems}" />
-                                    <p:ajax listener="#{activityBean.onInfoAppChanged}" update="mainPanelGrid"/>
-                                </p:selectOneMenu>
-                                <p:message for="infoApplication" />
-                            </h:panelGrid>  
-                        </p:fieldset>
-
-                        <f:facet name="footer">
-                            <h:panelGroup style="display:block; text-align:center">
-                                <p:commandButton id="submit" value="#{messages.label_save}" />
-                            </h:panelGroup>
-                        </f:facet>
-                    </p:panelGrid>
-                </h:panelGrid>
-
-            </h:form>
+            </o:form>
         </ui:define>
     </ui:composition>
 </html>

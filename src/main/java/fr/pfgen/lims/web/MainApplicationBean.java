@@ -5,8 +5,6 @@ import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import org.primefaces.model.DefaultMenuModel;
-import org.primefaces.model.MenuModel;
 import org.springframework.beans.factory.annotation.Configurable;
 
 @Configurable
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 public class MainApplicationBean {
 
     private String appName;
-    private MenuModel menuModel;
     
     public String getColumnName(String column) {
         if (column == null || column.length() == 0) {
@@ -32,11 +29,7 @@ public class MainApplicationBean {
     
    @PostConstruct
     public void initialize() {
-        menuModel = new DefaultMenuModel();
-    }
-    
-    public MenuModel getMenuModel() {
-        return menuModel;
+       
     }
     
     public String getAppName(){

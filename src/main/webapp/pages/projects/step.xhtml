@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:composition template="cpgTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+
+            <h:form>
+                <p:growl id="stepMessages" life="2500" showDetail="true" />
+
+                <p:panel header="#{messages.label_step}" >
+
+                    <h:panelGrid columns="3">
+                        <p:outputLabel for="name" value="#{messages.step_name}:" />
+                        <p:inputText id="name" required="true" value="#{stepBean.step.name}" validator="#{stepBean.validateName}" />
+                        <p:message for="name" />
+
+                        <p:outputLabel for="description" value="#{messages.step_description}:" />
+                        <p:editor id="description" value="#{stepBean.step.description}" />
+                        <p:message for="description" />
+                    </h:panelGrid> 
+
+                    <f:facet name="footer"> 
+                        <p:commandButton id="submitButton" value="#{messages.label_save}" update="stepMessages" action="#{stepBean.saveStep()}" icon="ui-icon-disk"/>
+                        <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{stepBean.cancelStep()}" />
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
