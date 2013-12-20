@@ -119,4 +119,9 @@ public class ApplicationServiceImpl implements ApplicationService {
     public void saveStep(Step step) {
         stepRepository.save(step);
     }
+    
+    @Override
+    public void saveActivity(Activity activity){
+        activityRepository.save(activity);
+    }
 }

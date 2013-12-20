@@ -5,6 +5,7 @@
 package fr.pfgen.lims.domain.util;
 
 import java.util.Date;
+import java.util.regex.Pattern;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Period;
@@ -18,6 +19,10 @@ public class TimeUtil {
     private TimeType timeType;
     private Integer units;
     
+    public TimeUtil(){
+        
+    }
+    
     public TimeUtil(Integer units, TimeType type){
         this.timeType = type;
         this.units = units;
@@ -27,6 +32,26 @@ public class TimeUtil {
         if (this.timeType==null) return null;
         if (this.units==0) return 0;
         return this.timeType.toDays(units);
+    }
+    
+    public static TimeUtil string2TimeUtil(String s){
+        Pattern whitespace = Pattern.compile("\\s+");
+        
+        String[] ls = whitespace.split(s);
+        if (ls.length != 2) return null;
+        Integer u;
+        TimeType tt;
+        try{
+            u = Integer.parseInt(ls[0]);
+            tt = TimeType.valueOf(ls[1]);
+        }catch(NumberFormatException e){
+            throw new NumberFormatException("Not an integer: "+ls[0]);
+        }catch(IllegalArgumentException e){
+            throw new IllegalArgumentException("No constant with text " + ls[1] + " found in enum TimeType");
+        }
+     
+        return new TimeUtil(u, tt);
+      
     }
     
     public static Date calculateEndDate(Date start, int nbDays){
@@ -51,6 +76,11 @@ public class TimeUtil {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(this.units)+" "+String.valueOf(this.timeType);
+    }
+    
     public TimeType getTimeType() {
         return timeType;
     }

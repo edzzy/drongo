@@ -48,9 +48,9 @@
                     </h:panelGrid> 
                     
                     <h:panelGrid columns="1" rendered="#{not empty applicationBean.application.activities}">
-                        <p:dataList value="#{applicationBean.application.activities}" var="activity" >  
-                            #{enums[activity.type.label]}
-                            <p:dataList value="#{activity.steps}" var="activityStep" type="ordered">
+                        <p:dataList value="#{applicationBean.application.activities.toArray()}" var="act" >  
+                            #{enums[act.type.label]}
+                            <p:dataList value="#{act.steps.toArray()}" var="activityStep" type="ordered">
                                 #{activityStep.step.name}
                             </p:dataList>
                         </p:dataList>

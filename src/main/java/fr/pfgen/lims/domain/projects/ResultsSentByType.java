@@ -9,5 +9,18 @@ package fr.pfgen.lims.domain.projects;
  * @author eric
  */
 public enum ResultsSentByType {
-    HARDDRIVE,USBKEY,MAIL,OTHER
+    HARDDRIVE ("sentByType_hardDrive"),
+    USBKEY ("sentByType_usbKey"),
+    MAIL ("sentByType_mail"),
+    FTP ("sentByType_ftp");
+    
+    private final String label;
+    
+    private ResultsSentByType(String label){
+        this.label = label;
+    }
+    
+    public String getLabel(){
+        return this.label;
+    }
 }

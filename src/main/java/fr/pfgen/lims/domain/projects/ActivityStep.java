@@ -24,18 +24,18 @@ import javax.validation.constraints.NotNull;
 public class ActivityStep extends AbstractGenericEntity {
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     private Activity activity;
     
     @NotNull
     @ManyToOne
     private Step step;
     
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "parent_activity_step")
     private ActivityStep parentActivityStep;
     
-    @OneToMany(mappedBy = "parentActivityStep", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "parentActivityStep", cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     private Set<ActivityStep> childActivityStep;
 
     public ActivityStep getParentActivityStep() {
@@ -45,7 +45,7 @@ public class ActivityStep extends AbstractGenericEntity {
     public void setParentActivityStep(ActivityStep parentActivityStep) {
         this.parentActivityStep = parentActivityStep;
     }
-
+    
     public Set<ActivityStep> getChildActivityStep() {
         return childActivityStep;
     }

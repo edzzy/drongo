@@ -10,6 +10,7 @@ import fr.pfgen.lims.domain.projects.Application;
 import fr.pfgen.lims.domain.projects.ApplicationCategory;
 import fr.pfgen.lims.domain.projects.Step;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -38,4 +39,6 @@ public interface ApplicationService {
     public abstract List<Step> findAllSteps();
     
     public abstract void saveStep(Step step);
+    
+    public abstract void saveActivity(Activity activity);
 }
