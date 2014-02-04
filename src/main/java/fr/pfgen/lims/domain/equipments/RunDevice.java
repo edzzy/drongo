@@ -4,7 +4,6 @@
  */
 package fr.pfgen.lims.domain.equipments;
 
-import fr.pfgen.lims.domain.runs.AbstractRun;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -43,4 +42,6 @@ public class RunDevice extends Equipment{
     public void setReagents(Set<Reagent> reagents) {
         this.reagents = reagents;
     }
+    
+    
 }

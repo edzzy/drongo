@@ -44,6 +44,11 @@
             org.springframework.web.context.request.RequestContextListener
         </listener-class>
     </listener>
+   <listener>
+        <listener-class>
+           fr.pfgen.lims.domain.util.InitDatabase2
+        </listener-class>
+    </listener>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>

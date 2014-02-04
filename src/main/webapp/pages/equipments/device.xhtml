@@ -31,7 +31,11 @@
                                 <p:message for="type" />
 
                                 <p:outputLabel for="manufacturer" value="#{messages.equipment_manufacturer}" />
-                                <p:inputText id="manufacturer" required="true" value="#{deviceBean.device.manufacturer}" />
+                                <p:selectOneMenu id="manufacturer" value = "#{deviceBean.device.manufacturer}" editable="true"  >
+                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
+                                    <f:selectItems value ="#{deviceBean.allManufacturers}"  var="man" itemLabel="#{man}" itemValue="#{man}" />
+                                </p:selectOneMenu> 
+                               
                                 <p:message for="manufacturer" />
                             </h:panelGrid>
                         </p:panel>
@@ -56,7 +60,20 @@
                         </p:panel>
                     </p:tab>
 
-                    <p:tab id="otherTab" title="#{messages.label_informations}" >
+                   
+                    <p:tab id="peopleTab" title="#{messages.label_people}">
+                        <p:panel header="#{messages.label_people}">
+                            <p:panelGrid columns="3">
+                                <p:outputLabel for="plateform" value="Plateforme" />
+                                <p:selectOneMenu id="plateform" value = "#{deviceBean.device.plateform}">
+                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
+                                    <f:selectItems value ="#{deviceBean.plateformTypes}"  var="pf" itemLabel="#{pf.label}" itemValue="#{pf}" />
+                                </p:selectOneMenu> 
+                                <p:message for="plateform" />
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:tab>
+ <p:tab id="otherTab" title="#{messages.label_informations}" >
                         <p:panel id="panelOther" header="#{messages.label_otherInformations}" >
                             <p:focus context="panelOther"/>
                             <h:panelGrid columns="3" >
@@ -64,8 +81,16 @@
                                 <p:inputText id="room" required="true" value="#{deviceBean.device.room}" />
                                 <p:message for="room" />
 
+
+                                <p:outputLabel for="status" value = "Status : " />
+                                <p:selectOneMenu id="status" value = "#{deviceBean.device.status}">
+                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
+                                    <f:selectItems value ="#{deviceBean.equipmentStatuses}"  var="es" itemLabel="#{es.label}" itemValue="#{es}" />
+                                </p:selectOneMenu> 
+                                <p:message for="status" />
+
                                 <p:outputLabel for="acquisition" value="#{messages.equipment_acquisitionDate}" />
-                                <p:calendar id="acquisition" value="#{deviceBean.device.acquisitionDate}" />
+                                <p:calendar id="acquisition" value="#{deviceBean.device.acquisitionDate}" navigator="true" />
                                 <p:message for="acquisition" />
                             </h:panelGrid>
                             <h:panelGrid columns="3" id="imagePanel">
@@ -90,7 +115,6 @@
                             </h:panelGrid>
                         </p:panel>
                     </p:tab>
-
                     <p:tab id="confirmTab" title="#{messages.label_confirmation}">
                         <p:panel header="#{messages.label_confirmation}" >
                             <p:focus context="submitButton"/>

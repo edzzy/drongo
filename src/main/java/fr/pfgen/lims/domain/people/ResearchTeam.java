@@ -31,7 +31,7 @@ public class ResearchTeam extends AbstractGenericEntity{
     private String name;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private ResearchUnit researchUnit;
     
     @OneToMany(mappedBy = "researchTeam", cascade = CascadeType.ALL)

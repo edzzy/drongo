@@ -6,6 +6,7 @@ package fr.pfgen.lims.service;
 
 import fr.pfgen.lims.domain.equipments.Equipment;
 import fr.pfgen.lims.domain.equipments.EquipmentCategory;
+import fr.pfgen.lims.domain.equipments.Intervention;
 import fr.pfgen.lims.domain.equipments.RunDevice;
 import fr.pfgen.lims.domain.equipments.SmallEquipment;
 import java.util.List;
@@ -56,4 +57,13 @@ public interface EquipmentService {
     public abstract EquipmentCategory findEquipmentCategoryByName(String name);
     
     public abstract void saveEquipmentCategory(EquipmentCategory category);
+    
+    public abstract List<Intervention> findAllInterventions();
+    
+    public abstract List<Intervention> findAllInterventionsByEquipment(Equipment equipment);
+    
+    
+    public abstract List<String> findAllManufacturers();
+    
+    public abstract void saveIntervention(Intervention intervention);
 }

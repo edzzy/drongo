@@ -6,12 +6,16 @@ package fr.pfgen.lims.service;
 
 import fr.pfgen.lims.domain.equipments.Equipment;
 import fr.pfgen.lims.domain.equipments.EquipmentCategory;
+import fr.pfgen.lims.domain.equipments.Intervention;
 import fr.pfgen.lims.domain.equipments.RunDevice;
 import fr.pfgen.lims.domain.equipments.SmallEquipment;
 import fr.pfgen.lims.repository.EquipmentCategoryRepository;
 import fr.pfgen.lims.repository.EquipmentRepository;
+import fr.pfgen.lims.repository.InterventionRepository;
 import fr.pfgen.lims.repository.RunDeviceRepository;
 import fr.pfgen.lims.repository.SmallEquipmentRepository;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +39,8 @@ public class EquipmentServiceImpl implements EquipmentService {
     SmallEquipmentRepository smallEquipmentRepository;
     @Autowired
     EquipmentCategoryRepository equipmentCategoryRepository;
+    @Autowired
+    InterventionRepository interventionRepository;
 
     @Override
     public long countAllEquipments() {
@@ -149,5 +155,37 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public void saveEquipmentCategory(EquipmentCategory category) {
         equipmentCategoryRepository.save(category);
+    }
+
+    @Override
+    public List<Intervention> findAllInterventions() {
+        
+        return interventionRepository.findAll();
+    }
+
+    @Override
+    public List<Intervention> findAllInterventionsByEquipment(Equipment equipment) {
+        List<Intervention> interList = interventionRepository.findByEquipment(equipment);
+        Collections.sort(interList, new Comparator<Intervention>() {
+
+            @Override
+            public int compare(Intervention o1, Intervention o2) {
+                return o1.getInterventionDate().compareTo(o2.getInterventionDate());
+            }
+        });
+        
+        return interList; 
+        
+    }
+
+    @Override
+    public List<String> findAllManufacturers() {
+       return equipmentRepository.findAllManufacturers();
+    }
+
+    @Override
+    public void saveIntervention(Intervention intervention) {
+        
+         interventionRepository.save(intervention);
     }
 }

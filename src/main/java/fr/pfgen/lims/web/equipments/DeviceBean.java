@@ -5,30 +5,37 @@
 package fr.pfgen.lims.web.equipments;
 
 import fr.pfgen.lims.domain.equipments.Equipment;
+import fr.pfgen.lims.domain.equipments.EquipmentStatus;
+import fr.pfgen.lims.domain.equipments.Intervention;
+import fr.pfgen.lims.domain.equipments.PlateformType;
 import fr.pfgen.lims.domain.equipments.RunDevice;
 import fr.pfgen.lims.service.EquipmentService;
 import fr.pfgen.lims.web.util.FacesUtils;
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author eric
  */
-@Controller
+@Component
 @Scope("view")
-@ManagedBean
 public class DeviceBean implements Serializable {
 
     @Autowired
@@ -37,6 +44,7 @@ public class DeviceBean implements Serializable {
     private String wizStep;
     private boolean isNewDevice;
     private boolean hasImage;
+    
 
     public void initDevice() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
@@ -178,4 +186,24 @@ public class DeviceBean implements Serializable {
             return "ui-icon-disk";
         }
     }
+    
+    
+      public EquipmentStatus[] getEquipmentStatuses(){
+        return EquipmentStatus.values();
+    }
+      public PlateformType[] getPlateformTypes(){
+          return PlateformType.values();
+      }
+      
+      public List<String> getAllManufacturers(){
+          return equipmentService.findAllManufacturers();
+      }
+      
+      public List<Intervention> getAllInterventions(){
+          return equipmentService.findAllInterventions();
+      
+      }
+     
+   
+    
 }

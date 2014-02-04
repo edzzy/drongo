@@ -11,6 +11,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
@@ -36,7 +38,7 @@ public abstract class Equipment extends AbstractGenericEntity{
     
     @NotNull
     @Size(max = 50)
-    private String Manufacturer;
+    private String manufacturer;
     
     @Size(max = 50)
     private String type;
@@ -59,11 +61,27 @@ public abstract class Equipment extends AbstractGenericEntity{
     @Size(max = 7)
     private String itx;
     
+    
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date acquisitionDate;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipement")
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date constructedDate;
+    
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private EquipmentStatus status;
+    
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private PlateformType plateform;
+    
+    
+    
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipment")
     private Set<Intervention> interventions;
     
     public String getInternalNumber() {
@@ -107,11 +125,11 @@ public abstract class Equipment extends AbstractGenericEntity{
     }
 
     public String getManufacturer() {
-        return Manufacturer;
+        return manufacturer;
     }
 
-    public void setManufacturer(String Manufacturer) {
-        this.Manufacturer = Manufacturer;
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
     public String getType() {
@@ -129,7 +147,21 @@ public abstract class Equipment extends AbstractGenericEntity{
     public void setAcquisitionDate(Date acquisitionDate) {
         this.acquisitionDate = acquisitionDate;
     }
+    public Set<Intervention> getInterventions() {
+        return interventions;
+    }
 
+    public PlateformType getPlateform() {
+        return plateform;
+    }
+
+    public void setPlateform(PlateformType plateform) {
+        this.plateform = plateform;
+    }
+
+    public void setInterventions(Set<Intervention> interventions) {
+        this.interventions = interventions;
+    }
     @Override
     public int hashCode() {
         int hash = 7;
@@ -156,4 +188,13 @@ public abstract class Equipment extends AbstractGenericEntity{
     public String toString() {
         return this.name+" ("+this.internalNumber+")";
     }
+
+    public EquipmentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EquipmentStatus status) {
+        this.status = status;
+    }
+    
 }

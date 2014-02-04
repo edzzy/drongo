@@ -51,7 +51,7 @@
                     </p:column>
 
                     <p:column headerText="#{messages.pfMember_memberSince}" sortBy="#{pfMember.memberSince}" id="registered">
-                        <h:outputText value="#{pfMember.registeredOn}">
+                        <h:outputText value="#{pfMember.created}">
                             <f:convertDateTime dateStyle="long" type="date" />
                         </h:outputText>
                     </p:column>

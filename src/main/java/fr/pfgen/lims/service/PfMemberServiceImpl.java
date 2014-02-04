@@ -49,7 +49,7 @@ public class PfMemberServiceImpl implements PfMemberService {
         pfMember.setLastname(WordUtils.capitalizeFully(pfMember.getLastname(), '-', ' '));
         pfMember.setEmail(pfMember.getEmail().toLowerCase());
      //   pfMember.setMemberSince(new Date());
-        pfMember.getAppCredentials().setSalt("saltTest");
+    
         pfMemberRepository.save(pfMember);
     }
 
