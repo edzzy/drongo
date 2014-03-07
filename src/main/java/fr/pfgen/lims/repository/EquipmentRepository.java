@@ -24,4 +24,6 @@ public interface EquipmentRepository extends JpaSpecificationExecutor<Equipment>
     
     @Query("select distinct manufacturer from Equipment")
     public List<String> findAllManufacturers();
+
+    public  Equipment findById(Long id);
 }

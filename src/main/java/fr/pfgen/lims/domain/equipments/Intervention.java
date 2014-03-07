@@ -37,7 +37,7 @@ public class Intervention extends AbstractGenericEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date interventionDate;
     
-    @Size(max = 50)
+    @Size(max = 200)
     private String subject;
     
     @Lob

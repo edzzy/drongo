@@ -19,7 +19,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "run_devices")
 public class RunDevice extends Equipment{
-    
+
+    //TODO Remove image attribut
+
     @NotNull
     @Lob
     private byte[] image;

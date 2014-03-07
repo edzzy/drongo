@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
+
 @Table(name = "pf_members")
 public class PfMember extends AbstractPerson{
 

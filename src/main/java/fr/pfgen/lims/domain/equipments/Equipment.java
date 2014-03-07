@@ -4,23 +4,18 @@
  */
 package fr.pfgen.lims.domain.equipments;
 
+import fr.pfgen.lims.domain.people.Organism;
+import fr.pfgen.lims.domain.people.PfMember;
+import fr.pfgen.lims.domain.people.Structure;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -28,62 +23,106 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author eric
  */
 @Entity
+
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "equipments")
-public abstract class Equipment extends AbstractGenericEntity{
-    
+public class Equipment extends AbstractGenericEntity{
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private PlateformType plateform;
+
     @NotNull
     @Size(min = 2, max = 50)
     private String name;
-    
+
+    //Todo description field
+
     @NotNull
     @Size(max = 50)
     private String manufacturer;
     
     @Size(max = 50)
-    private String type;
-    
-    @NotNull
-    @Column(unique = true)
-    @Size(max = 50)
-    private String serialNumber;
-    
-    @NotNull
-    @Column(unique = true)
-    @Size(max = 7)
-    private String internalNumber;
-    
-    @NotNull
-    @Size(max = 15)
-    private String room;
-    
-    @Column(unique = true)
-    @Size(max = 7)
-    private String itx;
-    
-    
+    private String modele;
+
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date acquisitionDate;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date constructedDate;
+
+    @Min(value = 0)
+    private Double cost;
+
+    @NotNull
+    @Size(max = 50)
+    private String room;
+
+    @Column
+    @Size(max = 50)
+    private String serialNumber;
+    
+
+    @Column
+    @Size(max = 20)
+    private String internalNumber;
+
+    @Column
+    private String ifrNumber;
+
+    @Column
+    @Size(max = 7)
+    private String itx;
+
+    @Min(value = 0)
+    private Double maintenanceCost;
+
+    @ManyToMany
+    private Set<Organism> organisms;
+
+    @ManyToMany
+    private Set<Structure> structures;
+
+
+    private String description;
+
+    private String maintenanceCharge;
+
+    private Boolean convention;
+
+    private String comment;
+
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "MJ")
+    private Date maintenance_date;
+
+    @Size(max = 50)
+    private String warranty;
+
+    @Size(max = 50)
+    private String sav;
+
+    private String software;
+
+    private String licence;
+
     
     @NotNull
     @Enumerated(EnumType.STRING)
     private EquipmentStatus status;
     
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private PlateformType plateform;
-    
-    
+
+    @ManyToMany
+    private Set<PfMember> responsables;
+
     
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipment")
     private Set<Intervention> interventions;
-    
+
     public String getInternalNumber() {
         return internalNumber;
     }
@@ -124,6 +163,14 @@ public abstract class Equipment extends AbstractGenericEntity{
         this.itx = itx;
     }
 
+    public Set<Structure> getStructures() {
+        return structures;
+    }
+
+    public void setStructures(Set<Structure> structures) {
+        this.structures = structures;
+    }
+
     public String getManufacturer() {
         return manufacturer;
     }
@@ -132,14 +179,13 @@ public abstract class Equipment extends AbstractGenericEntity{
         this.manufacturer = manufacturer;
     }
 
-    public String getType() {
-        return type;
+    public Date getConstructedDate() {
+        return constructedDate;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setConstructedDate(Date constructedDate) {
+        this.constructedDate = constructedDate;
     }
-
     public Date getAcquisitionDate() {
         return acquisitionDate;
     }
@@ -162,6 +208,137 @@ public abstract class Equipment extends AbstractGenericEntity{
     public void setInterventions(Set<Intervention> interventions) {
         this.interventions = interventions;
     }
+
+    public Double getMaintenance_cost() {
+        return maintenanceCost;
+    }
+
+    public void setMaintenance_cost(Double maintenance_cost) {
+        this.maintenanceCost = maintenance_cost;
+    }
+
+    public String getMainteance_charge() {
+        return maintenanceCharge;
+    }
+
+    public void setMainteance_charge(String mainteance_charge) {
+        this.maintenanceCharge = mainteance_charge;
+    }
+
+    public Boolean getConvention() {
+        return convention;
+    }
+
+    public void setConvention(Boolean convention) {
+        this.convention = convention;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getMaintenanceCharge() {
+        return maintenanceCharge;
+    }
+
+    public void setMaintenanceCharge(String maintenanceCharge) {
+        this.maintenanceCharge = maintenanceCharge;
+    }
+
+    public Date getMaintenance_date() {
+        return maintenance_date;
+    }
+
+    public void setMaintenance_date(Date maintenance_date) {
+        this.maintenance_date = maintenance_date;
+    }
+
+    public String getWarranty() {
+        return warranty;
+    }
+
+    public void setWarranty(String warranty) {
+        this.warranty = warranty;
+    }
+
+    public String getSav() {
+        return sav;
+    }
+
+    public void setSav(String sav) {
+        this.sav = sav;
+    }
+
+    public String getIfrNumber() {
+        return ifrNumber;
+    }
+
+    public void setIfrNumber(String ifrNumber) {
+        this.ifrNumber = ifrNumber;
+    }
+
+    public String getSofware() {
+        return software;
+    }
+
+    public void setSofware(String sofware) {
+        this.software = sofware;
+    }
+
+    public String getLicence() {
+        return licence;
+    }
+
+    public void setLicence(String licence) {
+        this.licence = licence;
+    }
+
+    public Double getMaintenanceCost() {
+        return maintenanceCost;
+    }
+
+    public void setMaintenanceCost(Double maintenanceCost) {
+        this.maintenanceCost = maintenanceCost;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getMainteanceCharge() {
+        return maintenanceCharge;
+    }
+
+    public void setMainteanceCharge(String mainteanceCharge) {
+        this.maintenanceCharge = mainteanceCharge;
+    }
+
+    public String getSoftware() {
+        return software;
+    }
+
+    public void setSoftware(String software) {
+        this.software = software;
+    }
+
+    public Set<Organism> getOrganisms() {
+        return organisms;
+    }
+
+    public void setOrganisms(Set<Organism> organisms) {
+        this.organisms = organisms;
+    }
+
+
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -169,6 +346,21 @@ public abstract class Equipment extends AbstractGenericEntity{
         return hash;
     }
 
+    public String getModele() {
+        return modele;
+    }
+
+    public void setModele(String modele) {
+        this.modele = modele;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

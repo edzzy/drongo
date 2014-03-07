@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="#{redirectBean.templateEquipment}">
+    <ui:define name="content">
+        <p:spacer height="50"/>
+        <f:metadata>
+            f:metadata>
+            <f:viewParam id="inter_id" name="id" value="#{showEquipmentBean.equipment}"
+                         required="true" requiredMessage="Accès à la page invalide. Utilisez un lien de l'inteface pour accéder à cette page !"
+                         converter="#{equipmentConverter}" converterMessage="id d'intervention inconnu ! Utilisez un lien de l'inteface pour accéder à cette page !"/>
+
+        </f:metadata>
+        <h:message for="inter_id" style="color: red"/>
+        <p:accordionPanel multiple="true">
+            <p:tab title="#{messages.label_information}">
+                    <p:panelGrid columns="2">
+
+                        <p:outputLabel value="#{messages.equipment_name}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.name}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_deviceDescription}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.description}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_manufacturer}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.manufacturer}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_model}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.modele}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_acquisitionDate}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.acquisitionDate}">
+                            <f:convertDateTime pattern="yyyy" type="date" />
+                        </h:outputText>
+
+                        <p:outputLabel value="#{messages.equipment_room}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.room}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_status}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.status.label}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.label_plateform}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.plateform.label}"/>
+
+                        <p:outputLabel value="#{messages.equipment_ifrNumber}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.ifrNumber}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_internalNumber}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.internalNumber}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_itx}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.itx}" style="font-weight: bold" />
+
+                        <p:outputLabel value="#{messages.equipment_serialNumber}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.serialNumber}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.label_comment}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.comment}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_chargeCost}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.maintenance_cost}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_maintenanceCharge}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.maintenanceCharge}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_maintenanceDate}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.maintenance_date}" style="font-weight: bold">
+                            <f:convertDateTime pattern="mm-DD" type="date" />
+                        </h:outputText>
+
+                        <p:outputLabel value="#{messages.equipment_sav}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.sav}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_warranty}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.warranty}" style="font-weight: bold" />
+
+                        <p:outputLabel value="#{messages.equipment_software}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.software}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_licence}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.licence}" style="font-weight: bold"/>
+
+                        <p:outputLabel value="#{messages.equipment_convention}" />
+                        <h:outputText value="#{showEquipmentBean.equipment.convention}" style="font-weight: bold" />
+                    </p:panelGrid>
+            </p:tab>
+            <p:tab title="#{messages.equipment_funding}">
+                <h:panelGrid columns="1" rendered="#{showEquipmentBean.pieModel!=null}">
+                <p:pieChart id="fund" value="#{showEquipmentBean.pieModel}" legendPosition="e" fill="false" showDataLabels="true"
+                            title="#{messages.equipment_funding}" style="width: 400px;height: 300px;background: transparent " sliceMargin="5" diameter="150"/>
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="#{messages.equipment_cost}" />
+                    <h:outputText value="#{showEquipmentBean.equipment.cost} &#8364;" style="font-weight: bold"/>
+                </p:panelGrid>
+                </h:panelGrid>
+                <p:outputLabel value="#{messages.label_notFunding}" rendered="#{showEquipmentBean.pieModel==null}"/>
+
+            </p:tab>
+            <p:tab title="#{messages.label_interventions}">
+                    <p:dataTable var="intervention"
+                                 value="#{showEquipmentBean.interventionList}">
+                        <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
+                        <p:column style="width: 5px">
+                            <p:rowToggler />
+                        </p:column>
+                        <p:column style="width: 5px" headerText="#{messages.label_view}">
+                            <p:commandLink id="showButton" action="#{showEquipmentBean.editIntervention}">
+                                <h:panelGroup styleClass="ui-icon ui-icon-search" />
+                                <f:setPropertyActionListener value="#{intervention}" target="#{showEquipmentBean.selectedIntervention}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="#{messages.label_subject}">
+                            <h:outputText value="#{intervention.subject}"/>
+                        </p:column>
+                        <p:column headerText="#{messages.label_date}">
+                            <h:outputText value="#{intervention.interventionDate}">
+                                <f:convertDateTime pattern="yyyy-MM-dd" type="date" />
+                            </h:outputText>
+                        </p:column>
+                        <p:rowExpansion>
+                            <h:outputText  value="#{intervention.comment}" escape="false" />
+                        </p:rowExpansion>
+                    </p:dataTable>
+            </p:tab>
+            <p:tab title="#{messages.label_referent}">
+            </p:tab>
+    </p:accordionPanel>
+    </ui:define>
+</ui:composition>
+</html>

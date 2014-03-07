@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="lims:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="lims-0.1.0.BUILD-SNAPSHOT.war">
+      <element id="artifact" artifact-name="lims:war exploded" />
+    </root>
+  </artifact>
+</component>

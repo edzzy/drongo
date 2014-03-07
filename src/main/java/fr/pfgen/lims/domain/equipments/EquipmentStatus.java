@@ -12,9 +12,9 @@ package fr.pfgen.lims.domain.equipments;
  */
 public enum EquipmentStatus {
     
-    ACTIVE("equipmentStatus_active"), 
-    REFORMED("equipmentStatus_reformed"),
-    INACTIVE("equipmentStatus_inactive");
+    ACTIVE("Actif"),
+    REFORMED("Réformé"),
+    INACTIVE("Hors périmétre");
     
     private final String label;
     

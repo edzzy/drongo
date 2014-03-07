@@ -34,7 +34,7 @@ public class ApplicationBean {
         }
         return builder.toString().trim();
     }
-    
+
    @PostConstruct
     public void initialize() {
         menuModel = new DefaultMenuModel();

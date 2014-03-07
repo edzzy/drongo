@@ -68,12 +68,13 @@ public class InitDatabase2 implements ServletContextListener {
     
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+
         try {
             WebApplicationContextUtils
                     .getRequiredWebApplicationContext(sce.getServletContext())
                     .getAutowireCapableBeanFactory()
                     .autowireBean(this);
-            
+
             List<ClientType> clientTypeList = new ArrayList<>();
             
             ClientType ct1 = new ClientType();
@@ -175,7 +176,7 @@ public class InitDatabase2 implements ServletContextListener {
             for (Client client : clientList) {
                 clientService.saveClient(client);
             }
-            
+
             List<PfMember> pfMemberList = new ArrayList<>();
             
             PfMember p1 = new PfMember();
@@ -260,7 +261,7 @@ public class InitDatabase2 implements ServletContextListener {
             for (PfMember pfMember : pfMemberList) {
                 pfMemberService.savePfMember(pfMember);
             }
-            
+
             List<RunDevice> runDeviceList = new ArrayList<>();
             RunDevice rd1 = new RunDevice();
             DateTime dt = new DateTime(2007, 1, 1, 0, 0, 0);
@@ -269,7 +270,7 @@ public class InitDatabase2 implements ServletContextListener {
             rd1.setManufacturer("DELL");
             rd1.setRoom("IRS : 117");
             rd1.setItx("ITX0000");
-            rd1.setType("Power Vault MD1000");
+            rd1.setModele("Power Vault MD1000");
             rd1.setSerialNumber("98LK93J");
             rd1.setStatus(EquipmentStatus.ACTIVE);
             rd1.setPlateform(PlateformType.BIOINFO);
@@ -277,7 +278,7 @@ public class InitDatabase2 implements ServletContextListener {
             rd1.setImage(imgByte1);
             
             runDeviceList.add(rd1);
-            
+            /*
             RunDevice rd2 = new RunDevice();
             DateTime dt2 = new DateTime(2009, 1, 1, 0, 0, 0);
             rd2.setAcquisitionDate(dt2.toDate());
@@ -285,7 +286,7 @@ public class InitDatabase2 implements ServletContextListener {
             rd2.setManufacturer("DELL");
             rd2.setRoom("IRS : 117");
             rd2.setItx("ITX0001");
-            rd2.setType("PowerEdge 2970");
+            rd2.setModele("PowerEdge 2970");
             rd2.setSerialNumber("BPJN64J");
             rd2.setStatus(EquipmentStatus.ACTIVE);
             rd2.setPlateform(PlateformType.BIOINFO);
@@ -302,7 +303,7 @@ public class InitDatabase2 implements ServletContextListener {
             rd3.setManufacturer("Affymetrix");
             rd3.setRoom("IRS : 217");
             rd3.setItx("ITX0005");
-            rd3.setType("GeneTitan");
+            rd3.setModele("GeneTitan");
             rd3.setSerialNumber("AffBPJN64J");
             rd3.setStatus(EquipmentStatus.ACTIVE);
             rd3.setPlateform(PlateformType.GENETIQUE);
@@ -315,7 +316,7 @@ public class InitDatabase2 implements ServletContextListener {
             for (RunDevice rundevice : runDeviceList) {
                 equipmentService.saveRunDevice(rundevice);
             }
-            
+
             Intervention i1 = new Intervention();
             i1.setEquipment(rd2);
             i1.setSubject("Changement du disque 0 ");
@@ -323,11 +324,11 @@ public class InitDatabase2 implements ServletContextListener {
             i1.setInterventionDate(new DateTime(2013, 2, 22, 0, 0, 0).toDate());
             
             equipmentService.saveIntervention(i1);
-            
-        } catch (IOException ex) {
+*/
+        } catch (Exception ex) {
             Logger.getLogger(InitDatabase2.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
     
     @Override

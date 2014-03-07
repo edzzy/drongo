@@ -12,9 +12,9 @@ package fr.pfgen.lims.domain.equipments;
  */
 public enum PlateformType {
     
-    GENOMIQUE("equipmentPlateform_genomique"),
-    GENETIQUE("equipmentPlateform_genetique"),
-    BIOINFO("equipmentPlateform_bioinfo");
+    GENOMIQUE("Genomique"),
+    GENETIQUE("Genetique"),
+    BIOINFO("Bioinfo");
     
     private final String label;
     

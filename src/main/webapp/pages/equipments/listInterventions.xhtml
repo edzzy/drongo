@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="#{redirectBean.templateEquipment}">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <h:form id="interventionListForm">
+                <p:growl id="interventionListMessages" showDetail="true" showSummary="true" life="3000"/>
+                <p:dataTable var="intervention"
+                             value="#{listInterventionsBean.interventionList}"
+                             rowsPerPageTemplate="5,10,15" 
+                             rowKey="#{intervention.id}"
+                             paginator="true"
+                             rows="10"
+                             filteredValue="#{listInterventionsBean.filteredInterventions}"
+                             id="interventionsTable"
+                             emptyMessage="#{messages.label_emptyRecords}"
+                             sortMode="multiple">  
+
+                    <f:facet name="header">
+                        #{messages.label_interventions}
+                    </f:facet>
+                    
+                    <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
+                    <!--
+                    <p:column >
+                         <p:commandLink  id="showButton" action="#{interventionBean.showDevice}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-search" />
+                            <f:setPropertyActionListener value="#{device}" target="#{devicesBean.selectedDevice}" />
+                        </p:commandLink>
+                    </p:column>
+                    -->
+                    <p:column headerText="Description" style="width: 5px">
+                        <p:rowToggler />
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_name}"  sortBy="#{intervention.equipment.name}" filterBy="#{intervention.equipment.name}" id="equipment_name">
+                        <h:outputText value="#{intervention.equipment.name}"/>
+                    </p:column>
+
+                    <p:column headerText="#{messages.label_subject}" sortBy="#{intervention.subject}" filterBy="#{intervention.subject}" id="subject">
+                        <h:outputText value="#{intervention.subject}" />
+                    </p:column>  
+
+                    <p:column headerText="#{messages.label_date}" sortBy="#{intervention.interventionDate}" filterBy="#{intervention.interventionDate}" id="date">
+                        <h:outputText value="#{intervention.interventionDate}" >
+                            <f:convertDateTime pattern="yyyy-MM-dd" type="date" />
+                        </h:outputText>
+                    </p:column>  
+
+                   <!--
+                    <p:column style="width: 5px">
+                        <p:commandLink id="editButton" action="#{devicevsBean.editDevice}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
+                            <f:setPropertyActionListener value="#{device}" target="#{devicesBean.selectedDevice}" />
+                        </p:commandLink>
+                        <p:tooltip for="editButton" value="#{messages.label_edit}" /> 
+                    </p:column>  
+
+                    <p:column style="width: 5px">
+                        <p:commandLink id="deleteButton" oncomplete="deleteDlg.show();" update=":deleteDialog" title="#{messages.label_delete}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-trash" />
+                            <f:setPropertyActionListener value="#{device}" target="#{devicesBean.selectedDevice}" />
+                        </p:commandLink>
+                        <p:tooltip for="deleteButton" value="#{messages.label_delete}" /> 
+                    </p:column>
+-->
+                    <p:rowExpansion>
+                        <h:outputText  value="#{intervention.comment}" escape="false" />
+                    </p:rowExpansion>
+                    <p:columnGroup type="footer">
+                        <p:row>  
+                            <p:column colspan="11" footerText="#{listInterventionsBean.numberInterventions} #{messages.label_interventions}"  />
+                        </p:row>  
+                    </p:columnGroup>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="#{messages.equipment_newDevice}" icon="ui-icon-plus" action="#{devicesBean.createNewDevice}"/>
+                    </f:facet>
+
+                </p:dataTable>
+            </h:form>
+
+            <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{listInterventionsBean.selectedInterventions}" message="#{messages.label_confirm_deletion}"
+                             closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
+                <h:form id="deleteForm">
+                    <h:panelGroup layout="block" style="text-align: right">
+                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{devicesBean.deleteDevice}" update=":interventionListForm:interventionListMessages, :interventionListForm:interventionsTable" oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_cancel}" actionListener="#{devicesBean.cancelDeletion}" update=":interventionListForm:interventionListMessages" oncomplete="deleteDlg.hide();" />
+                    </h:panelGroup>
+                </h:form>
+            </p:confirmDialog>
+
+        </ui:define>
+    </ui:composition>
+</html>

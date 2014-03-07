@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 public interface InterventionRepository extends JpaSpecificationExecutor<Intervention>, JpaRepository<Intervention, Long>{
     
     public List<Intervention> findByEquipment(Equipment equipment);
-        
-    
+
+
+    public Intervention findById(Long id);
 }
