@@ -10,10 +10,13 @@
         <p:spacer height="50"/>
 
         <f:metadata>
-
-            <f:event type="preRenderView" listener="#{EditInterventionBean.init}" />
-
+<!--
+            <f:event type="preRenderView" listener="#{createInterventionBean.initIntervention}" />
+            -->
+            <f:viewParam id="inter_id" name="equipment" value="#{createInterventionBean.selectedEquipment}"
+                         converter="#{equipmentConverter}" />
         </f:metadata>
+        <h:message for="inter_id" style="color: red"/>
 
         <h:form id="interventionForm" enctype="multipart/form-data">
             <p:growl id="interventionCreateMessages" life="2500" showDetail="true" globalOnly="true"/>
@@ -24,30 +27,29 @@
                     <p:focus context="panelDescription"/>
                     <h:panelGrid columns="3">
 
-                        <p:outputLabel for="equipment" value="#{messages.equipment_name}" />
-                        <p:selectOneMenu id="equipment" value="#{EditInterventionBean.newIntervention.equipment}" converter="#{equipmentConverter}" required="true" style="width: 130px" >
+                        <p:outputLabel for="equipments" value="#{messages.equipment_name}" />
+                        <p:selectOneMenu id="equipments" value="#{createInterventionBean.selectedEquipment}" converter="#{equipmentConverter}" required="true" style="width: 130px">
                             <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
-                            <f:selectItems value="#{EditInterventionBean.equipmentList}" />
-
+                            <f:selectItems value="#{createInterventionBean.equipmentList}" />
                         </p:selectOneMenu>
-                        <p:message for="equipment" />
+                        <p:message for="equipments" />
 
                         <p:outputLabel for="date" value="Date"/>
-                        <p:calendar id="date" value="#{EditInterventionBean.newIntervention.interventionDate}" />
+                        <p:calendar id="date" value="#{createInterventionBean.newIntervention.interventionDate}" />
                         <p:message for="date" />
 
                         <p:outputLabel for="subject" value="Subject"/>
-                        <p:inputText id="subject" value="#{EditInterventionBean.newIntervention.subject}" />
+                        <p:inputText id="subject" value="#{createInterventionBean.newIntervention.subject}" />
                         <p:message for="subject" />
 
                         <p:outputLabel for="comment" value ="Comment"/>
-                        <p:editor id="comment" value="#{EditInterventionBean.newIntervention.comment}" width="600"/>
+                        <p:editor id="comment" value="#{createInterventionBean.newIntervention.comment}" width="600"/>
                         <p:message for="comment" />
                     </h:panelGrid>
 
                     <f:facet name="footer">
-                        <p:commandButton id="submitButton" value="Save" update="interventionCreateMessages" action="#{EditInterventionBean.saveIntervention}" ajax="false"/>
-                        <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{EditInterventionBean.cancelIntervention}" ajax="false"/>
+                        <p:commandButton id="submitButton" value="Save" update="interventionCreateMessages" action="#{createInterventionBean.saveIntervention}" ajax="false"/>
+                        <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{createInterventionBean.cancelIntervention}" ajax="false"/>
                     </f:facet>
                 </p:panel>
             </p:tab>

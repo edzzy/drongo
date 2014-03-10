@@ -43,6 +43,9 @@ public class CreateInterventionBean implements Serializable{
     RedirectBean redirectBean;
 
 
+    public void initIntervention(){
+
+    }
 
     public String saveIntervention(){
         try {

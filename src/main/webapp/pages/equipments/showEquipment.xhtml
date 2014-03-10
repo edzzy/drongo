@@ -101,6 +101,9 @@
 
             </p:tab>
             <p:tab title="#{messages.label_interventions}">
+                <p:button value="#{messages.label_interventions}" outcome="#{showEquipmentBean.createIntervention()}"   />
+
+
                     <p:dataTable var="intervention"
                                  value="#{showEquipmentBean.interventionList}">
                         <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />

@@ -100,6 +100,10 @@ public class ShowEquipmentBean implements Serializable{
 
     }
 
+    public String createIntervention(){
+        return redirectBean.getCreateIntervention()+"&equipment=" + equipment.getId();
+    }
+
     public String saveEquipment() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -236,6 +240,8 @@ public class ShowEquipmentBean implements Serializable{
     public Intervention getSelectedIntervention() {
         return selectedIntervention;
     }
+
+
 
     public void setSelectedIntervention(Intervention selectedIntervention) {
         this.selectedIntervention = selectedIntervention;

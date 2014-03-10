@@ -378,7 +378,7 @@ public class Equipment extends AbstractGenericEntity{
 
     @Override
     public String toString() {
-        return this.name+" ("+this.internalNumber+")";
+        return this.name+" ("+serialNumber+")";
     }
 
     public EquipmentStatus getStatus() {
