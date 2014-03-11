@@ -16,6 +16,7 @@
 
         </f:metadata>
         <h:message for="inter_id" style="color: red"/>
+        <p:outputLabel value="#{showEquipmentBean.equipment.name}" />
         <p:accordionPanel multiple="true">
             <p:tab title="#{messages.label_information}">
                     <p:panelGrid columns="2">
@@ -101,7 +102,7 @@
 
             </p:tab>
             <p:tab title="#{messages.label_interventions}">
-                <p:button value="#{messages.label_interventions}" outcome="#{showEquipmentBean.createIntervention()}"   />
+                <p:button value="#{messages.label_newinterventions}" outcome="#{showEquipmentBean.createIntervention()}"   />
 
 
                     <p:dataTable var="intervention"
@@ -110,9 +111,9 @@
                         <p:column style="width: 5px">
                             <p:rowToggler />
                         </p:column>
-                        <p:column style="width: 5px" headerText="#{messages.label_view}">
-                            <p:commandLink id="showButton" action="#{showEquipmentBean.editIntervention}">
-                                <h:panelGroup styleClass="ui-icon ui-icon-search" />
+                        <p:column style="width: 5px" headerText="#{messages.label_edit}">
+                            <p:commandLink id="editButton" action="#{showEquipmentBean.editIntervention}">
+                                <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
                                 <f:setPropertyActionListener value="#{intervention}" target="#{showEquipmentBean.selectedIntervention}" />
                             </p:commandLink>
                         </p:column>

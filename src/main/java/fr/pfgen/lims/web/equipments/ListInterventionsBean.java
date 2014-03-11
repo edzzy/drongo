@@ -3,6 +3,7 @@ package fr.pfgen.lims.web.equipments;
 import fr.pfgen.lims.domain.equipments.Equipment;
 import fr.pfgen.lims.domain.equipments.Intervention;
 import fr.pfgen.lims.service.EquipmentService;
+import fr.pfgen.lims.web.util.RedirectBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,9 @@ public class ListInterventionsBean implements Serializable{
 
     @Autowired
     EquipmentService equipmentService;
+
+    @Autowired
+    RedirectBean redirectBean;
 
     private List<Intervention> interventionList;
     private List<Intervention> filteredInterventions;
@@ -60,5 +64,9 @@ public class ListInterventionsBean implements Serializable{
     public Integer getNumberInterventions() {
 
         return numberInterventions;
+    }
+
+    public String newIntervention(){
+        return redirectBean.getCreateIntervention();
     }
 }

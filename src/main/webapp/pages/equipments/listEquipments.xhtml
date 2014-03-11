@@ -8,11 +8,6 @@
 <ui:composition template="#{redirectBean.templateEquipment}">
     <ui:define name="content">
         <p:spacer height="50"/>
-        <f:metadata>
-            f:metadata>
-
-            <f:event type="preRenderView" listener="#{listEquipmentsBean.init()}" />
-        </f:metadata>
 
         <h:form id="equipmentListForm">
             <p:growl id="equipmentListMessages" showDetail="true" showSummary="true" life="3000"/>
@@ -26,7 +21,7 @@
                          id="equipmentsTable"
                          emptyMessage="#{messages.label_emptyRecords}"
                          sortMode="multiple"
-                         widgetVar="equipTable" >
+                         widgetVar="equipTable">
 
                 <f:facet name="header">
                     <p:outputPanel style="text-align: right !important;">
@@ -41,7 +36,6 @@
                     <p:commandLink id="showButton" action="#{listEquipmentsBean.showEquipment}">
                         <h:panelGroup styleClass="ui-icon ui-icon-search" />
                         <f:setPropertyActionListener value="#{equipment}" target="#{listEquipmentsBean.selectedEquipment}" />
-
                     </p:commandLink>
 
                 </p:column>
@@ -94,8 +88,9 @@
                     </p:commandLink>
                     <p:tooltip for="deleteButton" value="#{messages.label_delete}" />
                 </p:column>
--->
+
                 <p:ajax event="filter" update="sizeId"/>
+                -->
                 <p:columnGroup type="footer">
                     <p:row>
                         <p:column id="sizeId" colspan="12" footerText="#{listEquipmentsBean.filteredEquipments.size()} #{messages.label_equipments}"  />
@@ -110,8 +105,8 @@
                 <p:rowExpansion>
                     <h:panelGrid id="expansionPanel" columns="2" cellpadding="20" style="width:auto" styleClass="topAligned">
                         <p:panelGrid columns="2" id="number" >
-                            <f:facet name="header">
-                                "Informations "
+                            <f:facet name="header" >
+                                <h:outputText value="Information"/>
                             </f:facet>
                             <h:outputText value="Serial Number: " />
                             <h:outputText styleClass="carRetLabel" value="#{equipment.serialNumber}" />

@@ -11,13 +11,13 @@
         <p:spacer height="50"/>
 
         <f:metadata>
-            <f:event type="preRenderView" listener="#{showEquipmentBean.initEquipment()}" />
+            <f:event type="preRenderView" listener="#{createEquipmentBean.initEquipment()}" />
         </f:metadata>
 
         <o:form id="equipmentForm">
             <p:growl id="equipmentCreateMessages" life="2500" showDetail="true" globalOnly="true"/>
 
-            <p:wizard widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}" step="#{showEquipmentBean.wizStep}" >
+            <p:wizard widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}" step="#{createEquipmentBean.wizStep}" >
 
                 <p:tab id="descriptionTab" title="#{messages.label_description}">
                     <p:panel id="panelDescription" header="#{messages.equipment_description}">

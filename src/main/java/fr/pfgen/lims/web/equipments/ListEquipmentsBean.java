@@ -65,7 +65,7 @@ public class ListEquipmentsBean implements Serializable{
 
     public String createNewEquipment(){
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("equipment");
-        return "equipment?faces-redirect=true";
+        return redirectBean.getCreateEquipment();
     }
 
     public String editEquipment(){

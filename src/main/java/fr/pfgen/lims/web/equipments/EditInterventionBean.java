@@ -91,7 +91,9 @@ public class EditInterventionBean implements Serializable{
    }
 
 
-   public void cancelIntervention(){
+   public String cancelIntervention(){
+
+       return redirectBean.getShowEquipment() +"&id=" + intervention.getEquipment().getId();
    }
    
     public EquipmentService getEquipmentService() {
