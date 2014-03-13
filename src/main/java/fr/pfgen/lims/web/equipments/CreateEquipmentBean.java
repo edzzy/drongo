@@ -2,12 +2,14 @@ package fr.pfgen.lims.web.equipments;
 
 import fr.pfgen.lims.domain.equipments.Equipment;
 import fr.pfgen.lims.domain.equipments.EquipmentStatus;
+import fr.pfgen.lims.domain.equipments.Funding;
 import fr.pfgen.lims.domain.equipments.PlateformType;
 import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.people.Organism;
 import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.people.ResearchUnit;
 import fr.pfgen.lims.service.EquipmentService;
+import fr.pfgen.lims.service.OrganismService;
 import fr.pfgen.lims.web.util.FacesUtils;
 import org.hibernate.sql.Select;
 import org.primefaces.event.FlowEvent;
@@ -16,14 +18,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.persistence.Enumerated;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by edouard on 06/03/14.
@@ -34,58 +35,34 @@ public class CreateEquipmentBean implements Serializable{
 
     private Equipment newEquipment;
     private PlateformType plateformType;
-    private String name;
-    private String manufacter;
     private List<String> manufacterList;
-    private Date acquisitionDate;
-    private Date constructedDate;
-    private Double cost;
-    private String room;
-    private String serialNumber;
-    private String internalNumber;
-    private String ifrNumber;
-    private String itx;
-    private Double maintenanceCost;
-    private Set<Organism> organisms;
-    private String description;
-    private String maintenanceCharge;
-    private Boolean convention;
-    private String comment;
-    private Date maintenance_date;
-    private String warranty;
-    private String sav;
-    private String software;
-    private String licence;
-    private SelectItem[] statusOption;
+    private List<Organism> organisms;
     private Set<PfMember> responsable;
-    private List<EquipmentStatus> equipmentStatusList;
-    private String wizStep;
+    private String context;
+    private Double percent;
+    private Organism organism;
+    private List<Funding> fundings;
+
+
 
 
     @Autowired
     EquipmentService equipmentService;
+    @Autowired
+    OrganismService organismService;
 
     @PostConstruct
     public void init(){
+        newEquipment = new Equipment();
+        organisms = organismService.findAllOrganisms();
+        fundings = new ArrayList<Funding>();
 
-        equipmentStatusList = Arrays.asList(EquipmentStatus.values()) ;
-        statusOption = createFilterOptionsStatus(equipmentStatusList);
     }
 
     public void initEquipment() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            newEquipment = (Equipment) FacesUtils.getObjectInSessionMap("equipment");
 
-            wizStep = (String) FacesUtils.getObjectInSessionMap("wizStep");
 
-            FacesUtils.removeObjectFromSessionMap("wizStep");
-
-            if (wizStep == null) {
-                wizStep = "descriptionTab";
-            }
-            newEquipment = new Equipment();
-            FacesUtils.putObjectInSessionMap("equipment", newEquipment);
-            wizStep = "descriptionTab";
         }
     }
 
@@ -105,22 +82,6 @@ public class CreateEquipmentBean implements Serializable{
         this.plateformType = plateformType;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getManufacter() {
-        return manufacter;
-    }
-
-    public void setManufacter(String manufacter) {
-        this.manufacter = manufacter;
-    }
-
     public List<String> getManufacterList() {
         return manufacterList;
     }
@@ -129,158 +90,14 @@ public class CreateEquipmentBean implements Serializable{
         this.manufacterList = manufacterList;
     }
 
-    public Date getAcquisitionDate() {
-        return acquisitionDate;
-    }
-
-    public void setAcquisitionDate(Date acquisitionDate) {
-        this.acquisitionDate = acquisitionDate;
-    }
-
-    public Date getConstructedDate() {
-        return constructedDate;
-    }
-
-    public void setConstructedDate(Date constructedDate) {
-        this.constructedDate = constructedDate;
-    }
-
-    public Double getCost() {
-        return cost;
-    }
-
-    public void setCost(Double cost) {
-        this.cost = cost;
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    public void setRoom(String room) {
-        this.room = room;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
-    public String getInternalNumber() {
-        return internalNumber;
-    }
-
-    public void setInternalNumber(String internalNumber) {
-        this.internalNumber = internalNumber;
-    }
-
-    public String getIfrNumber() {
-        return ifrNumber;
-    }
-
-    public void setIfrNumber(String ifrNumber) {
-        this.ifrNumber = ifrNumber;
-    }
-
-    public String getItx() {
-        return itx;
-    }
-
-    public void setItx(String itx) {
-        this.itx = itx;
-    }
-
-    public Double getMaintenanceCost() {
-        return maintenanceCost;
-    }
-
-    public void setMaintenanceCost(Double maintenanceCost) {
-        this.maintenanceCost = maintenanceCost;
-    }
-
-    public Set<Organism> getOrganisms() {
+    public List<Organism> getOrganisms() {
         return organisms;
+
     }
 
-    public void setOrganisms(Set<Organism> organisms) {
+    public void setOrganisms(List<Organism> organisms) {
         this.organisms = organisms;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getMaintenanceCharge() {
-        return maintenanceCharge;
-    }
-
-    public void setMaintenanceCharge(String maintenanceCharge) {
-        this.maintenanceCharge = maintenanceCharge;
-    }
-
-    public Boolean getConvention() {
-        return convention;
-    }
-
-    public void setConvention(Boolean convention) {
-        this.convention = convention;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public Date getMaintenance_date() {
-        return maintenance_date;
-    }
-
-    public void setMaintenance_date(Date maintenance_date) {
-        this.maintenance_date = maintenance_date;
-    }
-
-    public String getWarranty() {
-        return warranty;
-    }
-
-    public void setWarranty(String warranty) {
-        this.warranty = warranty;
-    }
-
-    public String getSav() {
-        return sav;
-    }
-
-    public void setSav(String sav) {
-        this.sav = sav;
-    }
-
-    public String getSoftware() {
-        return software;
-    }
-
-    public void setSoftware(String software) {
-        this.software = software;
-    }
-
-    public String getLicence() {
-        return licence;
-    }
-
-    public void setLicence(String licence) {
-        this.licence = licence;
-    }
-
 
     public Set<PfMember> getResponsable() {
         return responsable;
@@ -290,34 +107,20 @@ public class CreateEquipmentBean implements Serializable{
         this.responsable = responsable;
     }
 
-    public String getWizStep() {
-        return wizStep;
+    public String getContext() {
+        return context;
     }
 
-    public void setWizStep(String wizStep) {
-        this.wizStep = wizStep;
+    public void setContext(String context) {
+        this.context = context;
     }
 
-    public List<EquipmentStatus> getEquipmentStatusList() {
-        return equipmentStatusList;
+    public Double getPercent() {
+        return percent;
     }
 
-    public void setEquipmentStatusList(List<EquipmentStatus> equipmentStatusList) {
-        this.equipmentStatusList = equipmentStatusList;
-    }
-
-    public String onFlowProcess(FlowEvent event){
-
-
-        return event.getNewStep();
-    }
-
-    public SelectItem[] getStatusOption() {
-        return statusOption;
-    }
-
-    public void setStatusOption(SelectItem[] statusOption) {
-        this.statusOption = statusOption;
+    public void setPercent(Double percent) {
+        this.percent = percent;
     }
 
     private SelectItem[] createFilterOptionsStatus(List<EquipmentStatus> data)  {
@@ -334,4 +137,56 @@ public class CreateEquipmentBean implements Serializable{
     public EquipmentStatus[] getEquipmentStatusTypes(){
         return EquipmentStatus.values();
     }
+
+    public PlateformType[] getEquipmentPlateformTypes(){
+        return PlateformType.values();
+    }
+
+    public Organism getOrganism() {
+        return organism;
+    }
+
+    public void setOrganism(Organism organism) {
+        this.organism = organism;
+    }
+
+    public String saveEquipment(){
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            if (newEquipment.getId() == null) {
+                equipmentService.saveEquipment(newEquipment);
+
+                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newEquipment_added"), newEquipment.toString(), FacesMessage.SEVERITY_INFO);
+            }
+        } catch (Exception e) {
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            System.out.print(e.getMessage());
+            return null;
+        }
+        return null;
+
+    }
+
+    public void addFunding(ActionEvent event){
+
+        Funding funding = new Funding();
+        //funding.setEquipment(newEquipment);
+        funding.setContext(context);
+        funding.setOrganism(organism);
+        funding.setPercent(percent);
+        fundings.add(funding);
+        context = "";
+        percent = 0.0;
+        organism = null;
+
+    }
+
+    public List<Funding> getFundings() {
+        return fundings;
+    }
+
+    public void setFundings(List<Funding> fundings) {
+        this.fundings = fundings;
+    }
+
 }

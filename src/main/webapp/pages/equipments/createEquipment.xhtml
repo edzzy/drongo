@@ -17,13 +17,9 @@
         <o:form id="equipmentForm">
             <p:growl id="equipmentCreateMessages" life="2500" showDetail="true" globalOnly="true"/>
 
-            <p:accordionPanel multiple="true"  >
-                <!--widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}" step="#{createEquipmentBean.wizStep}" flowListener="#{createEquipmentBean.onFlowProcess}"-->
+                <p:fieldset id="descriptionTab" legend="#{messages.equipment_description}">
 
-                <p:tab id="descriptionTab" title="#{messages.label_description}">
-                    <p:panel id="panelDescription" header="#{messages.equipment_description}">
-                        <p:focus context="panelDescription"/>
-                        <h:panelGrid columns="3">
+                        <p:panelGrid columns="3">
                             <p:outputLabel for="name" value="#{messages.equipment_name}" />
                             <p:inputText id="name" required="true" value="#{createEquipmentBean.newEquipment.name}" />
                             <p:message for="name" />
@@ -35,14 +31,14 @@
                             <p:outputLabel for="manufacturer" value="#{messages.equipment_manufacturer}" />
                             <p:inputText id="manufacturer" required="true" value="#{createEquipmentBean.newEquipment.manufacturer}" />
                             <p:message for="manufacturer" />
-                        </h:panelGrid>
-                    </p:panel>
-                </p:tab>
+                        </p:panelGrid>
 
-                <p:tab id="identificationTab" title="#{messages.label_identification}">
-                    <p:panel id="panelIdentification" header="#{messages.equipment_deviceIdentification}">
-                        <p:focus context="panelIdentification"/>
-                        <h:panelGrid columns="3" >
+                </p:fieldset>
+                <p:spacer/>
+                <p:fieldset id="identificationTab" legend="#{messages.equipment_deviceIdentification}">
+
+
+                        <p:panelGrid columns="3" >
                             <p:outputLabel for="serial" value="#{messages.equipment_serialNumber}" />
                             <p:inputText id="serial" required="true" value="#{createEquipmentBean.newEquipment.serialNumber}" />
                             <p:message for="serial" />
@@ -54,14 +50,11 @@
                             <p:outputLabel for="internal" value="#{messages.equipment_internalNumber}" />
                             <p:inputText id="internal" required="true"  value="#{createEquipmentBean.newEquipment.internalNumber}" />
                             <p:message for="internal" />
-                        </h:panelGrid>
-                    </p:panel>
-                </p:tab>
-
-                <p:tab id="otherTab" title="#{messages.label_informations}" >
-                    <p:panel id="panelOther" header="#{messages.label_otherInformations}" >
-                        <p:focus context="panelOther"/>
-                        <h:panelGrid columns="3" >
+                        </p:panelGrid>
+                </p:fieldset>
+                <p:spacer/>
+                <p:fieldset id="information" legend="#{messages.label_otherInformations}" >
+                        <p:panelGrid columns="3" >
                             <p:outputLabel for="room" value="#{messages.equipment_room}" />
                             <p:inputText id="room" required="true" value="#{createEquipmentBean.newEquipment.room}" />
                             <p:message for="room" />
@@ -76,67 +69,69 @@
                                 <f:selectItems value="#{createEquipmentBean.equipmentStatusTypes}" var="status" itemValue="#{status}" />
                             </p:selectOneMenu>
                             <p:message for="statusSelect" />
+                            <p:outputLabel for="pfSelect" value="#{messages.label_plateform}" />
+                            <p:selectOneMenu id="pfSelect" value="#{createEquipmentBean.newEquipment.plateform}"  style="width: 130px" converter="#{plateformTypeConverter}">
+                                <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                <f:selectItems value="#{createEquipmentBean.equipmentPlateformTypes}" var="plateform" itemValue="#{plateform}" />
+                            </p:selectOneMenu>
+                            <p:message for="pfSelect" />
+                        </p:panelGrid>
+                </p:fieldset>
+            <p:spacer/>
 
-                        </h:panelGrid>
-                    </p:panel>
-                </p:tab>
-<!--
-                <p:tab id="confirmTab" title="#{messages.label_confirmation}">
-                    <p:panel header="#{messages.label_confirmation}" >
-                        <p:focus context="submitButton"/>
-                        <h:panelGrid columns="2" cellpadding="20" styleClass="topAligned">
+            <p:fieldset id="fundingSet" legend="#{messages.equipment_funding}" >
+                <p:dataTable value="#{createEquipmentBean.fundings}" var="funding" id="fundingTable">
 
-                            <p:panelGrid columns="2" >
-                                <f:facet name="header">
-                                    #{messages.equipment_description}
-                                </f:facet>
-                                <h:outputText value="#{messages.equipment_name}: " />
-                                <h:outputText styleClass="outputLabel" value="#{createEquipmentBean.newEquipment.name}" />
+                    <p:column headerText="#{messages.equipment_funding}">
+                        <h:outputText value="#{funding.organism}"/>
+                    </p:column>
 
-                                <h:outputText value="#{messages.equipment_type}: " />
-                                <h:outputText styleClass="outputLabel" value="#{createEquipmentBean.newEquipment.modele}" />
+                    <p:column headerText="#{messages.equipment_cost}">
+                        <h:outputText value="#{funding.percent}"/>
+                    </p:column>
 
-                                <h:outputText value="#{messages.equipment_manufacturer}: " />
-                                <h:outputText styleClass="outputLabel" value="#{createEquipmentBean.newEquipment.manufacturer}" />
-                            </p:panelGrid>
+                    <p:column headerText="#{messages.equipment_context}">
+                        <h:outputText value="#{funding.context}" />
+                    </p:column>
+                </p:dataTable>
 
-                            <p:panelGrid columns="2" >
-                                <f:facet name="header">
-                                    #{messages.equipment_deviceIdentification}
-                                </f:facet>
-                                <h:outputText value="#{messages.equipment_serialNumber}: " />
-                                <h:outputText styleClass="outputLabel" value="#{createEquipmentBean.newEquipment.serialNumber}" />
+                <p:spacer/>
 
-                                <h:outputText value="#{messages.equipment_itx}: "/>
-                                <h:outputText styleClass="outputLabel" value="#{createEquipmentBean.newEquipment.itx}" />
-                            </p:panelGrid>
 
-                            <p:panelGrid columns="2">
-                                <f:facet name="header">
-                                    #{messages.label_otherInformations}
-                                </f:facet>
-                                <h:outputText value="#{messages.equipment_room}: " />
-                                <h:outputText styleClass="outputLabel" value="#{createEquipmentBean.newEquipment.room}" />
 
-                                <h:outputText value="#{messages.equipment_acquisitionDate}: " />
-                                <h:outputText value="#{createEquipmentBean.newEquipment.acquisitionDate}">
-                                    <f:convertDateTime dateStyle="long" type="date" />
-                                </h:outputText>
+                <p:panelGrid columns="3" id="panelTest">
 
-                                <h:outputText value="#{messages.equipment_category}: " />
-                                <h:outputText styleClass="outputLabel" value="#{createEquipmentBean.newEquipment.category}" />
-                            </p:panelGrid>
-                        </h:panelGrid>
 
-                        <f:facet name="footer">
-                            <p:commandButton id="submitButton" value="#{smallEquipmentBean.saveOrEditLabel}" update="equipmentCreateMessages" action="#{smallEquipmentBean.saveEquipment}" icon="#{smallEquipmentBean.plusOrPen}" ajax="false"/>
-                            <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{smallEquipmentBean.cancelEquipment}" ajax="false"/>
-                        </f:facet>
+                <p:outputLabel for="organismSelect" value="#{messages.label_organism}" />
+                <p:selectOneMenu id="organismSelect" value="#{createEquipmentBean.organism}" style="width: 130px" converter="#{organismConverter}">
+                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}"  />
+                    <f:selectItems value="#{createEquipmentBean.organisms}"/>
+                </p:selectOneMenu>
+                <p:messages for="organismSelect"/>
 
-                    </p:panel>
-                </p:tab>
- -->
-            </p:accordionPanel>
+
+                <p:outputLabel for="percent" value="#{messages.label_percent}"/>
+                <p:spinner id="percent" required="true" value="#{createEquipmentBean.percent}" />
+                <p:message for="percent"/>
+
+                <p:outputLabel for="context" value="#{messages.label_context}" />
+                <p:inputText id="context" required="true" value="#{createEquipmentBean.context}" />
+                <p:message for="context"/>
+
+
+                 <p:commandButton  value="Add" actionListener="#{createEquipmentBean.addFunding}" update="panelTest,fundingTable" process="@this,percent,context,organismSelect"/>
+                    <p:messages id="mess"/>
+                </p:panelGrid>
+            </p:fieldset>
+            <p:fieldset id="resp" legend="#{messages.label_referent}">
+
+            </p:fieldset>
+            <p:panel>
+                <f:facet name="footer">
+                    <p:commandButton id="submitButton" value="Save" update="equipmentCreateMessages" action="#{createEquipmentBean.saveEquipment}" ajax="false"/>
+                    <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{createEquipmentBean.cancelEquipment}" ajax="false"/>
+            </f:facet>
+            </p:panel>
         </o:form>
     </ui:define>
 </ui:composition>

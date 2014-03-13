@@ -118,10 +118,12 @@ public class Equipment extends AbstractGenericEntity{
     @ManyToMany
     private Set<PfMember> responsables;
 
-    
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipment")
     private Set<Intervention> interventions;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipment")
+    private Set<Funding> fundings;
 
     public String getInternalNumber() {
         return internalNumber;
@@ -374,6 +376,14 @@ public class Equipment extends AbstractGenericEntity{
             return false;
         }
         return true;
+    }
+
+    public Set<Funding> getFundings() {
+        return fundings;
+    }
+
+    public void setFundings(Set<Funding> fundings) {
+        this.fundings = fundings;
     }
 
     @Override

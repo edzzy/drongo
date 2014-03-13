@@ -13,7 +13,7 @@
 <!--
             <f:event type="preRenderView" listener="#{createInterventionBean.initIntervention}" />
             -->
-            <f:viewParam id="inter_id" name="equipment" value="#{createInterventionBean.selectedEquipment}"
+            <f:viewParam id="inter_id" name="equipment" value="#{createInterventionBean.newIntervention.equipment}"
                          converter="#{equipmentConverter}" />
         </f:metadata>
         <h:message for="inter_id" style="color: red"/>
@@ -28,7 +28,7 @@
                     <h:panelGrid columns="3">
 
                         <p:outputLabel for="equipments" value="#{messages.equipment_name}" />
-                        <p:selectOneMenu id="equipments" value="#{createInterventionBean.selectedEquipment}" converter="#{equipmentConverter}" required="true" style="width: 130px">
+                        <p:selectOneMenu id="equipments" value="#{createInterventionBean.newIntervention.equipment}" converter="#{equipmentConverter}" required="true" style="width: 130px">
                             <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
                             <f:selectItems value="#{createInterventionBean.equipmentList}" />
                         </p:selectOneMenu>

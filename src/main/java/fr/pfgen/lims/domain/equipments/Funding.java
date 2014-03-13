@@ -24,7 +24,7 @@ public class Funding extends AbstractGenericEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     private Equipment equipment;
 
-    @Max(20)
+    @Max(100)
     @Min(0)
     private Double percent;
 
