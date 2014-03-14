@@ -18,4 +18,8 @@ public interface FundingRepository extends JpaSpecificationExecutor<Funding>, Jp
     public List<Funding> findByEquipment(Equipment equipment);
 
     public List<Funding> findByOrganism(Organism organism);
+
+    public List<Funding> findAll();
+
+
 }

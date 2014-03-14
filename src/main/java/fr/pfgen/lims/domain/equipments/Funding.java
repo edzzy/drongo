@@ -18,10 +18,10 @@ import javax.validation.constraints.Min;
 @Table(name="fundings")
 public class Funding extends AbstractGenericEntity {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     private Organism organism;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
     private Equipment equipment;
 
     @Max(100)

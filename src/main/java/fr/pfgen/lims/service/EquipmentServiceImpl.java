@@ -11,6 +11,7 @@ import fr.pfgen.lims.repository.*;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,8 @@ public class EquipmentServiceImpl implements EquipmentService {
         if (equipment.getItx().trim().isEmpty()) equipment.setItx(null);
         equipmentRepository.save(equipment);
     }
+
+
 
     @Override
     public Equipment updateEquipment(Equipment equipment) {

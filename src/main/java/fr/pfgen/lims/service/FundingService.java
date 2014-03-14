@@ -11,5 +11,7 @@ public interface FundingService {
 
     public abstract List<Funding> findAllFundings();
 
+    public abstract void saveFunding(Funding funding);
+
 
 }

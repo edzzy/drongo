@@ -99,7 +99,7 @@
 
 
 
-                <p:panelGrid columns="3" id="panelTest">
+                <p:panelGrid columns="3" id="panelTest" rendered="#{createEquipmentBean.maxPercent != 0.0}">
 
 
                 <p:outputLabel for="organismSelect" value="#{messages.label_organism}" />
@@ -109,10 +109,13 @@
                 </p:selectOneMenu>
                 <p:messages for="organismSelect"/>
 
-
                 <p:outputLabel for="percent" value="#{messages.label_percent}"/>
-                <p:spinner id="percent" required="true" value="#{createEquipmentBean.percent}" />
+                <h:panelGrid columns="1" style="margin-bottom: 10px">
+                    <p:inputText id="percent" required="true" value="#{createEquipmentBean.percent}" />
+                    <p:slider for="percent" maxValue="#{createEquipmentBean.maxPercent}" minValue="#{createEquipmentBean.minPercent}" />
+                </h:panelGrid>
                 <p:message for="percent"/>
+
 
                 <p:outputLabel for="context" value="#{messages.label_context}" />
                 <p:inputText id="context" required="true" value="#{createEquipmentBean.context}" />

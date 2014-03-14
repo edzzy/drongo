@@ -8,9 +8,12 @@ import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.people.Organism;
 import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.people.ResearchUnit;
+import fr.pfgen.lims.repository.FundingRepository;
 import fr.pfgen.lims.service.EquipmentService;
+import fr.pfgen.lims.service.FundingService;
 import fr.pfgen.lims.service.OrganismService;
 import fr.pfgen.lims.web.util.FacesUtils;
+import fr.pfgen.lims.web.util.RedirectBean;
 import org.hibernate.sql.Select;
 import org.primefaces.event.FlowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +45,8 @@ public class CreateEquipmentBean implements Serializable{
     private Double percent;
     private Organism organism;
     private List<Funding> fundings;
+    private Double minPercent;
+    private Double maxPercent;
 
 
 
@@ -50,12 +55,19 @@ public class CreateEquipmentBean implements Serializable{
     EquipmentService equipmentService;
     @Autowired
     OrganismService organismService;
+    @Autowired
+    RedirectBean redirectBean;
+    @Autowired
+    FundingService fundingService;
 
     @PostConstruct
     public void init(){
         newEquipment = new Equipment();
         organisms = organismService.findAllOrganisms();
         fundings = new ArrayList<Funding>();
+        minPercent = 1.0;
+        maxPercent = 100.0;
+        percent = 100.0;
 
     }
 
@@ -123,6 +135,22 @@ public class CreateEquipmentBean implements Serializable{
         this.percent = percent;
     }
 
+    public Double getMinPercent() {
+        return minPercent;
+    }
+
+    public void setMinPercent(Double minPercent) {
+        this.minPercent = minPercent;
+    }
+
+    public Double getMaxPercent() {
+        return maxPercent;
+    }
+
+    public void setMaxPercent(Double maxPercent) {
+        this.maxPercent = maxPercent;
+    }
+
     private SelectItem[] createFilterOptionsStatus(List<EquipmentStatus> data)  {
         SelectItem[] options = new SelectItem[data.size() + 1];
 
@@ -154,6 +182,9 @@ public class CreateEquipmentBean implements Serializable{
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             if (newEquipment.getId() == null) {
+                Set<Funding> fundingSet = new HashSet<Funding>(fundings);
+
+                newEquipment.setFundings(fundingSet);
                 equipmentService.saveEquipment(newEquipment);
 
                 FacesUtils.addMessage(null, FacesUtils.getI18nValue("newEquipment_added"), newEquipment.toString(), FacesMessage.SEVERITY_INFO);
@@ -163,7 +194,7 @@ public class CreateEquipmentBean implements Serializable{
             System.out.print(e.getMessage());
             return null;
         }
-        return null;
+        return redirectBean.getShowEquipment()+"id="+newEquipment.getId();
 
     }
 
@@ -176,8 +207,9 @@ public class CreateEquipmentBean implements Serializable{
         funding.setPercent(percent);
         fundings.add(funding);
         context = "";
-        percent = 0.0;
         organism = null;
+        maxPercent = maxPercent - percent;
+        percent = maxPercent;
 
     }
 
