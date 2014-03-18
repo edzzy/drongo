@@ -71,7 +71,7 @@ public class ListEquipmentsBean implements Serializable{
     public String editEquipment(){
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("equipment");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("equipment", selectedEquipment);
-        return "equipment?faces-redirect=true";
+        return redirectBean.getEditEquipment() + "&id=" + selectedEquipment.getId();
     }
     public String showEquipment(){
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("equipment");
