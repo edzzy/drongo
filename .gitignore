@@ -1,2 +1,8 @@
 /target/
 /src/main/webapp/resources/
+.idea/*
+images/*
+out/*
+lims.iml
+log.roo
+.settings/*

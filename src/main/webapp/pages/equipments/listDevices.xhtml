@@ -5,7 +5,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <ui:composition template="equipmentsTemplate.xhtml">
+    <ui:composition template="#{redirectBean.templateEquipment}">
         <ui:define name="content">
             <p:spacer height="50"/>
             <h:form id="deviceListForm">
@@ -19,59 +19,69 @@
                              filteredValue="#{devicesBean.filteredDevices}"
                              id="devicesTable"
                              emptyMessage="#{messages.label_emptyRecords}"
-                             sortMode="multiple">  
+                             sortMode="multiple"
+                             selection="#{devicesBean.selectedDevice}"
+                             >  
 
                     <f:facet name="header">
                         #{messages.label_runDevice}
                     </f:facet>
-                    
-                    <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
 
-                    <p:column style="width: 5px">  
-                        <p:rowToggler />  
+
+
+
+                    <p:column >
+                        <p:commandLink  id="showButton" action="#{devicesBean.showDevice}">
+                            <p:tooltip for="showButton" value="Show" />
+                            <h:panelGroup styleClass="ui-icon ui-icon-search" />
+                            <f:setPropertyActionListener value="#{device}" target="#{devicesBean.selectedDevice}" />
+                        </p:commandLink>
                     </p:column>
 
-                    <p:column headerText="#{messages.equipment_internalNumber}"  sortBy="#{device.internalNumber}" filterBy="#{device.internalNumber}" id="internalNumber">  
-                        <h:outputText value="#{device.internalNumber}"/>
+                    <p:column  style="width: 5px">  
+                        <p:commandLink  id="InterventionButton" action="#{devicesBean.showDeviceInterventions()}">
+                            <p:tooltip value="Interventions" for="InterventionButton" />
+                            <h:panelGroup styleClass="ui-icon ui-icon-note" />
+                            <f:setPropertyActionListener value="#{device}" target="#{devicesBean.selectedDevice}" />
+                        </p:commandLink>
                     </p:column>
 
                     <p:column headerText="#{messages.equipment_name}" sortBy="#{device.name}" filterBy="#{device.name}" id="name">  
                         <h:outputText value="#{device.name}" />
                     </p:column>  
 
-                    <p:column headerText="#{messages.equipment_type}" sortBy="#{device.type}" filterBy="#{device.type}" id="type">  
-                        <h:outputText value="#{device.type}" />
-                    </p:column>  
-                    
                     <p:column headerText="#{messages.equipment_manufacturer}" sortBy="#{device.manufacturer}" filterBy="#{device.manufacturer}" id="manufacturer">
                         <h:outputText value="#{device.manufacturer}" /> 
                     </p:column>
+
+                    <p:column headerText="#{messages.equipment_type}" sortBy="#{device.modele}" filterBy="#{device.modele}" id="type">
+                        <h:outputText value="#{device.modele}" />
+                    </p:column>  
+
+
 
                     <p:column headerText="#{messages.equipment_room}" sortBy="#{device.room}" filterBy="#{device.room}" id="room">  
                         <h:outputText value="#{device.room}" />
                     </p:column>  
 
-                    <p:column headerText="#{messages.equipment_itx}" sortBy="#{device.itx}" filterBy="#{device.itx}" id="itx">  
-                        <h:outputText value="#{device.itx}" />
-                    </p:column>  
-                    
-                    <p:column headerText="#{messages.equipment_serialNumber}" sortBy="#{device.serialNumber}" filterBy="#{device.serialNumber}" id="serial">  
-                        <h:outputText value="#{device.serialNumber}" />
-                    </p:column>
-
                     <p:column headerText="#{messages.equipment_acquisitionDate}" sortBy="#{device.acquisitionDate}" id="acquisition">
                         <h:outputText value="#{device.acquisitionDate}">
-                            <f:convertDateTime dateStyle="long" type="date" />
+                            <f:convertDateTime dateStyle="long" type="date" pattern="yyyy" />
                         </h:outputText>
                     </p:column>
-
+                    <p:column headerText="Plateform" sortBy="#{device.plateform}" filterBy="#{device.plateform}">
+                        <h:outputText value="#{device.plateform}" />
+                    </p:column>
+                    <p:column headerText="Status" sortBy="#{device.status}">
+                        <h:outputText value="#{device.status}"  />
+                    </p:column>
                     <p:column style="width: 5px">
                         <p:commandLink id="editButton" action="#{devicesBean.editDevice}">
                             <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
                             <f:setPropertyActionListener value="#{device}" target="#{devicesBean.selectedDevice}" />
                         </p:commandLink>
                         <p:tooltip for="editButton" value="#{messages.label_edit}" /> 
-                    </p:column>  
+                    </p:column>
 
                     <p:column style="width: 5px">
                         <p:commandLink id="deleteButton" oncomplete="deleteDlg.show();" update=":deleteDialog" title="#{messages.label_delete}">
@@ -81,23 +91,9 @@
                         <p:tooltip for="deleteButton" value="#{messages.label_delete}" /> 
                     </p:column>
 
-                    <p:columnGroup type="footer">
-                        <p:row>  
-                            <p:column colspan="11" footerText="#{devicesBean.deviceNumber} #{messages.label_runDevice}"  />
-                        </p:row>  
-                    </p:columnGroup>
-
                     <f:facet name="footer">
                         <p:commandButton value="#{messages.equipment_newDevice}" icon="ui-icon-plus" action="#{devicesBean.createNewDevice}"/>
                     </f:facet>
-
-                    <p:rowExpansion>  
-                        <h:panelGrid id="expansionPanel" columns="2" cellpadding="20" style="width:auto" styleClass="topAligned">  
-
-                            
-                        </h:panelGrid>
-                    </p:rowExpansion>
-
                 </p:dataTable>
             </h:form>
 

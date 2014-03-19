@@ -4,7 +4,6 @@
  */
 package fr.pfgen.lims.domain.equipments;
 
-import fr.pfgen.lims.domain.runs.AbstractRun;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -20,7 +19,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "run_devices")
 public class RunDevice extends Equipment{
-    
+
+    //TODO Remove image attribut
+
     @NotNull
     @Lob
     private byte[] image;
@@ -43,4 +44,6 @@ public class RunDevice extends Equipment{
     public void setReagents(Set<Reagent> reagents) {
         this.reagents = reagents;
     }
+    
+    
 }

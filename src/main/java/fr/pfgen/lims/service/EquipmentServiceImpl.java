@@ -4,15 +4,14 @@
  */
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.equipments.Equipment;
-import fr.pfgen.lims.domain.equipments.EquipmentCategory;
-import fr.pfgen.lims.domain.equipments.RunDevice;
-import fr.pfgen.lims.domain.equipments.SmallEquipment;
-import fr.pfgen.lims.repository.EquipmentCategoryRepository;
-import fr.pfgen.lims.repository.EquipmentRepository;
-import fr.pfgen.lims.repository.RunDeviceRepository;
-import fr.pfgen.lims.repository.SmallEquipmentRepository;
+import fr.pfgen.lims.domain.equipments.*;
+import fr.pfgen.lims.domain.people.Organism;
+import fr.pfgen.lims.repository.*;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +34,12 @@ public class EquipmentServiceImpl implements EquipmentService {
     SmallEquipmentRepository smallEquipmentRepository;
     @Autowired
     EquipmentCategoryRepository equipmentCategoryRepository;
+    @Autowired
+    InterventionRepository interventionRepository;
+    @Autowired
+    FundingRepository fundingRepository;
+
+
 
     @Override
     public long countAllEquipments() {
@@ -86,6 +91,8 @@ public class EquipmentServiceImpl implements EquipmentService {
         if (equipment.getItx().trim().isEmpty()) equipment.setItx(null);
         equipmentRepository.save(equipment);
     }
+
+
 
     @Override
     public Equipment updateEquipment(Equipment equipment) {
@@ -149,5 +156,70 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public void saveEquipmentCategory(EquipmentCategory category) {
         equipmentCategoryRepository.save(category);
+    }
+
+    @Override
+    public List<Intervention> findAllInterventions() {
+        
+        return interventionRepository.findAll();
+    }
+
+    @Override
+    public List<Intervention> findAllInterventionsByEquipment(Equipment equipment) {
+        List<Intervention> interList = interventionRepository.findByEquipment(equipment);
+        Collections.sort(interList, new Comparator<Intervention>() {
+
+            @Override
+            public int compare(Intervention o1, Intervention o2) {
+                return o1.getInterventionDate().compareTo(o2.getInterventionDate());
+            }
+        });
+        
+        return interList; 
+        
+    }
+
+    @Override
+    public List<String> findAllManufacturers() {
+       return equipmentRepository.findAllManufacturers();
+    }
+
+    @Override
+    public void saveIntervention(Intervention intervention) {
+        
+         interventionRepository.save(intervention);
+    }
+
+    @Override
+    public List<Funding> findAllFundings() {
+        return fundingRepository.findAll();
+    }
+
+    @Override
+    public List<Funding> findAllFundingsByEquipments(Equipment equipment) {
+
+        return fundingRepository.findByEquipment(equipment);
+    }
+
+    @Override
+    public List<Funding> findAllFundingsByOrganisms(Organism organism) {
+        return fundingRepository.findByOrganism(organism);
+    }
+
+    @Override
+    public Intervention updateIntervention(Intervention intervention) {
+
+
+        return interventionRepository.save(intervention);
+    }
+
+    @Override
+    public Intervention findInterventionById(Long id) {
+        return interventionRepository.findById(id);
+    }
+
+    @Override
+    public Equipment findEquipmentById(Long id) {
+        return equipmentRepository.findById(id);
     }
 }

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         version="3.0"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <display-name>lims</display-name>
     <context-param>
         <param-name>defaultHtmlEscape</param-name>
@@ -16,6 +19,10 @@
     <context-param>
         <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
         <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>facelets.SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
     </context-param>
     <filter>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
@@ -42,6 +49,11 @@
     <listener>
         <listener-class>
             org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+    </listener>
+   <listener>
+        <listener-class>
+           fr.pfgen.lims.domain.util.InitDatabase2
         </listener-class>
     </listener>
     <servlet>

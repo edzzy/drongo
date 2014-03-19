@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="#{redirectBean.templateEquipment}">
+    <ui:define name="content">
+        <p:spacer height="50"/>
+
+        <h:form id="equipmentListForm">
+            <p:growl id="equipmentListMessages" showDetail="true" showSummary="true" life="3000"/>
+            <p:dataTable var="equipment"
+                         value="#{listEquipmentsBean.equipmentList}"
+                         rowsPerPageTemplate="5,10,15,50"
+                         rowKey="#{equipment.id}"
+                         paginator="true"
+                         rows="10"
+                         filteredValue="#{listEquipmentsBean.filteredEquipments}"
+                         id="equipmentsTable"
+                         emptyMessage="#{messages.label_emptyRecords}"
+                         sortMode="multiple"
+                         widgetVar="equipTable">
+
+                <f:facet name="header">
+                    <p:outputPanel style="text-align: right !important;">
+                        <h:outputText value="#{messages.label_searchFields}:" />
+                        <p:inputText id="globalFilter" onkeyup="equipTable.filter()" style="width:150px" />
+                    </p:outputPanel>
+                </f:facet>
+
+                <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
+
+                <p:column style="width: 5px" headerText="#{messages.label_view}">
+                    <p:commandLink id="showButton" action="#{listEquipmentsBean.showEquipment}">
+                        <h:panelGroup styleClass="ui-icon ui-icon-search" />
+                        <f:setPropertyActionListener value="#{equipment}" target="#{listEquipmentsBean.selectedEquipment}" />
+                    </p:commandLink>
+
+                </p:column>
+
+                <p:column style="width: 5px" headerText="#{messages.label_edit}">
+                    <p:commandLink id="editButton" action="#{listEquipmentsBean.editEquipment}">
+                        <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
+                        <f:setPropertyActionListener value="#{equipment}" target="#{listEquipmentsBean.selectedEquipment}" />
+                    </p:commandLink>
+
+                </p:column>
+
+
+
+                <p:column style="width: 5px">
+                    <p:rowToggler />
+
+                </p:column>
+
+                <p:column headerText="#{messages.equipment_name}" sortBy="#{equipment.name}" filterBy="#{equipment.name}" footerText="contains" id="name" >
+                    <h:outputText value="#{equipment.name}" />
+                </p:column>
+
+                <p:column headerText="#{messages.equipment_manufacturer}" sortBy="#{equipment.manufacturer}" filterBy="#{equipment.manufacturer}" footerText="contains" id="manufacturer">
+                    <h:outputText value="#{equipment.manufacturer}" />
+                </p:column>
+
+                <p:column headerText="#{messages.label_plateform}"
+                          sortBy="#{equipment.plateform.label}"
+                          filterBy="#{equipment.plateform.label}"
+                          id="plateform"
+                          filterOptions="#{listEquipmentsBean.plateformOption}"
+                          filterMatchMode="exact">
+                    <h:outputText value="#{equipment.plateform.label}" />
+                </p:column>
+
+                <p:column headerText="#{messages.equipment_status}"
+                          sortBy="#{equipment.status.label}"
+                          filterBy="#{equipment.status.label}"
+                          id="status"
+                          filterOptions="#{listEquipmentsBean.statusOption}"
+                          filterMatchMode="exact">
+                    <h:outputText value="#{equipment.status.label}" />
+                </p:column>
+<!--
+                <p:column style="width: 5px" headerText="#{messages.label_delete}">
+                    <p:commandLink id="deleteButton" oncomplete="deleteDlg.show();" update=":deleteDialog" title="#{messages.label_delete}">
+                        <h:panelGroup styleClass="ui-icon ui-icon-trash" />
+                        <f:setPropertyActionListener value="#{equipment}" target="#{listEquipmentsBean.selectedEquipment}" />
+                    </p:commandLink>
+                    <p:tooltip for="deleteButton" value="#{messages.label_delete}" />
+                </p:column>
+
+                <p:ajax event="filter" update="sizeId"/>
+                -->
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column id="sizeId" colspan="12" footerText="#{listEquipmentsBean.filteredEquipments.size()} #{messages.label_equipments}"  />
+                    </p:row>
+
+                </p:columnGroup>
+
+                <f:facet name="footer">
+                    <p:commandButton value="#{messages.equipment_newEquipment}" icon="ui-icon-plus" action="#{listEquipmentsBean.createNewEquipment}"/>
+                </f:facet>
+
+                <p:rowExpansion>
+                    <h:panelGrid id="expansionPanel" columns="2" cellpadding="20" style="width:auto" styleClass="topAligned">
+                        <p:panelGrid columns="2" id="number" >
+                            <f:facet name="header" >
+                                <h:outputText value="Information"/>
+                            </f:facet>
+                            <h:outputText value="Serial Number: " />
+                            <h:outputText styleClass="carRetLabel" value="#{equipment.serialNumber}" />
+
+                            <h:outputText value="ITX Number " />
+                            <h:outputText styleClass="carRetLabel" value="#{equipment.itx}" />
+                        </p:panelGrid>
+
+                    </h:panelGrid>
+                </p:rowExpansion>
+
+            </p:dataTable>
+        </h:form>
+
+        <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{listEquipmentsBean.selectedEquipment}" message="#{messages.label_confirm_deletion}"
+                         closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
+            <h:form id="deleteForm">
+                <h:panelGroup layout="block" style="text-align: right">
+                    <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{listEquipmentsBean.deleteEquipment}" update=":equipmentListForm:equipmentListMessages, :equipmentListForm:equipmentsTable" oncomplete="deleteDlg.hide();" />
+                    <p:commandButton value="#{messages.label_cancel}" actionListener="#{listEquipmentsBean.cancelDeletion}" update=":equipmentListForm:equipmentListMessages" oncomplete="deleteDlg.hide();" />
+                </h:panelGroup>
+            </h:form>
+        </p:confirmDialog>
+
+    </ui:define>
+</ui:composition>
+</html>
+

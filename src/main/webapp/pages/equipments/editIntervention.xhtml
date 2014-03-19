@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="#{redirectBean.templateEquipment}">
+    <ui:define name="content">
+        <p:spacer height="50"/>
+
+        <f:metadata>
+            <f:viewParam id="inter_id" name="id" value="#{editInterventionBean.intervention}"
+                         required="true" requiredMessage="Accès à la page invalide. Utilisez un lien de l'inteface pour accéder à cette page !"
+                         converter="#{interventionConverter}" converterMessage="id d'intervention inconnu ! Utilisez un lien de l'inteface pour accéder à cette page !"/>
+
+
+        </f:metadata>
+        <h:message for="inter_id" style="color: red"/>
+
+        <h:form id="interventionForm" enctype="multipart/form-data">
+            <p:growl id="interventionCreateMessages" life="2500" showDetail="true" globalOnly="true"/>
+
+
+                <p:panel id="panelDescription" header="Description" rendered="#{editInterventionBean.intervention != null}">
+
+
+                    <h:panelGrid columns="3">
+
+                        <p:outputLabel for="interventionForm" value="#{messages.equipment_name}" />
+                         <h:outputText value="#{editInterventionBean.intervention.equipment}" />
+                         <p:message for="interventionForm" />
+
+                        <p:outputLabel for="date" value="Date"/>
+                        <p:calendar id="date" value="#{editInterventionBean.intervention.interventionDate}" />
+                        <p:message for="date" />
+
+                        <p:outputLabel for="subject" value="Subject"/>
+                        <p:inputText id="subject" value="#{editInterventionBean.intervention.subject}" />
+                        <p:message for="subject" />
+
+                        <p:outputLabel for="comment" value ="Comment"/>
+                        <p:editor id="comment" value="#{editInterventionBean.intervention.comment}" width="600"/>
+                        <p:message for="comment" />
+                    </h:panelGrid>
+
+                    <f:facet name="footer">
+                        <p:commandButton id="submitButton" value="Save" update="interventionCreateMessages" action="#{editInterventionBean.saveIntervention}" ajax="false"/>
+                        <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{editInterventionBean.cancelIntervention}" ajax="false"/>
+                    </f:facet>
+                </p:panel>
+
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

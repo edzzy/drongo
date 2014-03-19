@@ -6,7 +6,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:o="http://omnifaces.org/ui">
-    <ui:composition template="equipmentsTemplate.xhtml">
+    <ui:composition template="#{redirectBean.templateEquipment}">
         <ui:define name="content">
             <p:spacer height="50"/>
 
@@ -28,7 +28,7 @@
                                 <p:message for="name" />
 
                                 <p:outputLabel for="type" value="#{messages.equipment_type}" />
-                                <p:inputText id="type" required="true" value="#{smallEquipmentBean.equipment.type}" />
+                                <p:inputText id="type" required="true" value="#{smallEquipmentBean.equipment.modele}" />
                                 <p:message for="type" />
 
                                 <p:outputLabel for="manufacturer" value="#{messages.equipment_manufacturer}" />
@@ -78,7 +78,15 @@
                                     <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" action="#{smallEquipmentBean.createNewEquipmentCategory}" >
                                         <o:ignoreValidationFailed />
                                     </p:commandButton>
+
                                 </h:panelGrid>
+                                <p:outputLabel for="plateforme" value="Plateforme" />
+                                <p:inputText id="plateforme" value="#{smallEquipmentBean.equipment.plateform}" />
+                                <p:outputLabel for="statusSelect" value="Status" />
+                                <p:selectOneMenu id="statusSelect" value="#{smallEquipmentBean.equipment.status}" converter="#{equipmentStatusConverter}" style="width: 130px">
+                                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                    <f:selectItems value="#{smallEquipmentBean.equipmentStatusList}" />
+                                </p:selectOneMenu>
                                 <p:message for="categorySelect" />
                             </h:panelGrid>
                         </p:panel>
@@ -97,7 +105,7 @@
                                     <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.name}" />
 
                                     <h:outputText value="#{messages.equipment_type}: " />
-                                    <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.type}" />
+                                    <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.modele}" />
 
                                     <h:outputText value="#{messages.equipment_manufacturer}: " />
                                     <h:outputText styleClass="outputLabel" value="#{smallEquipmentBean.equipment.manufacturer}" />

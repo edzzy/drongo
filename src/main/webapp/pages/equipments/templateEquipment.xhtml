@@ -13,13 +13,15 @@
         <ui:define name="menu">
             <h:form id="menuForm">
                 <p:menu>  
-                    <p:submenu label="#{messages.label_runDevice}">  
-                        <p:menuitem value="#{messages.label_list}" outcome="devices" icon="ui-icon-script" />
-                    </p:submenu>  
-                    <p:submenu label="#{messages.label_otherEquipments}">  
-                        <p:menuitem value="#{messages.label_list}" outcome="smallEquipments" icon="ui-icon-script" />
+                    <p:submenu label="#{messages.label_equipment}">
+                        <p:menuitem value="#{messages.label_list}" outcome="#{redirectBean.listEquipments}" icon="ui-icon-script" />
+                        <p:menuitem value="#{messages.label_new}" outcome="#{redirectBean.createEquipment}" icon="ui-icon-script" />
                     </p:submenu>
-                </p:menu>  
+                    <p:submenu label="#{messages.label_interventions}">
+                        <p:menuitem value="#{messages.label_list}" outcome="#{redirectBean.listInterventions}" icon="ui-icon-script"/>
+                        <p:menuitem value="#{messages.label_new}" outcome="#{redirectBean.createIntervention}" icon="ui-icon-script"/>
+                    </p:submenu>
+                </p:menu>
             </h:form>
         </ui:define>
 

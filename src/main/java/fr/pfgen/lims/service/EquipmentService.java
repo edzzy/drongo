@@ -4,11 +4,12 @@
  */
 package fr.pfgen.lims.service;
 
-import fr.pfgen.lims.domain.equipments.Equipment;
-import fr.pfgen.lims.domain.equipments.EquipmentCategory;
-import fr.pfgen.lims.domain.equipments.RunDevice;
-import fr.pfgen.lims.domain.equipments.SmallEquipment;
+import fr.pfgen.lims.domain.equipments.*;
+import fr.pfgen.lims.domain.people.Organism;
+
+import javax.faces.model.SelectItem;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -56,4 +57,28 @@ public interface EquipmentService {
     public abstract EquipmentCategory findEquipmentCategoryByName(String name);
     
     public abstract void saveEquipmentCategory(EquipmentCategory category);
+    
+    public abstract List<Intervention> findAllInterventions();
+    
+    public abstract List<Intervention> findAllInterventionsByEquipment(Equipment equipment);
+    
+    
+    public abstract List<String> findAllManufacturers();
+    
+    public abstract void saveIntervention(Intervention intervention);
+
+
+    //methods for fundings
+
+    public abstract List<Funding> findAllFundings();
+
+    public abstract List<Funding> findAllFundingsByEquipments(Equipment equipment);
+
+    public abstract List<Funding> findAllFundingsByOrganisms(Organism organism);
+
+    public abstract Intervention updateIntervention(Intervention intervention);
+
+    public abstract Intervention findInterventionById(Long id);
+
+    public abstract Equipment findEquipmentById(Long aLong);
 }

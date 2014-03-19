@@ -4,6 +4,8 @@
  */
 package fr.pfgen.lims.web.equipments;
 
+import fr.pfgen.lims.domain.equipments.EquipmentStatus;
+import fr.pfgen.lims.domain.equipments.Intervention;
 import fr.pfgen.lims.domain.equipments.RunDevice;
 import fr.pfgen.lims.service.EquipmentService;
 import fr.pfgen.lims.web.util.FacesUtils;
@@ -11,19 +13,18 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.ToggleEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author eric
  */
-@Controller
+@Component
 @Scope("view")
-@ManagedBean
 public class DevicesBean implements Serializable{
     
     @Autowired
@@ -32,10 +33,18 @@ public class DevicesBean implements Serializable{
     private List<RunDevice> deviceList;
     private List<RunDevice> filteredDevices;
     private RunDevice selectedDevice;
+    private List<Intervention> interventionList;
     
     @PostConstruct
     public void init(){
         deviceList = equipmentService.findAllDevices();
+        
+        for (RunDevice runDevice : deviceList) {
+            for (Intervention i : runDevice.getInterventions()) {
+                //System.out.print(i);
+            }
+        }
+        
     }
     
     public String createNewDevice(){
@@ -47,6 +56,18 @@ public class DevicesBean implements Serializable{
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("device");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("device", selectedDevice);
         return "device?faces-redirect=true";
+    }
+    
+    public String showDevice(){
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("device");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("device", selectedDevice);
+        return "deviceShow?faces-redirect=true";
+    }
+    
+    public String showDeviceInterventions(){
+        
+        FacesUtils.putObjectInSessionMap("equipment", selectedDevice);
+        return "interventionsEquipment?faces-redirect=true";
     }
     
     public void deleteDevice() {
@@ -92,4 +113,25 @@ public class DevicesBean implements Serializable{
     public int getDeviceNumber(){
         return deviceList.size();
     }
+    
+    public List getAllManufacturers(){
+        return null;
+    }
+    
+    public void populateInterventionList(ToggleEvent event){
+        
+        System.out.println((RunDevice) event.getData());
+        interventionList = equipmentService.findAllInterventionsByEquipment((RunDevice) event.getData());
+    }
+
+    public List<Intervention> getInterventionList() {
+        return interventionList;
+    }
+
+    public void setInterventionList(List<Intervention> interventionList) {
+        this.interventionList = interventionList;
+    }
+    
+    
+  
 }

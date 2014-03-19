@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="#{redirectBean.templateEquipment}">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <f:metadata>
+                <f:viewParam id="inter_id" name="id" value="#{showInterventionBean.intervention}"
+                             required="true" requiredMessage="Accès à la page invalide. Utilisez un lien de l'inteface pour accéder à cette page !"
+                             converter="#{interventionConverter}" converterMessage="id d'intervention inconnu ! Utilisez un lien de l'inteface pour accéder à cette page !"/>
+            </f:metadata>
+            <h:message for="inter_id" style="color: red"/>
+
+                <p:growl id="interventionCreateMessages" life="2500" showDetail="true" globalOnly="true"/>
+                    <p:panel id="panelDescription" header="Description">
+
+                        <h:panelGrid columns="2">
+
+                            <p:outputLabel for="equipment" value="#{messages.equipment_name}" />
+                           <h:outputText id="equipment" value="#{showInterventionBean.intervention.equipment}" />
+
+                            <p:outputLabel for="date" value="Date"/>
+                            <h:outputText id="date" value="#{showInterventionBean.intervention.interventionDate}">
+                                <f:convertDateTime pattern="yyy-MM-dd"/>
+                            </h:outputText>
+
+                            <p:outputLabel for="subject" value="Subject"/>
+                            <h:outputText id="subject" value="#{showInterventionBean.intervention.subject}" />
+
+
+                            <p:outputLabel for="comment" value ="Comment"/>
+                            <h:outputText id="comment" value="#{showInterventionBean.intervention.comment}" escape="false"/>
+
+                        </h:panelGrid>
+                        <p:button id="returnButton" outcome="#{redirectBean.showEquipment}" value="#{messages.label_return} #{showInterventionBean.intervention.equipment.name}" >
+                            <f:param name="id" value="#{showInterventionBean.intervention.equipment.id}"/>
+                        </p:button>
+
+                        <f:facet name="footer"> 
+
+                        </f:facet>
+                    </p:panel>
+
+        </ui:define>
+    </ui:composition>
+</html>

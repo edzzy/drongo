@@ -6,12 +6,12 @@
 
 package fr.pfgen.lims.domain.equipments;
 
-import java.io.Serializable;
+import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Date;
+import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,49 +24,82 @@ import javax.validation.constraints.Size;
  * @author edouard
  */
 @Entity
-@Table(name="intervention")
-public class Intervention implements Serializable {
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+@Table(name="interventions")
+public class Intervention extends AbstractGenericEntity {
+   
+  
 
     @NotNull
-    @ManyToOne
-    private Equipment equipement;
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    private Equipment equipment;
     
     
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private Date interventionDate;
     
-    @Size(max = 50)
+    @Size(max = 200)
     private String subject;
     
-    
-    
-    public Long getId() {
-        return id;
+    @Lob
+    private String comment;
+
+    public Equipment getEquipment() {
+        return equipment;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setEquipment(Equipment equipment) {
+        this.equipment = equipment;
+    }
+
+    public Date getInterventionDate() {
+        return interventionDate;
+    }
+
+    public void setInterventionDate(Date interventionDate) {
+        this.interventionDate = interventionDate;
+    }
+    
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.equipment);
+        hash = 31 * hash + Objects.hashCode(this.interventionDate);
+        hash = 31 * hash + Objects.hashCode(this.subject);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Intervention)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        Intervention other = (Intervention) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Intervention other = (Intervention) obj;
+        if (!Objects.equals(this.equipment, other.equipment)) {
+            return false;
+        }
+        if (!Objects.equals(this.interventionDate, other.interventionDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.subject, other.subject)) {
             return false;
         }
         return true;
@@ -74,7 +107,6 @@ public class Intervention implements Serializable {
 
     @Override
     public String toString() {
-        return "fr.pfgen.lims.domain.equipments.Intervention[ id=" + id + " ]";
-    }
-    
+        return this.subject;
+    }    
 }

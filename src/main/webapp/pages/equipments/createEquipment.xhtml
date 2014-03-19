@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+<ui:composition template="#{redirectBean.templateEquipment}">
+    <ui:define name="content">
+        <p:spacer height="50"/>
+
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{createEquipmentBean.initEquipment()}" />
+        </f:metadata>
+
+        <o:form id="equipmentForm">
+            <p:growl id="equipmentCreateMessages" life="2500" showDetail="true" globalOnly="true"/>
+
+                <p:fieldset id="descriptionTab" legend="#{messages.equipment_description}">
+
+                        <p:panelGrid columns="3">
+                            <p:outputLabel for="name" value="#{messages.equipment_name}" />
+                            <p:inputText id="name" required="true" value="#{createEquipmentBean.newEquipment.name}" />
+                            <p:message for="name" />
+
+                            <p:outputLabel for="type" value="#{messages.equipment_type}" />
+                            <p:inputText id="type" required="true" value="#{createEquipmentBean.newEquipment.modele}" />
+                            <p:message for="type" />
+
+                            <p:outputLabel for="manufacturer" value="#{messages.equipment_manufacturer}" />
+                            <p:inputText id="manufacturer" required="true" value="#{createEquipmentBean.newEquipment.manufacturer}" />
+                            <p:message for="manufacturer" />
+                        </p:panelGrid>
+
+                </p:fieldset>
+                <p:spacer/>
+                <p:fieldset id="identificationTab" legend="#{messages.equipment_deviceIdentification}">
+
+
+                        <p:panelGrid columns="3" >
+                            <p:outputLabel for="serial" value="#{messages.equipment_serialNumber}" />
+                            <p:inputText id="serial" required="true" value="#{createEquipmentBean.newEquipment.serialNumber}" />
+                            <p:message for="serial" />
+
+                            <p:outputLabel for="itx" value="#{messages.equipment_itx}" />
+                            <p:inputMask id="itx" mask="ITX9999" value="#{createEquipmentBean.newEquipment.itx}" />
+                            <p:message for="itx" />
+
+                            <p:outputLabel for="internal" value="#{messages.equipment_internalNumber}" />
+                            <p:inputText id="internal" required="true"  value="#{createEquipmentBean.newEquipment.internalNumber}" />
+                            <p:message for="internal" />
+                        </p:panelGrid>
+                </p:fieldset>
+                <p:spacer/>
+                <p:fieldset id="information" legend="#{messages.label_otherInformations}" >
+                        <p:panelGrid columns="3" >
+                            <p:outputLabel for="room" value="#{messages.equipment_room}" />
+                            <p:inputText id="room" required="true" value="#{createEquipmentBean.newEquipment.room}" />
+                            <p:message for="room" />
+
+                            <p:outputLabel for="acquisition" value="#{messages.equipment_acquisitionDate}" />
+                            <p:calendar id="acquisition" value="#{createEquipmentBean.newEquipment.acquisitionDate}" />
+                            <p:message for="acquisition" />
+
+                            <p:outputLabel for="statusSelect" value="Status" />
+                            <p:selectOneMenu id="statusSelect" value="#{createEquipmentBean.newEquipment.status}"  style="width: 130px" converter="#{statusTypeConverter}">
+                                <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                <f:selectItems value="#{createEquipmentBean.equipmentStatusTypes}" var="status" itemValue="#{status}" />
+                            </p:selectOneMenu>
+                            <p:message for="statusSelect" />
+                            <p:outputLabel for="pfSelect" value="#{messages.label_plateform}" />
+                            <p:selectOneMenu id="pfSelect" value="#{createEquipmentBean.newEquipment.plateform}"  style="width: 130px" converter="#{plateformTypeConverter}">
+                                <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                <f:selectItems value="#{createEquipmentBean.equipmentPlateformTypes}" var="plateform" itemValue="#{plateform}" />
+                            </p:selectOneMenu>
+                            <p:message for="pfSelect" />
+                        </p:panelGrid>
+                </p:fieldset>
+            <p:spacer/>
+
+            <p:fieldset id="fundingSet" legend="#{messages.equipment_funding}" >
+                <p:dataTable value="#{createEquipmentBean.fundings}" var="funding" id="fundingTable">
+
+                    <p:column headerText="#{messages.equipment_funding}">
+                        <h:outputText value="#{funding.organism}"/>
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_cost}">
+                        <h:outputText value="#{funding.percent}"/>
+                    </p:column>
+
+                    <p:column headerText="#{messages.equipment_context}">
+                        <h:outputText value="#{funding.context}" />
+                    </p:column>
+                </p:dataTable>
+
+                <p:spacer/>
+
+
+
+                <p:panelGrid columns="3" id="panelTest" rendered="#{createEquipmentBean.maxPercent != 0.0}">
+
+
+                <p:outputLabel for="organismSelect" value="#{messages.label_organism}" />
+                <p:selectOneMenu id="organismSelect" value="#{createEquipmentBean.organism}" style="width: 130px" converter="#{organismConverter}">
+                    <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}"  />
+                    <f:selectItems value="#{createEquipmentBean.organisms}"/>
+                </p:selectOneMenu>
+                <p:messages for="organismSelect"/>
+
+                <p:outputLabel for="percent" value="#{messages.label_percent}"/>
+                <h:panelGrid columns="1" style="margin-bottom: 10px">
+                    <p:inputText id="percent" required="true" value="#{createEquipmentBean.percent}" />
+                    <p:slider for="percent" maxValue="#{createEquipmentBean.maxPercent}" minValue="#{createEquipmentBean.minPercent}" />
+                </h:panelGrid>
+                <p:message for="percent"/>
+
+
+                <p:outputLabel for="context" value="#{messages.label_context}" />
+                <p:inputText id="context" required="true" value="#{createEquipmentBean.context}" />
+                <p:message for="context"/>
+
+
+                 <p:commandButton  value="Add" actionListener="#{createEquipmentBean.addFunding}" update="panelTest,fundingTable" process="@this,percent,context,organismSelect"/>
+                    <p:messages id="mess"/>
+                </p:panelGrid>
+            </p:fieldset>
+            <p:fieldset id="resp" legend="#{messages.label_referent}">
+
+            </p:fieldset>
+            <p:panel>
+                <f:facet name="footer">
+                    <p:commandButton id="submitButton" value="Save" update="equipmentCreateMessages" action="#{createEquipmentBean.saveEquipment}" ajax="false"/>
+                    <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{createEquipmentBean.cancelEquipment}" ajax="false"/>
+            </f:facet>
+            </p:panel>
+        </o:form>
+    </ui:define>
+</ui:composition>
+</html>

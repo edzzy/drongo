@@ -6,6 +6,7 @@ package fr.pfgen.lims.web.equipments;
 
 import fr.pfgen.lims.domain.equipments.Equipment;
 import fr.pfgen.lims.domain.equipments.EquipmentCategory;
+import fr.pfgen.lims.domain.equipments.EquipmentStatus;
 import fr.pfgen.lims.domain.equipments.SmallEquipment;
 import fr.pfgen.lims.service.EquipmentService;
 import fr.pfgen.lims.web.util.FacesUtils;
@@ -36,7 +37,8 @@ public class SmallEquipmentBean {
     private String wizStep;
     private boolean isNewEquipment;
     private List<EquipmentCategory> equipmentCategoryList;
-    
+    private List<EquipmentStatus> equipmentStatusList;
+
     @PostConstruct
     public void init() {
         equipmentCategoryList = equipmentService.findAllEquipmentCategories();
@@ -134,6 +136,14 @@ public class SmallEquipmentBean {
         } else {
             return "ui-icon-disk";
         }
+    }
+
+    public List<EquipmentStatus> getEquipmentStatusList() {
+        return equipmentStatusList;
+    }
+
+    public void setEquipmentStatusList(List<EquipmentStatus> equipmentStatusList) {
+        this.equipmentStatusList = equipmentStatusList;
     }
 
     public List<EquipmentCategory> getEquipmentCategoryList() {

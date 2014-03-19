@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="#{redirectBean.templateEquipment}">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{deviceBean.initDevice}" /> 
+            </f:metadata>
+          <h:panelGrid columns="2" cellpadding="20" styleClass="topAligned">
+
+                                <p:panelGrid columns="2" > 
+                                    <f:facet name="header">
+                                        #{messages.equipment_deviceDescription}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.equipment_name}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{deviceBean.device.name}" />
+
+                                    <h:outputText value="#{messages.equipment_type}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{deviceBean.device.modele}" />
+
+                                    <h:outputText value="#{messages.equipment_manufacturer}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{deviceBean.device.manufacturer}" />
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" > 
+                                    <f:facet name="header">
+                                        #{messages.equipment_deviceIdentification}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.equipment_serialNumber}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{deviceBean.device.serialNumber}" />
+
+                                    <h:outputText value="#{messages.equipment_itx}: "/>
+                                    <h:outputText styleClass="outputLabel" value="#{deviceBean.device.itx}" />
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        #{messages.label_otherInformations}
+                                    </f:facet>
+                                    <h:outputText value="#{messages.equipment_room}: " />
+                                    <h:outputText styleClass="outputLabel" value="#{deviceBean.device.room}" />
+
+                                    <h:outputText value="#{messages.equipment_acquisitionDate}: " />
+                                    <h:outputText value="#{deviceBean.device.acquisitionDate}">
+                                        <f:convertDateTime dateStyle="long" type="date" />
+                                    </h:outputText>
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="1">
+                                    <f:facet name="header">
+                                        #{messages.label_image}
+                                    </f:facet>
+                                    <p:graphicImage value="#{imageBean.deviceStreamedContent}" style="max-width: 300px; height: auto;" />
+                                </p:panelGrid>
+
+                            </h:panelGrid>
+       </ui:define>
+    </ui:composition>
+</html>
+
