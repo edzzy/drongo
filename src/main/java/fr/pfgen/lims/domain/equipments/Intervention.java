@@ -30,7 +30,8 @@ public class Intervention extends AbstractGenericEntity {
   
 
     @NotNull
-    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+   // @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.ALL})
     private Equipment equipment;
     
     

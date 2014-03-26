@@ -17,8 +17,8 @@
         </f:metadata>
         <h:message for="inter_id" style="color: red"/>
         <h2>#{showEquipmentBean.equipment.name} </h2>
-        <p:accordionPanel multiple="true">
-            <p:tab title="#{messages.label_information}">
+
+            <p:fieldset legend="#{messages.label_information}" >
                     <p:panelGrid columns="2">
 
 
@@ -86,8 +86,8 @@
                         <p:outputLabel value="#{messages.equipment_convention}" />
                         <h:outputText value="#{showEquipmentBean.equipment.convention}" style="font-weight: bold" />
                     </p:panelGrid>
-            </p:tab>
-            <p:tab title="#{messages.equipment_funding}">
+            </p:fieldset>
+            <p:fieldset legend="#{messages.equipment_funding}">
                 <h:panelGrid columns="1" rendered="#{showEquipmentBean.pieModel!=null}">
                 <p:pieChart id="fund" value="#{showEquipmentBean.pieModel}" legendPosition="e" fill="false" showDataLabels="true"
                             title="#{messages.equipment_funding}" style="width: 400px;height: 300px;background: transparent " sliceMargin="5" diameter="150"/>
@@ -98,9 +98,9 @@
                 </h:panelGrid>
                 <p:outputLabel value="#{messages.label_notFunding}" rendered="#{showEquipmentBean.pieModel==null}"/>
 
-            </p:tab>
-            <p:tab title="#{messages.label_interventions}">
-                <p:button value="#{messages.label_newinterventions}" outcome="#{showEquipmentBean.createIntervention()}"   />
+            </p:fieldset>
+            <p:fieldset legend="#{messages.label_interventions}">
+
 
 
                     <p:dataTable var="intervention"
@@ -109,7 +109,7 @@
                         <p:column style="width: 5px">
                             <p:rowToggler />
                         </p:column>
-                        <p:column style="width: 5px" headerText="#{messages.label_edit}">
+                        <p:column style="width: 5px" >
                             <p:commandLink id="editButton" action="#{showEquipmentBean.editIntervention}">
                                 <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
                                 <f:setPropertyActionListener value="#{intervention}" target="#{showEquipmentBean.selectedIntervention}" />
@@ -127,10 +127,11 @@
                             <h:outputText  value="#{intervention.comment}" escape="false" />
                         </p:rowExpansion>
                     </p:dataTable>
-            </p:tab>
-            <p:tab title="#{messages.label_referent}">
-            </p:tab>
-    </p:accordionPanel>
+                <p:button value="#{messages.label_newinterventions}" outcome="#{showEquipmentBean.createIntervention()}"   />
+            </p:fieldset>
+            <p:fieldset legend="#{messages.label_referent}">
+            </p:fieldset>
+
     </ui:define>
 </ui:composition>
 </html>

@@ -60,7 +60,7 @@ public class CreateInterventionBean implements Serializable{
             System.out.print(e.getMessage());
             return null;
         }
-        return null;
+        return redirectBean.getShowIntervention() +"&id=" + newIntervention.getId();
 
     }
 
