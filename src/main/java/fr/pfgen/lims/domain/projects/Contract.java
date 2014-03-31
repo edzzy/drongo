@@ -4,19 +4,22 @@
  */
 package fr.pfgen.lims.domain.projects;
 
+import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 /**
  *
  * @author edouard
@@ -29,38 +32,117 @@ public class Contract extends AbstractGenericEntity{
     @DateTimeFormat(style = "M-")
     private Date signatureDate;
     
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date beginDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date endDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date dueDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date scheduleBeginDate;
-    
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
-    private Date scheduleDueDate;
-    
     @NotNull
-    private ContractStatus status;
+    @Column(unique = true)
+    private String contractNumber;
     
-    @NotNull
     @ManyToOne
-    private Project project;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contract")
-    private Set<Activity> activities;
+    @NotNull
+    private Client mainClient;
     
     @NotNull
-    private int contractNumber;
+    @Size(min = 3,max = 100)
+    private String title;
+    
+    @ManyToMany(mappedBy = "involvedInContracts")
+    private Set<Client> involvedClients;
+    
+    @Lob
+    @NotNull
+    private String description;
+    
+    @NotNull
+    @Size(min = 2,max = 20)
+    private String keyword;
+    
+    @Size(max = 50)
+    private String reminderKeywords;
+    
+    @NotNull
+    private ContractStatus status = ContractStatus.PENDING;
+    
+    @ManyToOne
+    private Activity activity;
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public String getReminderKeywords() {
+        return reminderKeywords;
+    }
+
+    public ContractStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ContractStatus status) {
+        this.status = status;
+    }
+
+    public void setReminderKeywords(String reminderKeywords) {
+        this.reminderKeywords = reminderKeywords;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public boolean isSigned() {
+        if (signatureDate == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public String getContractNumber() {
+        return contractNumber;
+    }
+
+    public void setContractNumber(String contractNumber) {
+        this.contractNumber = contractNumber;
+    }
+
+    public Client getMainClient() {
+        return mainClient;
+    }
+
+    public void setMainClient(Client mainClient) {
+        this.mainClient = mainClient;
+    }
+
+    public Set<Client> getInvolvedClients() {
+        return involvedClients;
+    }
+
+    public void setInvolvedClients(Set<Client> involvedClients) {
+        this.involvedClients = involvedClients;
+    }
 
     public Date getSignatureDate() {
         return signatureDate;
@@ -70,52 +152,30 @@ public class Contract extends AbstractGenericEntity{
         this.signatureDate = signatureDate;
     }
 
-    public Date getBeginDate() {
-        return beginDate;
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.contractNumber);
+        return hash;
     }
 
-    public void setBeginDate(Date beginDate) {
-        this.beginDate = beginDate;
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Contract other = (Contract) obj;
+        if (!Objects.equals(this.contractNumber, other.contractNumber)) {
+            return false;
+        }
+        return true;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    @Override
+    public String toString() {
+        return this.contractNumber;
     }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
-    public Set<Activity> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(Set<Activity> activities) {
-        this.activities = activities;
-    }
-
-    public int getContractNumber() {
-        return contractNumber;
-    }
-
-    public void setContractNumber(int contractNumber) {
-        this.contractNumber = contractNumber;
-    }
-    
 }

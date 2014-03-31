@@ -109,16 +109,16 @@ public class ShowEquipmentBean implements Serializable{
             FacesContext context = FacesContext.getCurrentInstance();
             if (equipment.getId() == null) {
                 equipmentService.saveEquipment(equipment);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newEquipment_added"), equipment.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("newEquipment_added"), equipment.toString(), FacesMessage.SEVERITY_INFO);
 
             } else {
                 equipmentService.updateEquipment(equipment);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), equipment.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_done"), equipment.toString(), FacesMessage.SEVERITY_INFO);
             }
             context.getExternalContext().getFlash().setKeepMessages(true);
             return "smallEquipments?faces-redirect=true";
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }
@@ -126,9 +126,9 @@ public class ShowEquipmentBean implements Serializable{
     public String cancelEquipment() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (equipment.getId() == null) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
         } else {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), equipment.toString(), FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_cancelled"), equipment.toString(), FacesMessage.SEVERITY_INFO);
         }
         context.getExternalContext().getFlash().setKeepMessages(true);
         return "smallEquipments?faces-redirect=true";
@@ -141,7 +141,7 @@ public class ShowEquipmentBean implements Serializable{
 
         if ((existingEquipment != null && existingEquipment.getId() != equipment.getId())) {
             ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\"" + serial + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValueInMessages("edit_error"), "\"" + serial + "\" " + FacesUtils.getI18nValueInMessages("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
     }
 
@@ -153,7 +153,7 @@ public class ShowEquipmentBean implements Serializable{
 
         if ((existingEquipment != null && existingEquipment.getId() != equipment.getId())) {
             ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\"" + itx + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValueInMessages("edit_error"), "\"" + itx + "\" " + FacesUtils.getI18nValueInMessages("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
     }
 
@@ -163,9 +163,9 @@ public class ShowEquipmentBean implements Serializable{
 
     public String getSaveOrEditLabel() {
         if (equipment.getId() != null) {
-            return FacesUtils.getI18nValue("label_edit");
+            return FacesUtils.getI18nValueInMessages("label_edit");
         } else {
-            return FacesUtils.getI18nValue("label_save");
+            return FacesUtils.getI18nValueInMessages("label_save");
         }
     }
 

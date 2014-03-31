@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("request")
-@ManagedBean
 public class ResearchTeamCreateBean extends ResearchTeamFlow{
 
     @Autowired
@@ -44,15 +42,14 @@ public class ResearchTeamCreateBean extends ResearchTeamFlow{
     }
 
     public String createNewResearchUnit() {
-        enterFlow(FlowType.RESEARCHUNIT);
-        return "researchUnitCreate?faces-redirect=true";
+        return enterFlow(FlowType.RESEARCHUNIT);
     }
 
     public String saveNewTeam() {
 
         for (ResearchTeam team : unit2teams.get(newResearchTeam.getResearchUnit())) {
             if (team.getName().equalsIgnoreCase(newResearchTeam.getName())) {
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), "\"" + newResearchTeam.getName() + "\" " + FacesUtils.getI18nValue("label_alreadyExistsInUnit"), FacesMessage.SEVERITY_ERROR);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), "\"" + newResearchTeam.getName() + "\" " + FacesUtils.getI18nValueInMessages("label_alreadyExistsInUnit"), FacesMessage.SEVERITY_ERROR);
                 return null;
             }
         }
@@ -71,7 +68,7 @@ public class ResearchTeamCreateBean extends ResearchTeamFlow{
                 return null;
             }
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }

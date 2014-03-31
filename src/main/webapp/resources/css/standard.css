@@ -88,6 +88,13 @@ a:visited {
     vertical-align: top;
 }
 */
+.center{
+    margin-left:auto;
+    margin-right:auto;
+    width:70%;
+    background-color:#b0e0e6;
+}
+
 .ui-dock-container-top{
     z-index: 30;
     position:relative;
@@ -96,7 +103,7 @@ a:visited {
 }
 
 .ui-panelgrid tr, .ui-panelgrid td {
-    border:0 !important;
+    border:0;
 }
 
 a.ui-dock-item-top {
@@ -110,7 +117,11 @@ a.ui-dock-item-top {
 }
 
 .topAligned td{
-    vertical-align: top !important;
+    vertical-align: top;
+}
+
+.topAlign{
+    vertical-align: top;
 }
 
 .ui-layout-unit-content{
@@ -134,3 +145,4 @@ a.ui-dock-item-top {
     margin-left: auto;
     margin-right: auto;
 }
+

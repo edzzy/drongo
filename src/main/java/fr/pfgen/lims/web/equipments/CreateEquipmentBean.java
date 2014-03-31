@@ -154,7 +154,7 @@ public class CreateEquipmentBean implements Serializable{
     private SelectItem[] createFilterOptionsStatus(List<EquipmentStatus> data)  {
         SelectItem[] options = new SelectItem[data.size() + 1];
 
-        options[0] = new SelectItem("", FacesUtils.getI18nValue("label_select"));
+        options[0] = new SelectItem("", FacesUtils.getI18nValue("messages","label_select"));
         for(int i = 0; i < data.size(); i++) {
             options[i + 1] = new SelectItem(data.get(i).getLabel(), data.get(i).getLabel());
         }
@@ -187,10 +187,10 @@ public class CreateEquipmentBean implements Serializable{
                 newEquipment.setFundings(fundingSet);
                 equipmentService.saveEquipment(newEquipment);
 
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newEquipment_added"), newEquipment.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValue("messages","newEquipment_added"), newEquipment.toString(), FacesMessage.SEVERITY_INFO);
             }
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValue("messages","label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             System.out.print(e.getMessage());
             return null;
         }

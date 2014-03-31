@@ -1,9 +1,12 @@
 package fr.pfgen.lims.domain.people;
 
-import fr.pfgen.lims.domain.projects.Project;
+import fr.pfgen.lims.domain.projects.Contract;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -31,15 +34,30 @@ public class Client extends AbstractPerson{
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Company company;
     
-    @OneToMany(mappedBy = "mainClient")
-    private Set<Project> projectsInitiated;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mainClient")
+    private Set<Contract> mainClientForContracts;
+    
+    @ManyToMany
+    @JoinTable(
+      name="contracts_clients",
+      joinColumns={@JoinColumn(name="client_id", referencedColumnName="id")},
+      inverseJoinColumns={@JoinColumn(name="contract_id", referencedColumnName="id")})
+    private Set<Contract> involvedInContracts;
 
-    public Set<Project> getProjectsInitiated() {
-        return projectsInitiated;
+    public Set<Contract> getMainClientForContracts() {
+        return mainClientForContracts;
     }
 
-    public void setProjectsInitiated(Set<Project> projectsInitiated) {
-        this.projectsInitiated = projectsInitiated;
+    public void setMainClientForContracts(Set<Contract> mainClientForContracts) {
+        this.mainClientForContracts = mainClientForContracts;
+    }
+
+    public Set<Contract> getInvolvedInContracts() {
+        return involvedInContracts;
+    }
+
+    public void setInvolvedInContracts(Set<Contract> involvedInContracts) {
+        this.involvedInContracts = involvedInContracts;
     }
     
     public Company getCompany() {

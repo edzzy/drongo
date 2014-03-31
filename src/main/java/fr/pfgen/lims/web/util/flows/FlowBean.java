@@ -42,7 +42,9 @@ public class FlowBean {
     }
     
     public void endFlow(FlowType f){
-        flowStack.remove(flowStack.lastIndexOf(f));
+        if (flowStack.lastIndexOf(f)!=-1){
+            flowStack.remove(flowStack.lastIndexOf(f));
+        }
     }
     
     public void addFlowToStack(FlowType f){

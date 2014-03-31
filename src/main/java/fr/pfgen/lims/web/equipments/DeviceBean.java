@@ -74,16 +74,16 @@ public class DeviceBean implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             if (device.getId() == null) {
                 equipmentService.saveRunDevice(device);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newDevice_added"), device.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("newDevice_added"), device.toString(), FacesMessage.SEVERITY_INFO);
 
             } else {
                 equipmentService.updateRunDevice(device);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"), device.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_done"), device.toString(), FacesMessage.SEVERITY_INFO);
             }
             context.getExternalContext().getFlash().setKeepMessages(true);
             return "devices?faces-redirect=true";
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }
@@ -91,9 +91,9 @@ public class DeviceBean implements Serializable {
     public String cancelDevice() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (device.getId() == null) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_createCanceled"), null, FacesMessage.SEVERITY_INFO);
         } else {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_cancelled"), device.toString(), FacesMessage.SEVERITY_INFO);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_cancelled"), device.toString(), FacesMessage.SEVERITY_INFO);
         }
         context.getExternalContext().getFlash().setKeepMessages(true);
         return "devices?faces-redirect=true";
@@ -106,7 +106,7 @@ public class DeviceBean implements Serializable {
 
         if ((existingEquipment != null && existingEquipment.getId() != device.getId())) {
             ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\"" + serial + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValueInMessages("edit_error"), "\"" + serial + "\" " + FacesUtils.getI18nValueInMessages("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
     }
 
@@ -117,7 +117,7 @@ public class DeviceBean implements Serializable {
 
         if ((existingEquipment != null && existingEquipment.getId() != device.getId())) {
             ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValue("edit_error"), "\"" + itx + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(component.getClientId(context), FacesUtils.getI18nValueInMessages("edit_error"), "\"" + itx + "\" " + FacesUtils.getI18nValueInMessages("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
     }
 
@@ -173,9 +173,9 @@ public class DeviceBean implements Serializable {
 
     public String getSaveOrEditLabel() {
         if (device.getId() != null) {
-            return FacesUtils.getI18nValue("label_edit");
+            return FacesUtils.getI18nValueInMessages("label_edit");
         } else {
-            return FacesUtils.getI18nValue("label_save");
+            return FacesUtils.getI18nValueInMessages("label_save");
         }
     }
 

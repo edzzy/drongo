@@ -23,14 +23,23 @@ public class FacesUtils {
         msg.setDetail(detail);
         context.addMessage(key, msg);
     }
-    
-    public static String getI18nValue(String key){
+
+    public static String getI18nValueInMessages(String key){
+        return getI18nValue("messages", key);
+    }
+
+    public static String getI18nValueInEnums(String key){
+        return getI18nValue("enums", key);
+    }
+
+    public static String getI18nValue(String resourceBundleName, String key){
         FacesContext context = FacesContext.getCurrentInstance();
-        ResourceBundle bundle = context.getApplication().getResourceBundle(context, "messages");
-        
+        ResourceBundle bundle = context.getApplication().getResourceBundle(context, resourceBundleName);
+
         return bundle.getString(key);
     }
-    
+
+
     public static void putObjectInSessionMap(String key, Object value){
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(key, value);
     }

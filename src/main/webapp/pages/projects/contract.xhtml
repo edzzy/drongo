@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:composition template="cpgTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{contractBean.initContract()}" /> 
+            </f:metadata>
+
+            <o:form>
+                <p:growl id="contractMessages" life="2500" showDetail="true" />
+
+                <p:wizard widgetVar="wiz" backLabel="#{messages.label_previous}" nextLabel="#{messages.label_next}" step="#{contractBean.wizStep}">
+
+                    <p:tab id="clientsTab" title="#{messages.label_client}">
+                        <p:panel id="panelClients" header="#{messages.project_clientsEngaged}" >
+                            <p:focus context="panelClients"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="mainClient" value="#{messages.project_mainClient}" />
+                                <h:panelGrid columns="2">
+                                    <p:selectOneMenu id="mainClient" required="true" value="#{contractBean.contract.mainClient}" converter="#{clientConverter}">
+                                        <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />  
+                                        <f:selectItems value="#{contractBean.clientList}" />
+                                        <p:ajax listener="#{contractBean.onMainClientSelect}" update="panelClients"/>
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="#{messages.label_new}" icon="ui-icon-plus" action="#{contractBean.createNewClient}">
+                                        <o:ignoreValidationFailed />
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                <p:message for="mainClient" />
+                            </h:panelGrid>
+
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="pojoPickList" value="#{messages.project_clientsParticipating}" />
+                                <p:pickList id="pojoPickList" 
+                                            value="#{contractBean.allClients}"
+                                            var="client" 
+                                            showCheckbox="true"  
+                                            showSourceFilter="true" 
+                                            showTargetFilter="true" 
+                                            filterMatchMode="contains"
+                                            itemLabel="#{client}" 
+                                            itemValue="#{client}"
+                                            addAllLabel="#{messages.label_addAll}"
+                                            addLabel="#{messages.label_add}"
+                                            removeAllLabel="#{messages.label_removeAll}"
+                                            removeLabel="#{messages.label_remove}"
+                                            >
+
+                                    <o:converter converterId="omnifaces.ListConverter" list="#{contractBean.clientSource}"/>
+
+                                    <f:facet name="sourceCaption">#{messages.project_clientList}</f:facet>  
+                                    <f:facet name="targetCaption">#{messages.project_selectedClients}</f:facet>
+                                </p:pickList>
+                                <p:commandButton value="#{messages.label_new}" icon="ui-icon-plus" action="#{contractBean.createNewClient}" >
+                                    <o:ignoreValidationFailed />
+                                </p:commandButton>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+                    <p:tab id="descriptionTab" title="#{messages.label_description}">
+                        <p:panel id="panelDescription" header="#{messages.label_description}">
+                            <p:focus context="panelDescription"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="title" value="#{messages.contract_title}" />
+                                <p:inputText id="title" required="true" value="#{contractBean.contract.title}" />
+                                <p:message for="title" />
+
+                                <p:outputLabel for="keyword" value="#{messages.contract_keyword}" />
+                                <p:inputText id="keyword" required="true" value="#{contractBean.contract.keyword}" >
+                                    <p:tooltip for="keyword" value="#{messages.tooltip_contractKeyword}" showEffect="fade" hideEffect="fade" />
+                                </p:inputText>
+                                <p:message for="keyword" />
+
+                                <p:outputLabel for="keywords" value="#{messages.contract_reminderKeywords}" />
+                                <p:inputText id="keywords" value="#{contractBean.contract.reminderKeywords}" >
+                                    <p:tooltip for="keywords" value="#{messages.tooltip_contractKeywords}" showEffect="fade" hideEffect="fade" />
+                                </p:inputText>
+                                <p:message for="keywords" />
+
+                                <p:outputLabel for="description" value="#{messages.label_description}" />
+                                <p:editor id="description" required="true" value="#{contractBean.contract.description}" />
+                                <p:message for="description" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="applicationTab" title="#{messages.label_application}">
+                        <p:panel id="panelApplication" header="#{messages.label_application}">
+                            <p:focus context="panelApplication"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="application" value="#{messages.label_application}:" />
+                                <p:selectOneMenu id="application" value="#{contractBean.selectedApplication}" required="true" converter="#{applicationConverter}">
+                                    <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />
+                                    <f:selectItems value="#{contractBean.availableApplications}" />
+                                    <p:ajax listener="#{contractBean.onAppChanged}" update="expOrAnaActivitiesPanelGrid,activityStepsPanelGrid"/>
+                                </p:selectOneMenu>
+                                <p:message for="application" />
+                            </h:panelGrid>
+
+                            <h:panelGrid id="expOrAnaActivitiesPanelGrid" columns="2" style="margin-bottom: 10px;margin-top: 10px;" >
+                                <h:panelGrid columns="2" rendered="#{not empty contractBean.activityList}" >
+                                    <h:outputText value="#{messages.label_activities}:" />
+                                    <p:selectOneRadio id="expOrAnaRadio" value="#{contractBean.selectedActivity}" layout="pageDirection" converter="#{activityConverter}" >  
+                                        <f:selectItems value="#{contractBean.activityList}" var="activity" itemLabel="#{enums[activity.type.label]}" itemValue="#{activity}"/>  
+                                        <p:ajax listener="#{contractBean.onActChanged}" update="activityStepsPanelGrid" />
+                                    </p:selectOneRadio>
+                                </h:panelGrid>
+                                <h:outputText value="#{messages.activity_noActForApp}" rendered="#{empty contractBean.activityList and contractBean.selectedApplication != null}"/>
+                            </h:panelGrid>
+
+                            <h:panelGrid width="100%" id="activityStepsPanelGrid">
+                                <p:dataList value="#{contractBean.activitySteps}" var="activityStep" type="ordered" rendered="#{not empty contractBean.activitySteps}">  
+                                    <h:outputText id="stepNameID" value="#{activityStep.step.name}" >
+                                        <p:tooltip for="stepNameID" value="#{activityStep.step.description}" />
+                                    </h:outputText>                           
+                                </p:dataList>
+                            </h:panelGrid>
+                        </p:panel>
+                    </p:tab>
+
+                    <p:tab id="planningTab" title="#{messages.label_planning}">
+
+                    </p:tab>
+
+                </p:wizard>
+            </o:form>
+        </ui:define>
+    </ui:composition>
+</html>

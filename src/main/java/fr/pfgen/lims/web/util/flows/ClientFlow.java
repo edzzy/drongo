@@ -18,12 +18,19 @@ public abstract class ClientFlow extends GenericFlow implements FlowMethods {
             switch (flowBean.getFlowAbove(FlowType.CLIENT)) {
                 case PROJECT:
                     return redirectToProject();
+                case CONTRACT:
+                    return redirectToContract();
                 default:
                     return redirectToDefault();
             }
         } else {
             return redirectToDefault();
         }
+    }
+    
+    public String redirectToContract(){
+        cleanFlow();
+        return "/pages/projects/contract" + REDIRECT;
     }
     
     public String redirectToProject(){

@@ -53,10 +53,10 @@ public class CreateInterventionBean implements Serializable{
             if (newIntervention.getId() == null) {
                 equipmentService.saveIntervention(newIntervention);
                 System.out.println(newIntervention.getEquipment().getName());
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("newIntervention_added"), newIntervention.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("newIntervention_added"), newIntervention.toString(), FacesMessage.SEVERITY_INFO);
             }
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             System.out.print(e.getMessage());
             return null;
         }

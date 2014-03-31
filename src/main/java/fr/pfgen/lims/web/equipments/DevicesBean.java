@@ -83,7 +83,7 @@ public class DevicesBean implements Serializable{
     }
     
     public void cancelDeletion() {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteCanceled"), selectedDevice.toString(), FacesMessage.SEVERITY_INFO);
+        FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_deleteCanceled"), selectedDevice.toString(), FacesMessage.SEVERITY_INFO);
     }
 
     public List<RunDevice> getDeviceList() {

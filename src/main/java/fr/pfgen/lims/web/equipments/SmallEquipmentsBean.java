@@ -67,7 +67,7 @@ public class SmallEquipmentsBean {
     }
     
     public void cancelDeletion() {
-        FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_deleteCanceled"), selectedEquipment.toString(), FacesMessage.SEVERITY_INFO);
+        FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_deleteCanceled"), selectedEquipment.toString(), FacesMessage.SEVERITY_INFO);
     }
 
     public List<EquipmentCategory> getCategoryList() {
@@ -109,7 +109,7 @@ public class SmallEquipmentsBean {
     private SelectItem[] createFilterOptions(List<EquipmentCategory> data)  {  
         SelectItem[] options = new SelectItem[data.size() + 1];  
   
-        options[0] = new SelectItem("", FacesUtils.getI18nValue("label_select"));  
+        options[0] = new SelectItem("", FacesUtils.getI18nValueInMessages("label_select"));  
         for(int i = 0; i < data.size(); i++) { 
             options[i + 1] = new SelectItem(data.get(i).getName(), data.get(i).getName());  
         }  

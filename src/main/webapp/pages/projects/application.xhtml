@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+    <ui:composition template="cpgTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{applicationBean.initApplication}" /> 
+            </f:metadata>
+
+            <o:form>
+                <p:growl id="applicationMessages" life="2500" showDetail="true" globalOnly="true"/>
+
+                <p:panel id="applicationPanel" header="#{messages.label_application}">
+                    <h:panelGrid columns="3" >
+                        <p:outputLabel for="name" value="#{messages.application_name}:" />
+                        <p:inputText id="name" required="true" value="#{applicationBean.application.name}" validator="#{applicationBean.validateName}"/>
+                        <p:message for="name" />
+
+                        <p:outputLabel for="code" value="#{messages.application_code}:" />
+                        <p:inputText id="code" value="#{applicationBean.application.code}" required="true" validator="#{applicationBean.validateCode}" />
+                        <p:message for="code" />
+
+                        <p:outputLabel for="category" value="#{messages.application_category}:" />
+                        <h:panelGrid columns="2">
+                            <p:selectOneMenu id="category" value="#{applicationBean.application.category}" converter="#{applicationCategoryConverter}" >
+                                <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />  
+                                <f:selectItems value="#{applicationBean.applicationCategoryList}" />
+                            </p:selectOneMenu>
+                            <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" action="#{applicationBean.createNewApplicationCategory}" immediate="true">
+                                <o:ignoreValidationFailed />
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:message for="category" />
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="2" >
+                        <p:outputLabel value="#{messages.label_activities}:" />
+                        <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" ajax="false" action="#{applicationBean.createNewActivity}" disabled="#{applicationBean.application.activities.size() == 3}">
+                            
+                        </p:commandButton>
+                    </h:panelGrid> 
+                    
+                    <h:panelGrid columns="1" rendered="#{not empty applicationBean.application.activities}">
+                        <p:dataList value="#{applicationBean.application.activities.toArray()}" var="act" >  
+                            #{enums[act.type.label]}
+                            <p:dataList value="#{act.steps.toArray()}" var="activityStep" type="ordered">
+                                #{activityStep.step.name}
+                            </p:dataList>
+                        </p:dataList>
+                    </h:panelGrid>
+                    <h:outputText value="(#{messages.activity_noActForApp})" rendered="#{empty applicationBean.application.activities}"/>
+
+
+
+                    <f:facet name="footer">
+                        <p:commandButton value="#{messages.label_save}" icon="ui-icon-disk" action="#{applicationBean.saveApplication}" />
+                    </f:facet>
+                </p:panel>
+
+            </o:form>
+        </ui:define>
+    </ui:composition>
+</html>

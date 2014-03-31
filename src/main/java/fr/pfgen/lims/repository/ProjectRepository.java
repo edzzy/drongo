@@ -4,7 +4,6 @@
  */
 package fr.pfgen.lims.repository;
 
-import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.projects.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -17,6 +16,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends JpaSpecificationExecutor<Project>, JpaRepository<Project, Long> {
     
-    public Project findOneByName(String value);
-    public Project findOneByNameAndMainClient(String name, Client client);
+    public Project findByName(String value);
 }

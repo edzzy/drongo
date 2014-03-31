@@ -4,15 +4,11 @@
  */
 package fr.pfgen.lims.domain.projects;
 
-import fr.pfgen.lims.domain.people.Client;
 import fr.pfgen.lims.domain.util.AbstractGenericEntity;
 import java.util.Objects;
-import java.util.Set;
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,33 +23,29 @@ public class Project extends AbstractGenericEntity{
     
     @NotNull
     @Size(min = 2, max = 30)
+    @Column(unique = true)
     private String name;
     
+    @Lob
+    private String description;
+    
     @NotNull
-    @ManyToOne
-    private Client mainClient; 
+    private boolean closed = false;
 
-    @ManyToMany
-    private Set<Client> clients;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
-    private Set<Contract> contracts;
-
-    
-    public Set<Client> getClients() {
-        return clients;
+    public boolean isClosed() {
+        return closed;
     }
 
-    public void setClients(Set<Client> clients) {
-        this.clients = clients;
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 
-    public Client getMainClient() {
-        return mainClient;
+    public String getDescription() {
+        return description;
     }
 
-    public void setMainClient(Client mainClient) {
-        this.mainClient = mainClient;
+    public void setDescription(String description) {
+        this.description = description;
     }
     
     public String getName(){
@@ -63,20 +55,11 @@ public class Project extends AbstractGenericEntity{
     public void setName(String name){
         this.name = name;
     }
-
-    public Set<Contract> getContracts() {
-        return contracts;
-    }
-
-    public void setContracts(Set<Contract> contracts) {
-        this.contracts = contracts;
-    }
-
+    
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.name);
-        hash = 17 * hash + Objects.hashCode(this.mainClient);
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -92,14 +75,11 @@ public class Project extends AbstractGenericEntity{
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.mainClient, other.mainClient)) {
-            return false;
-        }
         return true;
     }
-    
+
     @Override
-    public String toString(){
-        return this.name + " - " + this.mainClient;
+    public String toString() {
+        return this.name;
     }
 }

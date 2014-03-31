@@ -21,7 +21,7 @@
         <p:dataTable id="list" value="#{clientsBean.allClients}" var="client" rendered="#{clientsBean.dataVisible}" resizableColumns="false" paginator="true" paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,25,50" rows="10">
           <p:columns value="#{clientsBean.columns}" var="column" columnIndexVar="colIndex">
             <f:facet name="header">
-              <h:outputText value="#{applicationBean.getColumnName(column)}" />
+              <h:outputText value="#{mainApplicationBean.getColumnName(column)}" />
             </f:facet>
             <h:outputText value="#{client[column]}" />
           </p:columns>

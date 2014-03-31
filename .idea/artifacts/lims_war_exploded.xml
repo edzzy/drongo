@@ -8,6 +8,7 @@
           <element id="module-output" name="lims" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: joda-time:joda-time:2.3" />
           <element id="library" level="project" name="Maven: log4j:log4j:1.2.16" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.2" />
           <element id="library" level="project" name="Maven: org.slf4j:jcl-over-slf4j:1.7.2" />
@@ -49,14 +50,14 @@
           <element id="library" level="project" name="Maven: org.springframework.data:spring-data-commons-core:1.4.0.RELEASE" />
           <element id="library" level="project" name="Maven: com.sun.faces:jsf-api:2.1.22" />
           <element id="library" level="project" name="Maven: com.sun.faces:jsf-impl:2.1.22" />
-          <element id="library" level="project" name="Maven: org.primefaces:primefaces:3.5" />
+          <element id="library" level="project" name="Maven: org.primefaces:primefaces:4.0" />
           <element id="library" level="project" name="Maven: org.primefaces.themes:all-themes:1.0.9" />
-          <element id="library" level="project" name="Maven: org.omnifaces:omnifaces:1.5" />
-          <element id="library" level="project" name="Maven: org.primefaces.extensions:primefaces-extensions:0.7.1" />
-          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.2.2" />
+          <element id="library" level="project" name="Maven: org.omnifaces:omnifaces:1.6.3" />
+          <element id="library" level="project" name="Maven: org.primefaces.extensions:primefaces-extensions:1.1.0" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.2.4" />
           <element id="library" level="project" name="Maven: commons-fileupload:commons-fileupload:1.2.2" />
           <element id="library" level="project" name="Maven: commons-io:commons-io:2.1" />
-          <element id="library" level="project" name="Maven: joda-time:joda-time:2.2" />
+          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
           <element id="library" level="project" name="Maven: javax:javaee-web-api:6.0" />
         </element>
       </element>

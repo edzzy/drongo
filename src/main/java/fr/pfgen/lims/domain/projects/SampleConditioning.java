@@ -4,12 +4,10 @@
  */
 package fr.pfgen.lims.domain.projects;
 
-import fr.pfgen.lims.domain.util.AbstractGenericEntity;
-
 /**
  *
- * @author edouard
+ * @author eric
  */
-public class ProjectType extends AbstractGenericEntity{
-    
+public enum SampleConditioning {
+    PLATE,STRIPWELLS,TUBES,OTHER
 }

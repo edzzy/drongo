@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:c="http://java.sun.com/jsf/composite/components">
+    <ui:composition template="cpgTemplate.xhtml">
+        <ui:define name="content">
+            <p:spacer height="50"/>
+
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{activityBean.initActivities}" /> 
+            </f:metadata>
+
+            <o:form>
+                <p:growl id="activityMessages" life="2500" showDetail="true" />
+
+                <p:panel header="#{messages.activity_newActForApp}: #{activityBean.application.name}" >
+
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="activityType" value="#{messages.label_activity}:" />
+                        <p:selectOneRadio id="activityType" value="#{activityBean.selectedType}" required="true" layout="pageDirection" >  
+                            <f:selectItems value="#{activityBean.availableTypes}" var="type" itemLabel="#{enums[type.label]}" itemValue="#{type}"/>  
+                            <p:ajax update="stepNparamPanelGrid" />
+                        </p:selectOneRadio>
+                    </h:panelGrid> 
+
+                    <h:panelGrid columns="3">
+                        <p:outputLabel for="referentID" value="#{messages.activity_referent}:" />
+                        <p:selectOneMenu id="referentID" value="#{activityBean.selectedReferent}" converter="#{pfMemberConverter}" required="true">  
+                            <f:selectItem itemLabel="#{messages.label_select}" noSelectionOption="true" />  
+                            <f:selectItems value="#{activityBean.pfMemberList}" />  
+                        </p:selectOneMenu>
+                        <p:message for="referentID" />
+                    </h:panelGrid>
+
+                    <h:panelGrid id="stepNparamPanelGrid" columnClasses="topAlign,topAlign" columns="2">
+                        <p:fieldset id="stepsFieldSet" legend="#{messages.label_stepList}" style="width: max-content" rendered="#{activityBean.selectedType != null}">
+                            <h:panelGrid columns="2">
+                                <p:pickList id="stepPickList" 
+                                            value="#{activityBean.stepDualListModel}"
+                                            var="step"
+                                            showSourceFilter="true" 
+                                            showTargetFilter="true" 
+                                            filterMatchMode="contains"
+                                            itemLabel="#{step}" 
+                                            itemValue="#{step.name}"
+                                            addAllLabel="#{messages.label_addAll}"
+                                            addLabel="#{messages.label_add}"
+                                            removeAllLabel="#{messages.label_removeAll}"
+                                            removeLabel="#{messages.label_remove}"
+                                            moveBottomLabel="#{messages.label_moveBottom}"
+                                            moveDownLabel="#{messages.label_moveDown}"
+                                            moveTopLabel="#{messages.label_moveTop}"
+                                            moveUpLabel="#{messages.label_moveUp}"
+                                            showTargetControls="true"
+                                            >
+
+                                    <o:converter converterId="omnifaces.ListConverter" list="#{activityBean.stepSource}"/>
+
+                                    <f:facet name="sourceCaption"> #{messages.step_list}</f:facet>  
+                                    <f:facet name="targetCaption"> #{messages.label_stepList}</f:facet>
+
+
+                                    <p:column> 
+                                        <h:outputText value="#{step.name}" id="nameID" />
+
+                                    </p:column> 
+
+                                </p:pickList>
+
+                                <p:commandButton value="#{messages.label_newF}" icon="ui-icon-plus" action="#{activityBean.createNewStep}" ajax="false">
+                                    <o:ignoreValidationFailed />
+                                </p:commandButton>
+                            </h:panelGrid>
+
+                        </p:fieldset>
+
+                        <p:fieldset id="paramsFieldSet" legend="#{messages.activity_params}" style="width: max-content" rendered="#{activityBean.selectedType != null}">
+                            <h:panelGrid columns="3">
+                                <p:outputLabel for="sampleTypeID" value="#{messages.label_sampleType}:" />
+                                <p:selectOneMenu id="sampleTypeID" value="#{activityBean.activityParams.sampleType}" editable="true">  
+                                    <f:selectItem itemLabel="#{messages.label_selectOrEdit}" noSelectionOption="true" />  
+                                    <f:selectItems value="#{activityBean.availableSampleType}" var="sampleType" itemLabel="#{enums[sampleType.label]}" />  
+                                </p:selectOneMenu>
+                                <p:message for="sampleTypeID" />
+
+                                <p:outputLabel for="timeAccomplishID" value="#{messages.activity_timeToAccomplish}:"/>
+                                <c:timePeriod id="timeAccomplishID" timeTypes="#{activityBean.availableTimeTypes}" timeUtil="#{activityBean.activityParams.tuTimeToAccomplish}" />
+                                <p:message for="timeAccomplishID" />
+
+                                <p:outputLabel for="timeDestructionSamplesID" value="#{messages.activity_timeToDestructionSamples}:"/>
+                                <c:timePeriod id="timeDestructionSamplesID" timeTypes="#{activityBean.availableTimeTypes}" timeUtil="#{activityBean.activityParams.tuTimeToDestructionSamples}" />
+                                <p:message for="timeDestructionSamplesID" />
+
+                                <p:outputLabel for="timeBackupResultsID" value="#{messages.activity_timeBackupResults}:" />
+                                <c:timePeriod id="timeBackupResultsID" timeTypes="#{activityBean.availableTimeTypes}" timeUtil="#{activityBean.activityParams.tuTimeOfBackupResults}" />
+                                <p:message for="timeBackupResultsID" />
+
+                                <p:outputLabel for="sentByID" value="#{messages.activity_sentByType}:" />
+                                <p:selectOneMenu id="sentByID" value="#{activityBean.activityParams.resultsSentBy}" editable="true">  
+                                    <f:selectItem itemLabel="#{messages.label_selectOrEdit}" noSelectionOption="true" />  
+                                    <f:selectItems value="#{activityBean.availableSentByType}" var="sentByType" itemLabel="#{enums[sentByType.label]}" />  
+                                </p:selectOneMenu>
+                                <p:message for="sentByID" />
+                            </h:panelGrid>
+                        </p:fieldset>
+                    </h:panelGrid>
+
+                    <p:commandButton value="#{messages.label_save}" update="activityMessages" action="#{activityBean.saveActivity()}" icon="ui-icon-disk" />
+                    <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{activityBean.cancelActivity()}" />
+                </p:panel>
+            </o:form>
+        </ui:define>
+    </ui:composition>
+</html>

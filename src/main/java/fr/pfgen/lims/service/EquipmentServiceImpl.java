@@ -84,7 +84,7 @@ public class EquipmentServiceImpl implements EquipmentService {
         
         // condition is always true (for the moment)
         if (equipment.getInternalNumber()==null || equipment.getInternalNumber().isEmpty()){
-            equipment.setInternalNumber("PfG" + String.format("%04d", newIn + 1));
+            equipment.setInternalNumber("Eq" + String.format("%04d", newIn + 1));
         }
         
         // set ITX number to null instead of empty since field must be unique in DB.

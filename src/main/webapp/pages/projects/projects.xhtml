@@ -4,104 +4,96 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:pe="http://primefaces.org/ui/extensions"
-      xmlns:o="http://omnifaces.org/ui"
-      xmlns:of="http://omnifaces.org/functions">
-    <ui:composition template="projectTemplate.xhtml">
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="cpgTemplate.xhtml">
         <ui:define name="content">
             <p:spacer height="50"/>
             <h:form id="projectsForm">
                 <p:growl id="projectListMessages" showDetail="true" showSummary="true" life="3000"/>
-                <pe:masterDetail id="masterDetail" level="#{projectsBean.currentLevel}">
+                <p:dataTable var="project" 
+                             value="#{projectsBean.projectList}" 
+                             rowsPerPageTemplate="5,10,15" 
+                             rowKey="#{project.id}" 
+                             paginator="true" 
+                             rows="10" 
+                             filteredValue="#{projectsBean.filteredProjects}"  
+                             id="projectsTable" 
+                             emptyMessage="#{messages.label_emptyRecords}"
+                             sortMode="multiple">  
 
-                    <pe:masterDetailLevel level="1" levelLabel="#{messages.label_project}">
-                        <p:dataTable id="projectsTable" 
-                                     value="#{projectsBean.projectList}" 
-                                     var="project"
-                                     rowsPerPageTemplate="5,10,15" 
-                                     rowKey="#{project.id}"
-                                     paginator="true"
-                                     rows="10"
-                                     filteredValue="#{projectsBean.filteredProjects}"
-                                     emptyMessage="#{messages.label_emptyRecords}"
-                                     sortMode="multiple">
+                    <f:facet name="header">
+                        #{messages.label_project}
+                    </f:facet>
 
-                            <p:column headerText="#{messages.project_name}" sortBy="#{project.name}" filterBy="#{project.name}">
-                                <p:commandLink value="#{project.name}">
-                                    <pe:selectDetailLevel contextValue="#{project}"/>
-                                </p:commandLink>
-                            </p:column>
+                    <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
 
-                            <p:column headerText="#{messages.project_mainClient}" sortBy="#{project.mainClient}" filterBy="#{project.mainClient}">
-                                <h:outputText value="#{project.mainClient}"/>
-                            </p:column>
+                    <p:column style="width: 5px">  
+                        <p:rowToggler />  
+                    </p:column>
 
-                            <p:column headerText="#{messages.project_signatureDate}" sortBy="#{project.signatureDate}">
-                                <h:outputText value="#{project.signatureDate}">
-                                    <f:convertDateTime dateStyle="long" type="date" />
-                                </h:outputText>
-                            </p:column>
+                    <p:column headerText="#{messages.project_name}"  sortBy="#{project.name}" filterBy="#{project.name}" id="name">  
+                        <h:outputText value="#{project.name}"/>
+                    </p:column>
 
-                            <p:column headerText="#{messages.project_closed}" sortBy="#{project.closed}" filterBy="#{project.closed}">
-                                <p:graphicImage width="32" height="32" name="Primo_Icons/PNG/48x48/folder_private.png" library="images" styleClass="iconCentered" rendered="#{project.closed}"/>
-                                <p:graphicImage width="32" height="32" name="Primo_Icons/PNG/48x48/folder_open.png" library="images" styleClass="iconCentered" rendered="#{not project.closed}"/>
-                            </p:column>
+                    <p:column headerText="#{messages.project_creationDate}" sortBy="#{project.created}" filterBy="#{project.created}" id="created">  
+                        <h:outputText value="#{project.created}" >
+                            <f:convertDateTime dateStyle="long" type="date" />
+                        </h:outputText>
+                    </p:column>  
 
-                            <f:facet name="footer">
-                                <p:button value="#{messages.project_newProject}" icon="ui-icon-plus" outcome="project?faces-redirect=true"/>
-                            </f:facet>
-                        </p:dataTable>
-                    </pe:masterDetailLevel>
+                    <p:column headerText="#{messages.project_closed}" 
+                              sortBy="#{project.closed}" 
+                              filterBy="#{project.closed}" 
+                              id="type"
+                              filterOptions="#{projectsBean.projectClosedOptions}">
+                        <p:graphicImage width="32" height="32" name="Primo_Icons/PNG/48x48/folder_private.png" library="images" styleClass="iconCentered" rendered="#{project.closed}"/>
+                        <p:graphicImage width="32" height="32" name="Primo_Icons/PNG/48x48/folder_open.png" library="images" styleClass="iconCentered" rendered="#{not project.closed}"/>
+                    </p:column>
 
-                    <pe:masterDetailLevel level="2" contextVar="project" levelLabel="#{messages.project_activityIn} #{project.name}">
-                        <p:dataTable id="activitiesTable" 
-                                     value="#{of:setToList(project.activities)}" 
-                                     var="activity"
-                                     rowsPerPageTemplate="5,10,15" 
-                                     rowKey="#{activity.id}"
-                                     paginator="true"
-                                     rows="10"
-                                     emptyMessage="#{messages.label_emptyRecords}"
-                                     sortMode="multiple">
+                    <p:column style="width: 5px">
+                        <p:commandLink id="editButton" action="#{projectsBean.editProject}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
+                            <f:setPropertyActionListener value="#{project}" target="#{projectsBean.selectedProject}" />
+                        </p:commandLink>
+                        <p:tooltip for="editButton" value="#{messages.label_edit}" /> 
+                    </p:column>  
 
-                            <p:column headerText="#{messages.project_activityName}">
-                                <p:commandLink value="#{activity.type.name}">
-                                    <pe:selectDetailLevel contextValue="#{activity}"/>
-                                </p:commandLink>
-                            </p:column>
+                    <p:column style="width: 5px">
+                        <p:commandLink id="deleteButton" oncomplete="deleteDlg.show();" update=":deleteDialog" title="#{messages.label_delete}">
+                            <h:panelGroup styleClass="ui-icon ui-icon-trash" />
+                            <f:setPropertyActionListener value="#{project}" target="#{projectsBean.selectedProject}" />
+                        </p:commandLink>
+                        <p:tooltip for="deleteButton" value="#{messages.label_delete}" /> 
+                    </p:column>
 
-                        </p:dataTable>
-                    </pe:masterDetailLevel>
+                    <p:columnGroup type="footer">
+                        <p:row>  
+                            <p:column colspan="9" footerText="#{projectsBean.projectNumber} #{messages.label_project} : #{projectsBean.openProjectNumber} #{messages.label_opened} , #{projectsBean.closedProjectNumber} #{messages.label_closed}"  />
+                        </p:row>  
+                    </p:columnGroup>
 
-                    <pe:masterDetailLevel level="3" contextVar="activity" levelLabel="#{messages.project_runsIn} #{activity.type.name}">
-                        <p:dataTable id="runsTable" 
-                                     value="#{of:setToList(activity.runs)}" 
-                                     var="run"
-                                     rowsPerPageTemplate="5,10,15" 
-                                     rowKey="#{run.id}"
-                                     paginator="true"
-                                     rows="10"
-                                     emptyMessage="#{messages.label_emptyRecords}"
-                                     sortMode="multiple">
-                            <p:column headerText="#{messages.project_runType}">
-                                <h:outputText value="#{messages.project_run.concat(run.runType)}"/>
-                            </p:column>
+                    <f:facet name="footer">
+                        <p:commandButton value="#{messages.label_newProject}" icon="ui-icon-plus" action="#{projectsBean.createNewProject()}"/>
+                    </f:facet>
 
-                            <p:column headerText="#{messages.project_runLaunchedBy}">
-                                <h:outputText value="#{run.launchedBy}"/>
-                            </p:column>
+                    <p:rowExpansion>  
+                        <h:panelGrid id="expansionPanel" columns="2" cellpadding="20" style="width:auto" styleClass="topAligned">  
+                            <h:outputText id="display" value="#{project.description}" escape="false" />
+                        </h:panelGrid>
+                    </p:rowExpansion>
 
-                            <p:column headerText="#{messages.project_runFinished}">
-                                <h:outputText value="#{run.beginDate}">
-                                    <f:convertDateTime dateStyle="long" type="date" />
-                                </h:outputText>
-                            </p:column>
-                        </p:dataTable>
-                    </pe:masterDetailLevel>
-
-                </pe:masterDetail> 
+                </p:dataTable>
             </h:form>
+
+            <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{projectsBean.selectedProject.name}" message="#{messages.label_confirm_deletion}"
+                             closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
+                <h:form id="deleteForm">
+                    <h:panelGroup layout="block" style="text-align: right">
+                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{projectsBean.deleteProject}" update=":projectsForm:projectListMessages, :projectsForm:projectsTable" oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_cancel}" actionListener="#{projectsBean.cancelDeletion}" update=":projectsForm:projectListMessages" oncomplete="deleteDlg.hide();" />
+                    </h:panelGroup>
+                </h:form>
+            </p:confirmDialog>
         </ui:define>
     </ui:composition>
 </html>

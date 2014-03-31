@@ -51,7 +51,7 @@
                     </p:column>
 
                     <p:column headerText="#{messages.pfMember_memberSince}" sortBy="#{pfMember.memberSince}" id="registered">
-                        <h:outputText value="#{pfMember.created}">
+                        <h:outputText value="#{pfMember.memberSince}">
                             <f:convertDateTime dateStyle="long" type="date" />
                         </h:outputText>
                     </p:column>
@@ -89,7 +89,7 @@
                              closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
                 <h:form id="deleteForm">
                     <h:panelGroup layout="block" style="text-align: right">
-                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{pfMembersBean.deleteClient}" update=":pfMemberListForm:pfMemberListMessages, :pfMemberListForm:pfMembersTable" oncomplete="deleteDlg.hide();" />
+                        <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{pfMembersBean.deletePfMember}" update=":pfMemberListForm:pfMemberListMessages, :pfMemberListForm:pfMembersTable" oncomplete="deleteDlg.hide();" />
                         <p:commandButton value="#{messages.label_cancel}" actionListener="#{pfMembersBean.cancelDeletion}" update=":pfMemberListForm:pfMemberListMessages" oncomplete="deleteDlg.hide();" />
                     </h:panelGroup>
                 </h:form>

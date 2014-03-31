@@ -17,6 +17,10 @@
         <param-value>#{themeSwitcherBean.theme}</param-value>
     </context-param>
     <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
         <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
         <param-value>false</param-value>
     </context-param>
@@ -51,9 +55,9 @@
             org.springframework.web.context.request.RequestContextListener
         </listener-class>
     </listener>
-   <listener>
+    <listener>
         <listener-class>
-           fr.pfgen.lims.domain.util.InitDatabase2
+            fr.pfgen.lims.domain.util.InitDatabase
         </listener-class>
     </listener>
     <servlet>
@@ -66,7 +70,7 @@
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
     <session-config>
-        <session-timeout>20</session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

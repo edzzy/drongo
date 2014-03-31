@@ -81,9 +81,9 @@ public class EditInterventionBean implements Serializable{
        try {
             FacesContext context = FacesContext.getCurrentInstance();
                 equipmentService.updateIntervention(intervention);
-                FacesUtils.addMessage(null, FacesUtils.getI18nValue("edit_done"),intervention.toString(), FacesMessage.SEVERITY_INFO);
+                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("edit_done"),intervention.toString(), FacesMessage.SEVERITY_INFO);
             } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             System.out.print(e.getMessage());
             return null;
         }

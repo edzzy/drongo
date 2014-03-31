@@ -92,7 +92,7 @@ public abstract class AbstractPerson extends AbstractGenericEntity{
 
     @Override
     public String toString() {
-        return this.getFirstname()+" "+this.getFirstname();
+        return this.getFirstname()+" "+this.getLastname();
     }
 
     @Override

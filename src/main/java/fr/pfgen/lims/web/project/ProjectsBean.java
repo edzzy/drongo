@@ -6,26 +6,30 @@ package fr.pfgen.lims.web.project;
 
 import fr.pfgen.lims.domain.projects.Project;
 import fr.pfgen.lims.service.ProjectService;
+import fr.pfgen.lims.web.util.FacesUtils;
+import fr.pfgen.lims.web.util.flows.FlowType;
+import fr.pfgen.lims.web.util.flows.GenericFlow;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
+import javax.faces.application.FacesMessage;
+import javax.faces.model.SelectItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author eric
  */
-@Controller
+@Component
 @Scope("view")
-@ManagedBean
-public class ProjectsBean implements Serializable{
+public class ProjectsBean extends GenericFlow implements Serializable{
     
-    private int currentLevel = 1;
     private List<Project> projectList;
     private List<Project> filteredProjects;
+    //private SelectItem[] projectClosedOptions;
+    private Project selectedProject;
     
     @Autowired
     ProjectService projectService;
@@ -36,9 +40,68 @@ public class ProjectsBean implements Serializable{
     }
     
     public String createNewProject(){
-        return "project?faces-redirect=true";
+        FacesUtils.removeObjectFromSessionMap("project");
+        return enterFlow(FlowType.PROJECT);
     }
 
+    public SelectItem[] getProjectClosedOptions() {
+        SelectItem[] options = new SelectItem[3];
+        
+        options[0] = new SelectItem("", FacesUtils.getI18nValueInMessages("label_select"));
+        options[1] = new SelectItem("false", FacesUtils.getI18nValueInMessages("label_opened"));
+        options[2] = new SelectItem("true", FacesUtils.getI18nValueInMessages("label_closed"));
+         
+        return options;
+    }
+
+    public void deleteProject() {
+        try {
+            projectService.deleteProject(selectedProject);
+            projectList.remove(selectedProject);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_deleteDone"), selectedProject.toString(), FacesMessage.SEVERITY_INFO);
+        } catch (Exception e) {
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+        }
+    }
+    
+    public String editProject(){
+        FacesUtils.removeObjectFromSessionMap("project");
+        FacesUtils.putObjectInSessionMap("project", selectedProject);
+        return enterFlow(FlowType.PROJECT);
+    }
+
+    public void cancelDeletion() {
+        FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_deleteCanceled"), selectedProject.toString(), FacesMessage.SEVERITY_INFO);
+    }
+    
+    public Project getSelectedProject() {
+        return selectedProject;
+    }
+
+    public void setSelectedProject(Project selectedProject) {
+        this.selectedProject = selectedProject;
+    }
+    
+    public int getProjectNumber() {
+        return projectList.size();
+    }
+    
+    public int getOpenProjectNumber(){
+        int i = 0;
+        for (Project project : projectList) {
+            if (!project.isClosed()) i++;
+        }
+        return i;
+    }
+    
+    public int getClosedProjectNumber(){
+        int i = 0;
+        for (Project project : projectList) {
+            if (project.isClosed()) i++;
+        }
+        return i;
+    }
+    
     public List<Project> getProjectList() {
         return projectList;
     }
@@ -53,13 +116,5 @@ public class ProjectsBean implements Serializable{
 
     public void setFilteredProjects(List<Project> filteredProjects) {
         this.filteredProjects = filteredProjects;
-    }
-
-    public int getCurrentLevel() {
-        return currentLevel;
-    }
-
-    public void setCurrentLevel(int currentLevel) {
-        this.currentLevel = currentLevel;
     }
 }

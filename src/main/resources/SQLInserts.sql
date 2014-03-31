@@ -1,31 +1,31 @@
+# client types
 insert into client_types (name,version,created,updated) values ('interne',0,now(),now()),('académique',0,now(),now()),('privé',0,now(),now());
 
+# research units
 insert into research_units (name,version,created,updated) values ('UMR 1087',0,now(),now());
 insert into research_units (name,version,created,updated) values ('U892',0,now(),now());
 insert into research_units (name,version,created,updated) values ('U306',0,now(),now());
 
+# research teams
 insert into research_teams (name,version,research_unit,created,updated) values ('équipe4 - Redon',0,(select id from research_units where name='UMR 1087'),now(),now()),('équipe3 - Schott',0,(select id from research_units where name='UMR 1087'),now(),now());
 insert into research_teams (name,version,research_unit,created,updated) values ('équipe1',0,(select id from research_units where name='U892'),now(),now()),('équipe2',0,(select id from research_units where name='U892'),now(),now());
 insert into research_teams (name,version,research_unit,created,updated) values ('équipe8',0,(select id from research_units where name='U306'),now(),now()),('équipe9',0,(select id from research_units where name='U306'),now(),now());
 
-
-
-insert into persons (firstname,lastname, email, created, updated,registered_on, version)
+# persons - pf members
+insert into persons (firstname,lastname, email, created, updated, version)
 values
-('Édouard', 'Hirchaud', 'edouard.hirchaud@univ-nantes.fr',now(),now(),now(),0),
-('Éric', 'Charpentier', 'eric.charpentier@univ-nantes.fr',now(),now(),now(),0),
-('Catherine', 'Chevalier', 'catherine.chevalier@inserm.fr',now(),now(),now(),0),
-('Audrey', 'Bihouée' , 'audrey.bihouee.@univ-nantes.fr',now(),now(),now(),0), 
-('Raluca', 'Teusan' , 'raluca.teusan@inserm.fr',now(),now(),now(),0),
-('Marine', 'Cornec' , 'marine.cornec@univ-nantes.fr',now(),now(),now(),0),
-('Audrey', 'Donnart' , 'audrey.donnart@univ-nantes.fr',now(),now(),now(),0),
-('Françoise', 'Gros' , 'francois.gros@univ-nantes.fr',now(),now(),now(),0),
-('Jade', 'Violleau' , 'jade.violleau@univ-nantes.fr',now(),now(),now(),0),
-('Laëtitia', 'Duboscq-Bidot' , 'laëtitia.duboscq-Bidot@univ-nantes.fr',now(),now(),now(),0),
-('Richard', 'Redon' , 'richard.redon@inserm.fr',now(),now(),now(),0)
+('Édouard', 'Hirchaud', 'edouard.hirchaud@univ-nantes.fr',now(),now(),0),
+('Éric', 'Charpentier', 'eric.charpentier@univ-nantes.fr',now(),now(),0),
+('Catherine', 'Chevalier', 'catherine.chevalier@inserm.fr',now(),now(),0),
+('Audrey', 'Bihouée' , 'audrey.bihouee.@univ-nantes.fr',now(),now(),0), 
+('Raluca', 'Teusan' , 'raluca.teusan@inserm.fr',now(),now(),0),
+('Marine', 'Cornec' , 'marine.cornec@univ-nantes.fr',now(),now(),0),
+('Audrey', 'Donnart' , 'audrey.donnart@univ-nantes.fr',now(),now(),0),
+('Françoise', 'Gros' , 'francois.gros@univ-nantes.fr',now(),now(),0),
+('Jade', 'Violleau' , 'jade.violleau@univ-nantes.fr',now(),now(),0),
+('Laëtitia', 'Duboscq-Bidot' , 'laëtitia.duboscq-Bidot@univ-nantes.fr',now(),now(),0),
+('Richard', 'Redon' , 'richard.redon@inserm.fr',now(),now(),0)
 ;
-
-
 
 insert into pf_members (id, deleted, office) 
 values
@@ -41,10 +41,10 @@ values
 ((select id from persons where email='richard.redon@inserm.fr'), false, '217')
 ;
 
-
-insert into persons (firstname,lastname, email, created, updated, registered_on,version)
+# persons - clients
+insert into persons (firstname,lastname, email, created, updated, version)
 values
-('Gilles', 'Toumaniantz', 'Gilles.toumaniantz@univ-nantes.fr',now(),now(),now(), 0);
+('Gilles', 'Toumaniantz', 'Gilles.toumaniantz@univ-nantes.fr',now(),now(), 0);
 
 insert into clients (id, type,  research_team) 
 values((select id from persons where email='Gilles.toumaniantz@univ-nantes.fr'),

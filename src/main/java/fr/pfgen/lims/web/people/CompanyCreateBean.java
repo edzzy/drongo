@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("request")
-@ManagedBean
 public class CompanyCreateBean extends CompanyFlow{
 
     private Company company = new Company();
@@ -46,7 +45,7 @@ public class CompanyCreateBean extends CompanyFlow{
 
         if (existingCompany != null) {
             ((UIInput) component).setValid(false);
-            FacesUtils.addMessage(component.getClientId(context), null, "\"" + name + "\" " + FacesUtils.getI18nValue("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(component.getClientId(context), null, "\"" + name + "\" " + FacesUtils.getI18nValueInMessages("label_alreadyExists"), FacesMessage.SEVERITY_ERROR);
         }
     }
 
@@ -64,7 +63,7 @@ public class CompanyCreateBean extends CompanyFlow{
                 return null;
             }
         } catch (Exception e) {
-            FacesUtils.addMessage(null, FacesUtils.getI18nValue("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
+            FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             return null;
         }
     }
