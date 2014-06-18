@@ -6,3 +6,5 @@
 /lims.iml
 /log.roo
 /.settings/*
+*.orig
+*.iml
