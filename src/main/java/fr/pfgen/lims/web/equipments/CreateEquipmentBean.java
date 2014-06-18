@@ -1,6 +1,7 @@
 package fr.pfgen.lims.web.equipments;
 
 import fr.pfgen.lims.domain.equipments.Equipment;
+import fr.pfgen.lims.domain.equipments.EquipmentCategory;
 import fr.pfgen.lims.domain.equipments.EquipmentStatus;
 import fr.pfgen.lims.domain.equipments.Funding;
 import fr.pfgen.lims.domain.equipments.PlateformType;
@@ -38,6 +39,7 @@ public class CreateEquipmentBean implements Serializable{
 
     private Equipment newEquipment;
     private PlateformType plateformType;
+    private EquipmentCategory equipmentCategory;
     private List<String> manufacterList;
     private List<Organism> organisms;
     private Set<PfMember> responsable;
@@ -161,6 +163,17 @@ public class CreateEquipmentBean implements Serializable{
 
         return options;
     }
+    
+    private SelectItem[] createFilterOptionsCategory(List<EquipmentCategory> data){
+         SelectItem[] options = new SelectItem[data.size() + 1];
+
+        options[0] = new SelectItem("", FacesUtils.getI18nValue("messages","label_select"));
+        for(int i = 0; i < data.size(); i++) {
+            options[i + 1] = new SelectItem(data.get(i).getLabel(), data.get(i).getLabel());
+        }
+
+        return options;
+    }
 
     public EquipmentStatus[] getEquipmentStatusTypes(){
         return EquipmentStatus.values();
@@ -168,6 +181,10 @@ public class CreateEquipmentBean implements Serializable{
 
     public PlateformType[] getEquipmentPlateformTypes(){
         return PlateformType.values();
+    }
+    
+    public EquipmentCategory[] getEquipmentCategoryTypes(){
+        return EquipmentCategory.values();
     }
 
     public Organism getOrganism() {
@@ -211,6 +228,14 @@ public class CreateEquipmentBean implements Serializable{
         maxPercent = maxPercent - percent;
         percent = maxPercent;
 
+    }
+
+    public EquipmentCategory getEquipmentCategory() {
+        return equipmentCategory;
+    }
+
+    public void setEquipmentCategory(EquipmentCategory equipmentCategory) {
+        this.equipmentCategory = equipmentCategory;
     }
 
     public List<Funding> getFundings() {

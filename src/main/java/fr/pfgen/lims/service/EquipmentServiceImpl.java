@@ -7,6 +7,7 @@ package fr.pfgen.lims.service;
 import fr.pfgen.lims.domain.equipments.*;
 import fr.pfgen.lims.domain.people.Organism;
 import fr.pfgen.lims.repository.*;
+import java.io.Serializable;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,16 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class EquipmentServiceImpl implements EquipmentService {
+public class EquipmentServiceImpl implements EquipmentService, Serializable  {
 
     @Autowired
     EquipmentRepository equipmentRepository;
     @Autowired
     RunDeviceRepository runDeviceRepository;
-    @Autowired
-    SmallEquipmentRepository smallEquipmentRepository;
-    @Autowired
-    EquipmentCategoryRepository equipmentCategoryRepository;
+   
     @Autowired
     InterventionRepository interventionRepository;
     @Autowired
@@ -115,12 +113,19 @@ public class EquipmentServiceImpl implements EquipmentService {
     public List<RunDevice> findAllDevices() {
         return runDeviceRepository.findAll();
     }
+    
+    @Override
+    public List<Equipment> findEquipmentByStatus(EquipmentStatus status){
+        
+        return equipmentRepository.findByStatus(status);
+    }
 
     @Override
     public long countAllRunDevices() {
         return runDeviceRepository.count();
     }
 
+    
     @Override
     public void saveRunDevice(RunDevice device) {
         saveEquipment(device);
@@ -130,33 +135,13 @@ public class EquipmentServiceImpl implements EquipmentService {
     public RunDevice updateRunDevice(RunDevice device) {
         return (RunDevice) updateEquipment(device);
     }
+    
 
     //methods for small equipments
-    @Override
-    public List<SmallEquipment> findAllSmallEquipments() {
-        return smallEquipmentRepository.findAll();
-    }
-
-    @Override
-    public long countAllSmallEquipments() {
-        return smallEquipmentRepository.count();
-    }
+  
 
     //methods for equipment categories
-    @Override
-    public List<EquipmentCategory> findAllEquipmentCategories() {
-        return equipmentCategoryRepository.findAll();
-    }
-
-    @Override
-    public EquipmentCategory findEquipmentCategoryByName(String name) {
-        return equipmentCategoryRepository.findByName(name);
-    }
-
-    @Override
-    public void saveEquipmentCategory(EquipmentCategory category) {
-        equipmentCategoryRepository.save(category);
-    }
+   
 
     @Override
     public List<Intervention> findAllInterventions() {

@@ -4,13 +4,16 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+>
 <ui:composition template="#{redirectBean.templateEquipment}">
     <ui:define name="content">
         <p:spacer height="50"/>
 
         <h:form id="equipmentListForm">
             <p:growl id="equipmentListMessages" showDetail="true" showSummary="true" life="3000"/>
+            
             <p:dataTable var="equipment"
                          value="#{listEquipmentsBean.equipmentList}"
                          rowsPerPageTemplate="5,10,15,50"
@@ -24,61 +27,73 @@
                          widgetVar="equipTable">
 
                 <f:facet name="header">
-                    <p:outputPanel style="text-align: right !important;">
+                    <p:outputPanel style="text-align: left !important;">
                         <h:outputText value="#{messages.label_searchFields}:" />
                         <p:inputText id="globalFilter" onkeyup="equipTable.filter()" style="width:150px" />
                     </p:outputPanel>
                 </f:facet>
-
-                <p:ajax event="rowToggle" onstart="hideOtherExpendedRows();" />
-
-                <p:column style="width: 5px" headerText="#{messages.label_view}">
-                    <p:commandLink id="showButton" action="#{listEquipmentsBean.showEquipment}">
-                        <h:panelGroup styleClass="ui-icon ui-icon-search" />
+                
+                <p:column headerText="#{messages.equipment_name}" sortBy="#{equipment.name}" filterBy="#{equipment.name}"  id="name" >
+                   <p:commandLink id="showButton" action="#{listEquipmentsBean.showEquipment}">
+                       <h:outputText value="#{equipment.name}" id="textname" />
                         <f:setPropertyActionListener value="#{equipment}" target="#{listEquipmentsBean.selectedEquipment}" />
                     </p:commandLink>
-
+                </p:column>
+                <p:column headerText="#{messages.equipment_itx}" id="itx" sortBy="#{equipment.itx}" filterBy="#{equipment.itx}" filterStyle="width: 7px" >
+                  <h:outputText styleClass="carRetLabel" value="#{equipment.itx}" />
                 </p:column>
 
-                <p:column style="width: 5px" headerText="#{messages.label_edit}">
-                    <p:commandLink id="editButton" action="#{listEquipmentsBean.editEquipment}">
-                        <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
-                        <f:setPropertyActionListener value="#{equipment}" target="#{listEquipmentsBean.selectedEquipment}" />
-                    </p:commandLink>
-
-                </p:column>
-
-
-
-                <p:column style="width: 5px">
-                    <p:rowToggler />
-
-                </p:column>
-
-                <p:column headerText="#{messages.equipment_name}" sortBy="#{equipment.name}" filterBy="#{equipment.name}" footerText="contains" id="name" >
-                    <h:outputText value="#{equipment.name}" />
-                </p:column>
-
-                <p:column headerText="#{messages.equipment_manufacturer}" sortBy="#{equipment.manufacturer}" filterBy="#{equipment.manufacturer}" footerText="contains" id="manufacturer">
+                <p:column headerText="#{messages.equipment_manufacturer}" sortBy="#{equipment.manufacturer}" filterBy="#{equipment.manufacturer}"  id="manufacturer">
                     <h:outputText value="#{equipment.manufacturer}" />
                 </p:column>
 
-                <p:column headerText="#{messages.label_plateform}"
-                          sortBy="#{equipment.plateform.label}"
-                          filterBy="#{equipment.plateform.label}"
-                          id="plateform"
-                          filterOptions="#{listEquipmentsBean.plateformOption}"
-                          filterMatchMode="exact">
-                    <h:outputText value="#{equipment.plateform.label}" />
+                <p:column headerText="#{messages.equipment_model}" sortBy="#{equipment.modele}" filterBy="#{equipment.modele}"  id="model">
+                    <h:outputText value="#{equipment.modele}" />
                 </p:column>
+                <p:column headerText="#{messages.equipment_serialNumber}" sortBy="#{equipment.serialNumber}" filterBy="#{equipment.serialNumber}"  id="serial">
+                    <h:outputText value="#{equipment.serialNumber}" />
+                </p:column>
+                <p:column headerText="#{messages.equipment_room}" sortBy="#{equipment.room}" filterBy="#{equipment.room}"  id="room">
+                    <h:outputText value="#{equipment.room}" />
+                </p:column>
+                <p:column headerText="#{messages.equipment_acquisitionDate}" sortBy="#{equipment.acquisitionDate}" filterBy="#{equipment.acquisitionDate}"  id="acquisition">
+               
+                <h:outputText value="#{showEquipmentBean.equipment.acquisitionDate}" style="font-weight: bold">
+                            <f:convertDateTime pattern="yyyy-mm-DD" type="date" />
+                        </h:outputText>
+                </p:column>
+                
 
                 <p:column headerText="#{messages.equipment_status}"
                           sortBy="#{equipment.status.label}"
                           filterBy="#{equipment.status.label}"
                           id="status"
+                          style="width: 5px"
+                          filterStyle="width: 5px"
                           filterOptions="#{listEquipmentsBean.statusOption}"
                           filterMatchMode="exact">
                     <h:outputText value="#{equipment.status.label}" />
+                </p:column>
+                
+                 <p:column headerText="#{messages.equipment_status}"
+                          sortBy="#{equipment.category.label}"
+                          filterBy="#{equipment.category.label}"
+                          id="category"
+                          filterOptions="#{listEquipmentsBean.categoryOptions}"
+                          filterMatchMode="exact"
+                         filterStyle="width: 5px">
+                   
+                    <h:outputText value="#{equipment.category.label}" />
+                </p:column>
+                
+               
+                
+                 <p:column style="width: 5px" headerText="#{messages.label_edit}">
+                    <p:commandLink id="editButton" action="#{listEquipmentsBean.editEquipment}">
+                        <h:panelGroup styleClass="ui-icon ui-icon-pencil" />
+                        <f:setPropertyActionListener value="#{equipment}" target="#{listEquipmentsBean.selectedEquipment}" />
+                    </p:commandLink>
+
                 </p:column>
 <!--
                 <p:column style="width: 5px" headerText="#{messages.label_delete}">
@@ -95,34 +110,16 @@
                     <p:row>
                         <p:column id="sizeId" colspan="12" footerText="#{listEquipmentsBean.filteredEquipments.size()} #{messages.label_equipments}"  />
                     </p:row>
-
                 </p:columnGroup>
 
                 <f:facet name="footer">
                     <p:commandButton value="#{messages.equipment_newEquipment}" icon="ui-icon-plus" action="#{listEquipmentsBean.createNewEquipment}"/>
                 </f:facet>
-
-                <p:rowExpansion>
-                    <h:panelGrid id="expansionPanel" columns="2" cellpadding="20" style="width:auto" styleClass="topAligned">
-                        <p:panelGrid columns="2" id="number" >
-                            <f:facet name="header" >
-                                <h:outputText value="Information"/>
-                            </f:facet>
-                            <h:outputText value="Serial Number: " />
-                            <h:outputText styleClass="carRetLabel" value="#{equipment.serialNumber}" />
-
-                            <h:outputText value="ITX Number " />
-                            <h:outputText styleClass="carRetLabel" value="#{equipment.itx}" />
-                        </p:panelGrid>
-
-                    </h:panelGrid>
-                </p:rowExpansion>
-
-            </p:dataTable>
+              </p:dataTable>
         </h:form>
 
         <p:confirmDialog widgetVar="deleteDlg" id="deleteDialog" header="#{listEquipmentsBean.selectedEquipment}" message="#{messages.label_confirm_deletion}"
-                         closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendToBody="true" >
+                         closable="false" showEffect="fade" hideEffect="explode" severity="alert" appendTo="@(body)" >
             <h:form id="deleteForm">
                 <h:panelGroup layout="block" style="text-align: right">
                     <p:commandButton value="#{messages.label_confirm_deletion}" actionListener="#{listEquipmentsBean.deleteEquipment}" update=":equipmentListForm:equipmentListMessages, :equipmentListForm:equipmentsTable" oncomplete="deleteDlg.hide();" />

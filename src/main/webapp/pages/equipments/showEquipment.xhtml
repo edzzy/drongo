@@ -42,9 +42,7 @@
                         <p:outputLabel value="#{messages.equipment_status}" />
                         <h:outputText value="#{showEquipmentBean.equipment.status.label}" style="font-weight: bold"/>
 
-                        <p:outputLabel value="#{messages.label_plateform}" />
-                        <h:outputText value="#{showEquipmentBean.equipment.plateform.label}"/>
-
+                       
                         <p:outputLabel value="#{messages.equipment_ifrNumber}" />
                         <h:outputText value="#{showEquipmentBean.equipment.ifrNumber}" style="font-weight: bold"/>
 
@@ -120,7 +118,7 @@
                         </p:column>
                         <p:column headerText="#{messages.label_date}">
                             <h:outputText value="#{intervention.interventionDate}">
-                                <f:convertDateTime pattern="yyyy-MM-dd" type="date" />
+                                <f:convertDateTime pattern="dd-MM-yyyy" type="date" />
                             </h:outputText>
                         </p:column>
                         <p:rowExpansion>

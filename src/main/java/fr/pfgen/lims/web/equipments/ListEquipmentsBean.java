@@ -53,13 +53,14 @@ public class ListEquipmentsBean implements Serializable{
     @PostConstruct
     public void init(){
         equipmentList = equipmentService.findAllEquipments();
-        categoryList =equipmentService.findAllEquipmentCategories();
         equipmentStatusList = Arrays.asList(EquipmentStatus.values()) ;
         statusOption = createFilterOptionsStatus(equipmentStatusList);
+        categoryList = Arrays.asList(EquipmentCategory.values());
+        categoryOptions = createFilterOptionsCategory(categoryList);
         equipmentPlateformList = Arrays.asList(PlateformType.values());
         plateformOption = createFilterOptionsPlateform(equipmentPlateformList);
         fundings = equipmentService.findAllFundings();
-        filteredEquipments = equipmentList;
+        filteredEquipments = equipmentService.findEquipmentByStatus(EquipmentStatus.ACTIVE);
 
     }
 
@@ -128,16 +129,14 @@ public class ListEquipmentsBean implements Serializable{
         return selectedEquipment;
     }
 
-    public void setSelectedEquipment(SmallEquipment selectedEquipment) {
-        this.selectedEquipment = selectedEquipment;
-    }
+    
 
     private SelectItem[] createFilterOptionsCategory(List<EquipmentCategory> data)  {
         SelectItem[] options = new SelectItem[data.size() + 1];
 
         options[0] = new SelectItem("", FacesUtils.getI18nValueInMessages("label_select"));
         for(int i = 0; i < data.size(); i++) {
-            options[i + 1] = new SelectItem(data.get(i).getName(), data.get(i).getName());
+            options[i + 1] = new SelectItem(data.get(i).getLabel(), data.get(i).getLabel());
         }
 
         return options;
@@ -166,11 +165,11 @@ public class ListEquipmentsBean implements Serializable{
     }
 
     private SelectItem[] createFilterOptionsStatus(List<EquipmentStatus> data)  {
-        SelectItem[] options = new SelectItem[data.size() + 1];
+        SelectItem[] options = new SelectItem[data.size() ];
 
-        options[0] = new SelectItem("", FacesUtils.getI18nValueInMessages("label_select"));
+        
         for(int i = 0; i < data.size(); i++) {
-            options[i + 1] = new SelectItem(data.get(i).getLabel(), data.get(i).getLabel());
+            options[i ] = new SelectItem(data.get(i).getLabel(), data.get(i).getLabel());
         }
 
         return options;

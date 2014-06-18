@@ -49,6 +49,10 @@
                         <p:commandButton id="cancelButton" value="#{messages.label_cancel}" icon="ui-icon-cancel" immediate="true" action="#{editInterventionBean.cancelIntervention}" ajax="false"/>
                     </f:facet>
                 </p:panel>
+            <p:panel>
+                <p:fileUpload  mode="advanced" dragDropSupport="true"
+                              multiple="true" sizeLimit="5000000" fileLimit="4" />
+            </p:panel>
 
 
         </h:form>

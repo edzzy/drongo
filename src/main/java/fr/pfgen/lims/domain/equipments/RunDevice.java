@@ -4,6 +4,7 @@
  */
 package fr.pfgen.lims.domain.equipments;
 
+import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -18,7 +19,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "run_devices")
-public class RunDevice extends Equipment{
+public class RunDevice extends Equipment implements Serializable{
 
     //TODO Remove image attribut
 

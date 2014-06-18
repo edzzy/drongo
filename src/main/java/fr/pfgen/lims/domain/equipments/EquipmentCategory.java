@@ -19,59 +19,28 @@ import javax.validation.constraints.Size;
  *
  * @author edouard
  */
-@Entity
-@Table(name = "equipment_categories")
-public class EquipmentCategory extends AbstractGenericEntity{
+
+public enum EquipmentCategory {
     
-    @NotNull
-    @Column(unique = true)
-    @Size(min = 2, max = 30)
-    private String name;
+    MISC("Diver"),
+    SCANNER("Scanner"),
+    SEQUENCER("Sequencer"),
+    AUTOMATE("Automates"),
+    QC("QC"),
+    ETUVE("Etuves/Bain-maire"),
+    CENTRI("Centrifugeuse"),
+    WET("Equipement paillasse"),
+    COLD("Froid")
+    ;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
-    private Set<SmallEquipment> equipments;
-
-
-    public Set<SmallEquipment> getEquipments() {
-        return equipments;
-    }
-
-    public void setEquipments(Set<SmallEquipment> equipments) {
-        this.equipments = equipments;
+    private final String label;
+    
+    private EquipmentCategory(String label){
+        this.label = label;
     }
     
-    public String getName() {
-        return name;
+    public String getLabel(){
+        return this.label;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.name);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final EquipmentCategory other = (EquipmentCategory) obj;
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
-    }
+ 
 }

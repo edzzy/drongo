@@ -5,6 +5,7 @@
 package fr.pfgen.lims.repository;
 
 import fr.pfgen.lims.domain.equipments.Equipment;
+import fr.pfgen.lims.domain.equipments.EquipmentStatus;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -26,4 +27,8 @@ public interface EquipmentRepository extends JpaSpecificationExecutor<Equipment>
     public List<String> findAllManufacturers();
 
     public  Equipment findById(Long id);
+    
+    
+    public List<Equipment> findByStatus(EquipmentStatus status);
+    
 }

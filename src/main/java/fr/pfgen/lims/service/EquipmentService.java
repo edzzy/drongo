@@ -27,6 +27,8 @@ public interface EquipmentService {
     public abstract List<Equipment> findAllEquipments();
 
     public abstract List<Equipment> findEquipmentEntries(int firstResult, int maxResults);
+    
+     public abstract List<Equipment> findEquipmentByStatus(EquipmentStatus status);
 
     public abstract void saveEquipment(Equipment equipment);
 
@@ -47,16 +49,11 @@ public interface EquipmentService {
     public abstract long countAllRunDevices();
     
     //methods for small equipments
-    public abstract List<SmallEquipment> findAllSmallEquipments();
+   
     
-    public abstract long countAllSmallEquipments();
-    
+       
     //methods for equipment categories
-    public abstract List<EquipmentCategory> findAllEquipmentCategories();
-    
-    public abstract EquipmentCategory findEquipmentCategoryByName(String name);
-    
-    public abstract void saveEquipmentCategory(EquipmentCategory category);
+   
     
     public abstract List<Intervention> findAllInterventions();
     
@@ -81,4 +78,6 @@ public interface EquipmentService {
     public abstract Intervention findInterventionById(Long id);
 
     public abstract Equipment findEquipmentById(Long aLong);
+    
+   
 }

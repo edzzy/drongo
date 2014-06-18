@@ -96,7 +96,6 @@
                         <h:panelGrid columns="3" id="imagePanel">
                             <p:outputLabel for="uploadImage" value="#{messages.label_image}" rendered="#{not deviceBean.hasImage}"/>
                             <p:fileUpload id="uploadImage"
-                                          showButtons="false"
                                           fileUploadListener="#{deviceBean.handleImageUpload}"
                                           mode="advanced"
                                           update="imagePanel"

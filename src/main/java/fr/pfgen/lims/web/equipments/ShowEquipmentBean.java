@@ -46,7 +46,7 @@ public class ShowEquipmentBean implements Serializable{
 
     @PostConstruct
     public void init() {
-        equipmentCategoryList = equipmentService.findAllEquipmentCategories();
+       
         equipment = (Equipment) FacesUtils.getObjectInSessionMap("equipment");
         fundingList = equipmentService.findAllFundingsByEquipments(equipment);
         interventionList = equipmentService.findAllInterventionsByEquipment(equipment);
@@ -84,7 +84,7 @@ public class ShowEquipmentBean implements Serializable{
             }
 
             if (equipment == null) {
-                equipment = new SmallEquipment();
+                equipment = new Equipment();
                 isNewEquipment = true;
                 sessionMap.put("equipment", equipment);
             } else {

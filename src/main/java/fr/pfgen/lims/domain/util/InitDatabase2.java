@@ -261,10 +261,11 @@ public class InitDatabase2 implements ServletContextListener {
             for (PfMember pfMember : pfMemberList) {
                 pfMemberService.savePfMember(pfMember);
             }
-
+/**
             List<RunDevice> runDeviceList = new ArrayList<>();
             RunDevice rd1 = new RunDevice();
             DateTime dt = new DateTime(2007, 1, 1, 0, 0, 0);
+            /**
             rd1.setAcquisitionDate(dt.toDate());
             rd1.setName("Baie de sauvegarde");
             rd1.setManufacturer("DELL");
@@ -273,11 +274,12 @@ public class InitDatabase2 implements ServletContextListener {
             rd1.setModele("Power Vault MD1000");
             rd1.setSerialNumber("98LK93J");
             rd1.setStatus(EquipmentStatus.ACTIVE);
-            rd1.setPlateform(PlateformType.BIOINFO);
+           
             byte[] imgByte1 = excractBytes("/home/edouard/Images/pvmd1000.jpg");
             rd1.setImage(imgByte1);
             
             runDeviceList.add(rd1);
+            *  * **/
             /*
             RunDevice rd2 = new RunDevice();
             DateTime dt2 = new DateTime(2009, 1, 1, 0, 0, 0);

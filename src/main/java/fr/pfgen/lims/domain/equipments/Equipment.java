@@ -28,15 +28,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "equipments")
 public class Equipment extends AbstractGenericEntity{
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private PlateformType plateform;
 
+    
+    
     @NotNull
     @Size(min = 2, max = 50)
     private String name;
-
-    //Todo description field
+    
+    
 
     @NotNull
     @Size(max = 50)
@@ -44,26 +43,31 @@ public class Equipment extends AbstractGenericEntity{
     
     @Size(max = 50)
     private String modele;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date acquisitionDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date constructedDate;
-
-    @Min(value = 0)
-    private Double cost;
-
-    @NotNull
-    @Size(max = 50)
-    private String room;
-
+    
     @Column
     @Size(max = 50)
     private String serialNumber;
     
+    @NotNull
+    @Size(max = 50)
+    private String room;
+      
+    @Column
+    @Size(max = 7)
+    private String itx;
+   
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date acquisitionDate;
+
+    private String description;
+
+    private String comment;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipment")
+    private Set<Intervention> interventions;
+
+    // pas utile à voir
 
     @Column
     @Size(max = 20)
@@ -72,12 +76,25 @@ public class Equipment extends AbstractGenericEntity{
     @Column
     private String ifrNumber;
 
-    @Column
-    @Size(max = 7)
-    private String itx;
+
+    //A deplacer dans d'autre classe
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private EquipmentStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private EquipmentCategory category;
+    
+    @Min(value = 0)
+    private Double cost;
 
     @Min(value = 0)
     private Double maintenanceCost;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "MJ")
+    private Date maintenance_date;
 
     @ManyToMany
     private Set<Organism> organisms;
@@ -86,18 +103,10 @@ public class Equipment extends AbstractGenericEntity{
     private Set<Structure> structures;
 
 
-    private String description;
-
     private String maintenanceCharge;
 
     private Boolean convention;
 
-    private String comment;
-
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "MJ")
-    private Date maintenance_date;
 
     @Size(max = 50)
     private String warranty;
@@ -110,21 +119,16 @@ public class Equipment extends AbstractGenericEntity{
     private String licence;
 
     
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private EquipmentStatus status;
+    @ManyToOne
+    private PfMember responsable;
     
-
-    @ManyToMany
-    private Set<PfMember> responsables;
-
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipment")
-    private Set<Intervention> interventions;
+    @ManyToOne
+    private PfMember subResponsable;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipment")
     private Set<Funding> fundings;
 
+/*
     public String getInternalNumber() {
         return internalNumber;
     }
@@ -132,7 +136,7 @@ public class Equipment extends AbstractGenericEntity{
     public void setInternalNumber(String internalNumber) {
         this.internalNumber = internalNumber;
     }
-
+*/
     public String getSerialNumber() {
         return serialNumber;
     }
@@ -157,13 +161,7 @@ public class Equipment extends AbstractGenericEntity{
         this.room = room;
     }
 
-    public String getItx() {
-        return itx;
-    }
-
-    public void setItx(String itx) {
-        this.itx = itx;
-    }
+   
 
     public Set<Structure> getStructures() {
         return structures;
@@ -181,32 +179,12 @@ public class Equipment extends AbstractGenericEntity{
         this.manufacturer = manufacturer;
     }
 
-    public Date getConstructedDate() {
-        return constructedDate;
-    }
-
-    public void setConstructedDate(Date constructedDate) {
-        this.constructedDate = constructedDate;
-    }
-    public Date getAcquisitionDate() {
-        return acquisitionDate;
-    }
-
-    public void setAcquisitionDate(Date acquisitionDate) {
-        this.acquisitionDate = acquisitionDate;
-    }
+   
     public Set<Intervention> getInterventions() {
         return interventions;
     }
 
-    public PlateformType getPlateform() {
-        return plateform;
-    }
-
-    public void setPlateform(PlateformType plateform) {
-        this.plateform = plateform;
-    }
-
+ 
     public void setInterventions(Set<Intervention> interventions) {
         this.interventions = interventions;
     }
@@ -274,7 +252,7 @@ public class Equipment extends AbstractGenericEntity{
     public void setSav(String sav) {
         this.sav = sav;
     }
-
+/*
     public String getIfrNumber() {
         return ifrNumber;
     }
@@ -282,7 +260,7 @@ public class Equipment extends AbstractGenericEntity{
     public void setIfrNumber(String ifrNumber) {
         this.ifrNumber = ifrNumber;
     }
-
+*/
     public String getSofware() {
         return software;
     }
@@ -305,6 +283,14 @@ public class Equipment extends AbstractGenericEntity{
 
     public void setMaintenanceCost(Double maintenanceCost) {
         this.maintenanceCost = maintenanceCost;
+    }
+
+    public EquipmentCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(EquipmentCategory category) {
+        this.category = category;
     }
 
     public String getDescription() {
@@ -398,5 +384,55 @@ public class Equipment extends AbstractGenericEntity{
     public void setStatus(EquipmentStatus status) {
         this.status = status;
     }
+
+    public String getItx() {
+        return itx;
+    }
+
+    public void setItx(String itx) {
+        this.itx = itx;
+    }
+
+    public Date getAcquisitionDate() {
+        return acquisitionDate;
+    }
+
+    public void setAcquisitionDate(Date acquisitionDate) {
+        this.acquisitionDate = acquisitionDate;
+    }
+
+    public String getInternalNumber() {
+        return internalNumber;
+    }
+
+    public void setInternalNumber(String internalNumber) {
+        this.internalNumber = internalNumber;
+    }
+
+    public String getIfrNumber() {
+        return ifrNumber;
+    }
+
+    public void setIfrNumber(String ifrNumber) {
+        this.ifrNumber = ifrNumber;
+    }
+
+    public PfMember getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(PfMember responsable) {
+        this.responsable = responsable;
+    }
+
+    public PfMember getSubResponsable() {
+        return subResponsable;
+    }
+
+    public void setSubResponsable(PfMember subResponsable) {
+        this.subResponsable = subResponsable;
+    }
+    
+    
     
 }

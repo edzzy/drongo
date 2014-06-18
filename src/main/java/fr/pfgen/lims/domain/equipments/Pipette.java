@@ -18,7 +18,9 @@ import javax.persistence.OneToMany;
 public class Pipette extends Equipment {
     
     
-    private boolean toCalibrate;
+
+     private boolean toCalibrate;
+
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pipette")
     private List<Calibration> calibrations;

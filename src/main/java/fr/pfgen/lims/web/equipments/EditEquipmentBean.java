@@ -33,6 +33,7 @@ public class EditEquipmentBean implements Serializable{
 
     private Equipment equipment;
     private PlateformType plateformType;
+    private EquipmentCategory equipmentCategory;
     private List<String> manufacterList;
     private List<Organism> organisms;
     private Set<PfMember> responsable;
@@ -156,6 +157,17 @@ public class EditEquipmentBean implements Serializable{
 
         return options;
     }
+    
+     private SelectItem[] createFilterOptionsCategory(List<EquipmentCategory> data){
+         SelectItem[] options = new SelectItem[data.size() + 1];
+
+        options[0] = new SelectItem("", FacesUtils.getI18nValue("messages","label_select"));
+        for(int i = 0; i < data.size(); i++) {
+            options[i + 1] = new SelectItem(data.get(i).getLabel(), data.get(i).getLabel());
+        }
+
+        return options;
+    }
 
     public EquipmentStatus[] getEquipmentStatusTypes(){
         return EquipmentStatus.values();
@@ -163,6 +175,10 @@ public class EditEquipmentBean implements Serializable{
 
     public PlateformType[] getEquipmentPlateformTypes(){
         return PlateformType.values();
+    }
+    
+    public EquipmentCategory[] getEquipmentCategoryTypes(){
+        return EquipmentCategory.values();
     }
 
     public Organism getOrganism() {
@@ -176,19 +192,23 @@ public class EditEquipmentBean implements Serializable{
     public String saveEquipment(){
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            if (equipment.getId() == null) {
-                Set<Funding> fundingSet = new HashSet<Funding>(fundings);
+              
+            //Set<Funding> fundingSet = new HashSet<Funding>(fundings);
+                
+             //equipment.setFundings(fundingSet);
+             
+             equipmentService.updateEquipment(equipment);
 
-                equipment.setFundings(fundingSet);
-                equipmentService.saveEquipment(equipment);
-
-                FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("equipment_added"), equipment.toString(), FacesMessage.SEVERITY_INFO);
-            }
+             FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("equipment_updated"), equipment.toString(), FacesMessage.SEVERITY_INFO);
+             
+             FacesUtils.keepMessageInFlash();
+            
         } catch (Exception e) {
             FacesUtils.addMessage(null, FacesUtils.getI18nValueInMessages("label_error"), e.getMessage(), FacesMessage.SEVERITY_ERROR);
             System.out.print(e.getMessage());
             return null;
         }
+        
         return redirectBean.getShowEquipment()+"id="+equipment.getId();
 
     }
@@ -207,6 +227,15 @@ public class EditEquipmentBean implements Serializable{
         percent = maxPercent;
 
     }
+
+    public EquipmentCategory getEquipmentCategory() {
+        return equipmentCategory;
+    }
+
+    public void setEquipmentCategory(EquipmentCategory equipmentCategory) {
+        this.equipmentCategory = equipmentCategory;
+    }
+    
 
     public List<Funding> getFundings() {
         return fundings;

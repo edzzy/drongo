@@ -20,6 +20,14 @@
                 <p:fieldset id="descriptionTab" legend="#{messages.equipment_description}">
 
                         <p:panelGrid columns="3">
+                            
+                              <p:outputLabel for="equipmentCat" value="Category" />
+                              <p:selectOneMenu id="equipmentCat" value="#{createEquipmentBean.newEquipment.category}"  style="width: 130px" converter="#{equipmentCategoryConverter}">
+                                <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                                <f:selectItems value="#{createEquipmentBean.equipmentCategoryTypes}" var="category" itemValue="#{category}" />
+                            </p:selectOneMenu>
+                            <p:message for="equipmentCat" />
+                            
                             <p:outputLabel for="name" value="#{messages.equipment_name}" />
                             <p:inputText id="name" required="true" value="#{createEquipmentBean.newEquipment.name}" />
                             <p:message for="name" />
@@ -48,7 +56,7 @@
                             <p:message for="itx" />
 
                             <p:outputLabel for="internal" value="#{messages.equipment_internalNumber}" />
-                            <p:inputText id="internal" required="true"  value="#{createEquipmentBean.newEquipment.internalNumber}" />
+                            <p:inputText id="internal"   value="#{createEquipmentBean.newEquipment.internalNumber}" />
                             <p:message for="internal" />
                         </p:panelGrid>
                 </p:fieldset>
@@ -69,12 +77,7 @@
                                 <f:selectItems value="#{createEquipmentBean.equipmentStatusTypes}" var="status" itemValue="#{status}" />
                             </p:selectOneMenu>
                             <p:message for="statusSelect" />
-                            <p:outputLabel for="pfSelect" value="#{messages.label_plateform}" />
-                            <p:selectOneMenu id="pfSelect" value="#{createEquipmentBean.newEquipment.plateform}"  style="width: 130px" converter="#{plateformTypeConverter}">
-                                <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
-                                <f:selectItems value="#{createEquipmentBean.equipmentPlateformTypes}" var="plateform" itemValue="#{plateform}" />
-                            </p:selectOneMenu>
-                            <p:message for="pfSelect" />
+                            
                         </p:panelGrid>
                 </p:fieldset>
             <p:spacer/>
@@ -118,7 +121,7 @@
 
 
                 <p:outputLabel for="context" value="#{messages.label_context}" />
-                <p:inputText id="context" required="true" value="#{createEquipmentBean.context}" />
+                <p:inputText id="context"  value="#{createEquipmentBean.context}" />
                 <p:message for="context"/>
 
 
