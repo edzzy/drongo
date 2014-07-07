@@ -24,6 +24,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+
+
 /**
  * Created by edouard on 21/02/14.
  */
@@ -186,5 +188,7 @@ public class ListEquipmentsBean implements Serializable{
         return options;
 
     }
+    
+
 
 }

@@ -182,20 +182,37 @@ public class InitDatabase implements ServletContextListener{
         List<PfMember> pfMemberList = new ArrayList<>();
         
         PfMember p1 = new PfMember();
-        p1.setFirstname("eric");
-        p1.setLastname("charpentier");
+        p1.setFirstname("Eric");
+        p1.setLastname("Charpentier");
         p1.setEmail("eric.charpentier@univ-nantes.fr");
         p1.setMemberSince(new DateTime(2011, 2, 1, 0, 0).toDate());
         p1.setOffice("218");
         pfMemberList.add(p1);
         
         PfMember p2 = new PfMember();
-        p2.setFirstname("edouard");
-        p2.setLastname("hirchaud");
+        p2.setFirstname("Edouard");
+        p2.setLastname("Hirchaud");
         p2.setEmail("edouard.hirchaud@univ-nantes.fr");
         p2.setMemberSince(new DateTime(2010, 1, 4, 0, 0).toDate());
         p2.setOffice("218");
         pfMemberList.add(p2);
+        
+         
+        PfMember p7 = new PfMember();
+        p7.setFirstname("Raluca");
+        p7.setLastname("Teusan");
+        p7.setEmail("raluca.teusan@univ-nantes.fr");
+        p7.setMemberSince(new DateTime(2010, 3, 25, 0, 0).toDate());
+        p7.setOffice("218");
+        pfMemberList.add(p7);
+        
+         PfMember p10 = new PfMember();
+        p10.setFirstname("Audrey");
+        p10.setLastname("Bihouée");
+        p10.setEmail("audrey.bihouee@univ-nantes.fr");
+        p10.setMemberSince(new DateTime(2010, 3, 25, 0, 0).toDate());
+        p10.setOffice("218");
+        pfMemberList.add(p10);
         
         PfMember p3 = new PfMember();
         p3.setFirstname("Laetitia");
@@ -212,6 +229,50 @@ public class InitDatabase implements ServletContextListener{
         p4.setMemberSince(new DateTime(2010, 3, 25, 0, 0).toDate());
         p4.setOffice("221");
         pfMemberList.add(p4);
+        
+        
+          
+        PfMember p5 = new PfMember();
+        p5.setFirstname("Audrey");
+        p5.setLastname("Donnart");
+        p5.setEmail("audrey.donnart@univ-nantes.fr");
+        p5.setMemberSince(new DateTime(2010, 3, 25, 0, 0).toDate());
+        p5.setOffice("221");
+        pfMemberList.add(p5);
+        
+        PfMember p6 = new PfMember();
+        p6.setFirstname("Jade");
+        p6.setLastname("Violeau");
+        p6.setEmail("jade.violleau@univ-nantes.fr");
+        p6.setMemberSince(new DateTime(2010, 3, 25, 0, 0).toDate());
+        p6.setOffice("222");
+        pfMemberList.add(p6);
+       
+        
+        PfMember p8 = new PfMember();
+        p8.setFirstname("Catherine");
+        p8.setLastname("Chevallier");
+        p8.setEmail("catherine.chevalier@univ-nantes.fr");
+        p8.setMemberSince(new DateTime(2010, 3, 25, 0, 0).toDate());
+        p8.setOffice("222");
+        pfMemberList.add(p8);
+        
+        
+        PfMember p9 = new PfMember();
+        p9.setFirstname("Françoise");
+        p9.setLastname("Gros");
+        p9.setEmail("francoise.gros@univ-nantes.fr");
+        p9.setMemberSince(new DateTime(2010, 3, 25, 0, 0).toDate());
+        p9.setOffice("222");
+        pfMemberList.add(p9);
+        
+         PfMember p11 = new PfMember();
+        p11.setFirstname("Richard");
+        p11.setLastname("Redon");
+        p11.setEmail("richard.redon@univ-nantes.fr");
+        p11.setMemberSince(new DateTime(2010, 3, 25, 0, 0).toDate());
+        p11.setOffice("217");
+        pfMemberList.add(p11);
         
         for (PfMember pfMember : pfMemberList) {
             pfMemberService.savePfMember(pfMember);

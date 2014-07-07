@@ -37,7 +37,7 @@ public class EquipmentServiceImpl implements EquipmentService, Serializable  {
     @Autowired
     FundingRepository fundingRepository;
 
-
+   
 
     @Override
     public long countAllEquipments() {

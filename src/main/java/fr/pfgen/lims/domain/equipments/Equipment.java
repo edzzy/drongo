@@ -4,6 +4,7 @@
  */
 package fr.pfgen.lims.domain.equipments;
 
+import fr.pfgen.lims.domain.documents.Document;
 import fr.pfgen.lims.domain.people.Organism;
 import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.domain.people.Structure;
@@ -77,6 +78,8 @@ public class Equipment extends AbstractGenericEntity{
     private String ifrNumber;
 
 
+    
+    
     //A deplacer dans d'autre classe
 
     @NotNull
@@ -103,6 +106,14 @@ public class Equipment extends AbstractGenericEntity{
     private Set<Structure> structures;
 
 
+    @ManyToOne
+    private PfMember ref;
+    
+    @ManyToOne
+    private PfMember sup;
+    
+    private boolean isMAD;
+    
     private String maintenanceCharge;
 
     private Boolean convention;
@@ -127,6 +138,11 @@ public class Equipment extends AbstractGenericEntity{
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "equipment")
     private Set<Funding> fundings;
+    
+       
+    
+    private Maintenance maintenance;
+    
 
 /*
     public String getInternalNumber() {
@@ -323,6 +339,30 @@ public class Equipment extends AbstractGenericEntity{
 
     public void setOrganisms(Set<Organism> organisms) {
         this.organisms = organisms;
+    }
+
+    public PfMember getRef() {
+        return ref;
+    }
+
+    public void setRef(PfMember ref) {
+        this.ref = ref;
+    }
+
+    public PfMember getSup() {
+        return sup;
+    }
+
+    public void setSup(PfMember sup) {
+        this.sup = sup;
+    }
+
+    public boolean isIsMAD() {
+        return isMAD;
+    }
+
+    public void setIsMAD(boolean isMAD) {
+        this.isMAD = isMAD;
     }
 
 

@@ -1,5 +1,6 @@
 package fr.pfgen.lims.domain.people;
 
+import fr.pfgen.lims.domain.equipments.Equipment;
 import fr.pfgen.lims.domain.projects.Contract;
 import fr.pfgen.lims.domain.runs.AbstractRun;
 import java.util.Date;
@@ -32,6 +33,12 @@ public class PfMember extends AbstractPerson{
     
     @OneToMany(mappedBy = "launchedBy")
     private Set<AbstractRun> runs;
+    
+    @OneToMany(mappedBy ="ref")
+    private Set<Equipment> refEquipments;
+    
+    @OneToMany(mappedBy ="sup")
+    private Set<Equipment> supEquipments;
 
     public Set<AbstractRun> getRuns() {
         return runs;
@@ -64,9 +71,28 @@ public class PfMember extends AbstractPerson{
     public void setMemberSince(Date memberSince) {
         this.memberSince = memberSince;
     }
+
+    public Set<Equipment> getRefEquipments() {
+        return refEquipments;
+    }
+
+    public void setRefEquipments(Set<Equipment> refEquipments) {
+        this.refEquipments = refEquipments;
+    }
+
+    public Set<Equipment> getSupEquipments() {
+        return supEquipments;
+    }
+
+    public void setSupEquipments(Set<Equipment> supEquipments) {
+        this.supEquipments = supEquipments;
+    }
+    
     
     @Override
     public String toString() {
         return super.toString();
     }
+    
+    
 }

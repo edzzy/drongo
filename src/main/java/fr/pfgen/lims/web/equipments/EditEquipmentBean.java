@@ -6,6 +6,7 @@ import fr.pfgen.lims.domain.people.PfMember;
 import fr.pfgen.lims.service.EquipmentService;
 import fr.pfgen.lims.service.FundingService;
 import fr.pfgen.lims.service.OrganismService;
+import fr.pfgen.lims.service.PfMemberService;
 import fr.pfgen.lims.web.util.FacesUtils;
 import fr.pfgen.lims.web.util.RedirectBean;
 import org.primefaces.model.chart.PieChartModel;
@@ -40,6 +41,7 @@ public class EditEquipmentBean implements Serializable{
     private String context;
     private Double percent;
     private Organism organism;
+    private List<PfMember> pfMembers;
     private List<Funding> fundings;
     private Double minPercent;
     private Double maxPercent;
@@ -55,11 +57,15 @@ public class EditEquipmentBean implements Serializable{
     RedirectBean redirectBean;
     @Autowired
     FundingService fundingService;
+    
+    @Autowired
+    PfMemberService pfMemberService;
 
     @PostConstruct
     public void init(){
 
         organisms = organismService.findAllOrganisms();
+        pfMembers = pfMemberService.findAllActivePfMembers();
         fundings = new ArrayList<Funding>();
         minPercent = 1.0;
         maxPercent = 100.0;
@@ -74,11 +80,11 @@ public class EditEquipmentBean implements Serializable{
         }
     }
 
-    public Equipment getequipment() {
+    public Equipment getEquipment() {
         return equipment;
     }
 
-    public void setequipment(Equipment equipment) {
+    public void setEquipment(Equipment equipment) {
         this.equipment = equipment;
     }
 
@@ -147,6 +153,15 @@ public class EditEquipmentBean implements Serializable{
         this.maxPercent = maxPercent;
     }
 
+    public List<PfMember> getPfMembers() {
+        return pfMembers;
+    }
+
+    public void setPfMembers(List<PfMember> pfMembers) {
+        this.pfMembers = pfMembers;
+    }
+
+    
     private SelectItem[] createFilterOptionsStatus(List<EquipmentStatus> data)  {
         SelectItem[] options = new SelectItem[data.size() + 1];
 

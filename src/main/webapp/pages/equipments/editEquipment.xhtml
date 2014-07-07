@@ -23,11 +23,27 @@
 
                 <p:panelGrid columns="3">
                     <p:outputLabel for="equipmentCat" value="Category" />
-                              <p:selectOneMenu id="equipmentCat" value="#{editEquipmentBean.equipment.category}"  style="width: 130px" converter="#{equipmentCategoryConverter}">
-                                <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
-                                <f:selectItems value="#{editEquipmentBean.equipmentCategoryTypes}" var="category" itemValue="#{category}" />
-                            </p:selectOneMenu>
-                            <p:message for="equipmentCat" />
+                    <p:selectOneMenu id="equipmentCat" value="#{editEquipmentBean.equipment.category}"  style="width: 130px" converter="#{equipmentCategoryConverter}">
+                        <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                        <f:selectItems value="#{editEquipmentBean.equipmentCategoryTypes}" var="category" itemValue="#{category}" />
+                    </p:selectOneMenu>
+                    <p:message for="equipmentCat" />
+                    
+                    <p:outputLabel for="refpfMember" value="#{messages.equipment_referring}" />
+                    <p:selectOneMenu id="refpfMember" value="#{editEquipmentBean.equipment.ref}"  style="width: 130px" converter="#{pfMemberConverter}">
+                        <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                        <f:selectItems value="#{editEquipmentBean.pfMembers}" var="ref" itemValue="#{ref}" />
+                    </p:selectOneMenu>
+                    <p:message for="refpfMember" />
+                    
+                    <p:outputLabel for="pfmembersup" value="#{messages.equipment_sup}" />
+                    <p:selectOneMenu id="pfmembersup" value="#{editEquipmentBean.equipment.sup}"  style="width: 130px" converter="#{pfMemberConverter}">
+                        <f:selectItem noSelectionOption="true" itemLabel="#{messages.label_select}" />
+                        <f:selectItems value="#{editEquipmentBean.pfMembers}" var="sup" itemValue="#{sup}" />
+                    </p:selectOneMenu>
+                    <p:message for="pfmembersup" />
+                    
+                            
                     <p:outputLabel for="name" value="#{messages.equipment_name}" />
                     <p:inputText id="name" required="true" value="#{editEquipmentBean.equipment.name}" />
                     <p:message for="name" />

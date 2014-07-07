@@ -146,3 +146,25 @@ a.ui-dock-item-top {
     margin-right: auto;
 }
 
+ .old {
+    background-color: #fca752 !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+.pair{
+    background-color: #abc8e2 !important;
+}
+.odd{
+    background-color: #e1e6fa !important;
+}
+
+.done{
+    background-color: #b0cc99 !important;
+}
+
+.todo{
+    
+    background-color: #e2ad3b !important;
+    
+}
+

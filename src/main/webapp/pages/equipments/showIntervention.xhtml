@@ -36,6 +36,7 @@
                             <h:outputText id="comment" value="#{showInterventionBean.intervention.comment}" escape="false"/>
 
                         </h:panelGrid>
+                        
                         <p:button id="returnButton" outcome="#{redirectBean.showEquipment}" value="#{messages.label_return} #{showInterventionBean.intervention.equipment.name}" >
                             <f:param name="id" value="#{showInterventionBean.intervention.equipment.id}"/>
                         </p:button>
